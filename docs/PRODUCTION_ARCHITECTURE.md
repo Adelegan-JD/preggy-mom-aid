@@ -1,6 +1,6 @@
 # Preggy Mom Aid — Production Architecture
 
-**Status:** Proposed production target; not yet approved for collection of real patient health information.
+**Status:** Proposed production target; not yet approved for collection of real patient health information. Will be updated in due time.
 
 ## 1. Product decisions
 
@@ -42,21 +42,21 @@ Keep the existing Next.js application and Vercel deployment. Introduce Supabase 
 
 Use UUID primary keys, UTC timestamps, explicit status enums, created/updated metadata, and soft deletion only where legally and operationally justified.
 
-| Table | Purpose / key fields |
-|---|---|
-| `profiles` | `user_id` (Auth FK), account type, display name, locale, contact preferences; no clinical role in user-editable fields |
-| `patient_profiles` | patient-specific details, state/LGA, emergency contact only where necessary and consented |
-| `professional_applications` | profession, registration body/number, evidence storage key, status, reviewer, decision timestamps |
-| `professional_verifications` | verified profession, evidence references, verification source, verifier and expiry/recheck date |
-| `consent_records` | user, purpose, notice version, granted/revoked timestamps, capture method |
-| `care_relationships` | patient, professional, requested/active/revoked status, patient authorisation and scope |
-| `pregnancy_episodes` | pregnancy/postpartum episode dates and patient-entered context |
-| `blood_pressure_readings` | patient, systolic, diastolic, pulse optional, measured-at, entered-at, source/device optional, note optional |
-| `symptom_reports` | patient, structured answers, free text optional, reported-at; no automatic diagnosis field |
-| `appointments` | patient, professional/facility optional, time, status, provenance; only real user-created or confirmed appointments |
-| `care_notes` | professional-authored note, patient, author, relationship, timestamps and visibility |
-| `facilities` | name, address, source URL/reference, source checked date, verification status, claim status, public visibility |
-| `audit_events` | actor, action, resource type/id, outcome, timestamp, request correlation; exclude secrets and unnecessary clinical payloads |
+| Table                          | Purpose / key fields                                                                                                        |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `profiles`                   | `user_id` (Auth FK), account type, display name, locale, contact preferences; no clinical role in user-editable fields    |
+| `patient_profiles`           | patient-specific details, state/LGA, emergency contact only where necessary and consented                                   |
+| `professional_applications`  | profession, registration body/number, evidence storage key, status, reviewer, decision timestamps                           |
+| `professional_verifications` | verified profession, evidence references, verification source, verifier and expiry/recheck date                             |
+| `consent_records`            | user, purpose, notice version, granted/revoked timestamps, capture method                                                   |
+| `care_relationships`         | patient, professional, requested/active/revoked status, patient authorisation and scope                                     |
+| `pregnancy_episodes`         | pregnancy/postpartum episode dates and patient-entered context                                                              |
+| `blood_pressure_readings`    | patient, systolic, diastolic, pulse optional, measured-at, entered-at, source/device optional, note optional                |
+| `symptom_reports`            | patient, structured answers, free text optional, reported-at; no automatic diagnosis field                                  |
+| `appointments`               | patient, professional/facility optional, time, status, provenance; only real user-created or confirmed appointments         |
+| `care_notes`                 | professional-authored note, patient, author, relationship, timestamps and visibility                                        |
+| `facilities`                 | name, address, source URL/reference, source checked date, verification status, claim status, public visibility              |
+| `audit_events`               | actor, action, resource type/id, outcome, timestamp, request correlation; exclude secrets and unnecessary clinical payloads |
 
 Add indexes for patient/time queries and relationship lookups. Apply retention, correction, export and deletion policies only after legal review. Do not store uploaded credential evidence in a public bucket.
 
