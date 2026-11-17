@@ -1,35 +1,47 @@
 # Preggy Mom Aid
 
-A mobile-first maternal health support prototype for people at risk of, living with, or recovering from pre-eclampsia/eclampsia.
+A public-first maternal health support platform being developed for women affected by, or at risk of, pre-eclampsia/eclampsia.
 
-## Run locally
+## Current release status
+
+The current branch replaces the former patient-demo dashboard with a public information site. Patient registration, professional accounts, patient health records, clinical decision-support and appointment workflows are **not open or implemented as production services**.
+
+The public site intentionally contains:
+- Product mission and staged platform approach.
+- A facility-directory explanation with no invented facility entries.
+- A professional onboarding information page; applications are not yet open.
+- A clear launch-status notice and medical/emergency disclaimer.
+
+## No demo health data
+
+Production-facing pages must not contain fictional patient identities, seeded blood-pressure readings, fabricated symptom histories, demo appointments, fake clinician accounts, synthetic hospital entries or scripted chatbot answers presented as live services.
+
+Development fixtures, if used for visual testing, must be isolated from production builds and clearly labelled. Never enter real patient health information into a prototype or an environment that has not passed the privacy and security release gates.
+
+## Planned production architecture
+
+See:
+- [Production architecture](docs/PRODUCTION_ARCHITECTURE.md)
+- [Production implementation plan](docs/PRODUCTION_IMPLEMENTATION_PLAN.md)
+
+Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level security, and private storage. Infrastructure, region, contractual terms and data-transfer arrangements must be reviewed before processing sensitive health information.
+
+## Local development
+
 1. Install Node.js 20.9+.
 2. Run `npm install`.
 3. Run `npm run dev`.
 4. Open http://localhost:3000.
 
-## Current prototype scope
-- Local demo profile and seeded fictional data (browser localStorage).
-- BP logging, history, trend chart and threshold prompts.
-- Symptom reporting with deterministic escalation rules.
-- Educational assistant with curated demo answers (not a diagnostic AI).
-- Emergency information, user-supplied emergency contact calling, and print-friendly health summary.
-- Hospital directory containing clearly labelled illustrative demo entries only.
-- Appointment creation and reminder list.
-- Educational library and profile editing.
+## Validation
 
-## Important limitations
-This is a usability prototype, not a certified medical device or clinical decision-support system. It does not diagnose, prescribe, contact emergency services, send SMS, or verify facilities. Demo facility records are fictional placeholders and must not be used to seek care. No real patient health information should be entered. Clinical thresholds and escalation wording require review by a Nigerian obstetric clinician before any real-world pilot.
+- `npm run typecheck` — TypeScript validation.
+- `npm run build` — production build.
 
-The app's high BP and symptom prompts are safety-oriented prototype rules, not a diagnosis. Severe symptoms or possible seizure/eclampsia require immediate emergency assessment; do not wait for the app.
+A successful build or deployment does not establish clinical, privacy, regulatory or security readiness.
 
-## Deploy to Vercel
-Import this folder/repository into Vercel, use the Next.js preset, and deploy. No environment variables are required for demo mode. Add Supabase only after configuring authentication, database schema, and row-level security.
+## Clinical and privacy boundaries
 
-## Next production steps
-1. Clinical review of all triage content and thresholds.
-2. Privacy impact assessment and Nigeria Data Protection Act compliance review.
-3. Secure authentication and database persistence with Supabase/PostgreSQL + RLS.
-4. Verify hospital records and emergency contacts from authoritative sources.
-5. Integrate clinician-reviewed knowledge retrieval and a secure server-side LLM endpoint.
-6. Accessibility, security, and clinical safety testing with intended users and clinicians.
+Preggy Mom Aid is not an emergency service and does not diagnose, prescribe or replace professional maternity care. Any clinical education, thresholds, symptom guidance or decision-support must be approved by appropriately qualified Nigerian maternal-health clinicians before release.
+
+Before collecting real patient information, complete the applicable Nigerian privacy/legal review, Data Protection Impact Assessment, consent and notice workflows, security review, access-control testing, incident response and backup/restore checks.
