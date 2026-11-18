@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 type DocumentRow = {
@@ -36,7 +36,7 @@ export default function PatientHealthDocuments({ initialDocuments }: { initialDo
     setMessage("");
   }
 
-  async function uploadDocument(event: React.FormEvent<HTMLFormElement>) {
+  async function uploadDocument(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!file) { setError("Choose a document to upload."); return; }
     if (!allowedTypes.includes(file.type)) { setError("Upload a PDF, JPG or PNG file."); return; }
@@ -67,6 +67,7 @@ export default function PatientHealthDocuments({ initialDocuments }: { initialDo
       }).select("id,object_path,display_name,mime_type,file_size_bytes,document_category,notes,created_at").single();
       if (insertError) {
         await supabase.storage.from("patient-health-records").remove([uploadedPath]);
+        uploadedPath = "";
         throw insertError;
       }
       setDocuments(current => [data, ...current]);
