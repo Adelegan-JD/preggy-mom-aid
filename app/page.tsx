@@ -62,7 +62,7 @@ export default function HomePage() {
         <nav id="primary-navigation" className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation">
           {nav.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
         </nav>
-        <div className="header-account-links"><a className="header-signin" href="/login">Sign in</a><a className="header-cta" href="/signup">Join as a tester <ArrowRight size={16} /></a></div>
+        <div className="header-account-links"><a className="header-signin" href="/login">Sign in</a><a className="header-cta" href="/signup">Create account <ArrowRight size={16} /></a></div>
         <button ref={menuButtonRef} type="button" className="public-menu-toggle" aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
