@@ -1,4 +1,9 @@
-"use client";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learning Centre | Preggy Mom Aid",
+  description: "Introductory information about pre-eclampsia, pregnancy and postpartum care, with clear clinical review status."
+};
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, AlertTriangle, Baby, BookOpen, CalendarCheck, ClipboardList, HeartPulse, ShieldCheck, Stethoscope, Activity, Eye, Hand, Zap, ExternalLink } from "lucide-react";
 
