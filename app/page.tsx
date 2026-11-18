@@ -55,7 +55,7 @@ export default function HomePage() {
   return (
     <main className="public-site" id="main-content" tabIndex={-1} aria-labelledby="hero-heading">
       <header className="public-header" onKeyDown={(event) => { if (event.key === "Escape" && menuOpen) { setMenuOpen(false); menuButtonRef.current?.focus(); } }}>
-        <a className="public-brand" href="/" aria-label="Preggy Mom Aid home">
+        <a className="public-brand" href="/">
           <Image src="/logo.png" alt="" width={48} height={48} priority />
           <span><strong>Preggy Mom Aid</strong><small>MATERNAL HEALTH SUPPORT</small></span>
         </a>
