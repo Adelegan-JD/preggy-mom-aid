@@ -10,7 +10,7 @@ import {
 
 const nav = [
   { label: "Our mission", href: "#mission" },
-  { label: "Learn", href: "#learn" },
+  { label: "Learn", href: "/learn" },
   { label: "Facility directory", href: "#facilities" },
   { label: "For professionals", href: "#professionals" },
 ];
@@ -44,7 +44,7 @@ const topics = [
   {
     icon: Headphones,
     title: "Accessible learning",
-    text: "We are preparing clear learning resources and audio support. Published health content will be identified by its review status and source.",
+    text: "Explore our learning area for introductory explainers, practical care conversations and trusted external resources. Clinical review status is shown clearly.",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function HomePage() {
           <h1>Care, knowledge<br />and support for<br /><em>every step.</em></h1>
           <p>Preggy Mom Aid is being built to help women affected by, or at risk of, pre-eclampsia and eclampsia find clear information, understand warning signs and feel supported throughout pregnancy and after birth.</p>
           <div className="hero-actions">
-            <a className="primary-public-btn" href="#learn">Explore health information <ArrowRight size={17} /></a>
+            <a className="primary-public-btn" href="/learn">Explore health information <ArrowRight size={17} /></a>
             <a className="secondary-public-btn" href="#professionals">For healthcare professionals</a>
           </div>
           <div className="hero-note"><ShieldCheck size={17} /><span>Privacy-conscious design. Responsible information. Care led by qualified professionals.</span></div>
