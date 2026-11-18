@@ -40,11 +40,11 @@ export default function LoginPage() {
       <section className="account-card">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={22} /></span>
-          <span><b>Preggy Mom Aid</b><small>PATIENT TESTER ACCESS</small></span>
+          <span><b>Preggy Mom Aid</b><small>PATIENT ACCOUNT</small></span>
         </Link>
         <div className="account-kicker">WELCOME BACK</div>
         <h1>Sign in</h1>
-        <p className="account-intro">Continue to your patient tester space and share your feedback with us.</p>
+        <p className="account-intro">Continue to your Preggy Mom Aid account.</p>
         {supabaseConfigured ? (
           <form className="account-form" onSubmit={submit}>
             <label htmlFor="loginEmail">Email address</label>
@@ -66,13 +66,11 @@ export default function LoginPage() {
         {error && <p className="account-error" role="alert">{error}</p>}
         <div className="account-privacy">
           <ShieldCheck size={18} />
-          <p>Only use your own account. Please do not enter personal medical information during this testing phase.</p>
+          <p>Only use your own account. Personal health records and clinical care features are not yet available.</p>
         </div>
-        {supabaseConfigured && <p className="account-switch">New to the testing group? <Link href="/signup">Create an account</Link></p>}
+        {supabaseConfigured && <p className="account-switch">New to Preggy Mom Aid? <Link href="/signup">Create an account</Link></p>}
         <p className="account-footnote">
-          You can still explore the <Link href="/learn">Learning Centre</Link> and
-          <Link href="/feedback"> share product feedback</Link>. Do not submit
-          symptoms or other health information through feedback.
+          Explore the <Link href="/learn">Learning Centre</Link> or <Link href="/feedback">share product feedback</Link>. Do not include symptoms or other health information in feedback.
         </p>
       </section>
     </main>
