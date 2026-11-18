@@ -49,7 +49,8 @@ const topics = [
 ];
 
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);\n  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <main className="public-site" id="main-content" tabIndex={-1} aria-labelledby="hero-heading">
