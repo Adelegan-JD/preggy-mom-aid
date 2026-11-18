@@ -394,3 +394,11 @@ html[data-contrast="high"] .pma-preferences-panel{box-shadow:0 0 0 3px #fff,0 0 
 .learn-page .postpartum-copy>a,
 .learn-page .learn-resource-card>a{color:#176b68}
 .account-available-links a{color:#873d50}
+
+/* Last contrast refinements identified on the homepage and Learning Centre */
+.public-site .notice>div>p{color:#62423d}
+.public-site #launch-status>div{color:#3e624f}
+.public-site #launch-status>p{color:#536258}
+.public-site .status-label{color:#5c5048}
+.public-site .footer>span{color:#536258}
+.learn-page .learn-footer a{color:#176b68}
