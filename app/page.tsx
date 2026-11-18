@@ -53,12 +53,12 @@ export default function HomePage() {
 
   return (
     <main className="public-site" id="main-content" tabIndex={-1} aria-labelledby="hero-heading">
-      <header className="public-header">
+      <header className="public-header" onKeyDown={(event) => { if (event.key === "Escape" && menuOpen) { setMenuOpen(false); menuButtonRef.current?.focus(); } }}>
         <a className="public-brand" href="/" aria-label="Preggy Mom Aid home">
           <Image src="/logo.png" alt="" width={48} height={48} priority />
           <span><strong>Preggy Mom Aid</strong><small>MATERNAL HEALTH SUPPORT</small></span>
         </a>
-        <nav id="primary-navigation" className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation" onKeyDown={(event) => { if (event.key === "Escape") { setMenuOpen(false); menuButtonRef.current?.focus(); } }}>
+        <nav id="primary-navigation" className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation">
           {nav.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
         </nav>
         <div className="header-account-links"><a className="header-signin" href="/login">Sign in</a><a className="header-cta" href="/signup">Join as a tester <ArrowRight size={16} /></a></div>
