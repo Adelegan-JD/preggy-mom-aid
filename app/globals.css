@@ -712,3 +712,11 @@ html[data-theme="dark"] .maternal-journey{background:var(--pma-surface);border-c
 html[data-theme="dark"] .journey-stage{background:var(--pma-surface);border-color:var(--pma-border);color:var(--pma-muted)}
 html[data-theme="dark"] .journey-stage[aria-pressed="true"],html[data-theme="dark"] .journey-detail{background:var(--pma-green-soft);color:var(--pma-ink)}
 html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df}
+
+
+.account-type-choice{display:grid;gap:10px;border:1px solid var(--pma-border);border-radius:13px;padding:14px;margin:4px 0 8px}
+.account-type-choice legend{font-weight:800;color:var(--pma-ink);padding:0 5px}
+.account-type-choice label{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--pma-ink);font-weight:650}
+.account-type-choice input{width:17px;height:17px;accent-color:var(--pma-green)}
+.professional-signup-note{display:grid;gap:8px;padding:14px;border-radius:12px;background:var(--pma-surface-soft)}
+.professional-signup-note p{font-size:12px;line-height:1.6;color:var(--pma-muted);margin:0}
