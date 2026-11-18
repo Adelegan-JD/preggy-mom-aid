@@ -329,3 +329,56 @@ html[data-contrast="high"] :where(.pma-preferences>summary,.pma-preferences-pane
 html[data-contrast="high"] .pma-preferences-panel{box-shadow:0 0 0 3px #fff,0 0 0 6px #111}
 :where(.public-header a,.learn-topbar a,.public-menu-toggle,.header-account-links a,.account-submit,.tester-signout,.pma-preferences>summary,.pma-preferences-reset){touch-action:manipulation}
 @media(max-width:650px){body{padding-bottom:72px}.public-nav a{min-height:48px}}
+
+/* WCAG AA text-contrast corrections informed by axe browser scans */
+.public-site .public-brand small,
+.public-site .art-caption small,
+.public-site .trust-strip small,
+.public-site .mission-grid p,
+.public-site .how-steps p,
+.public-site .directory-heading p,
+.public-site .directory-empty p,
+.public-site .directory-disclaimer,
+.public-site .hero-note,
+.public-site .professional-copy>p,
+.public-site .professional-card p{color:#536258}
+.public-site .header-signin{color:#884657}
+.public-site .section-kicker,
+.public-site .eyebrow-public{color:#78535b}
+.public-site .hero-copy-public h1 em,
+.public-site .section-intro h2 em,
+.public-site .how-inner h2 em,
+.public-site .professional-copy h2 em,
+.public-site .launch-status h2 em{color:#a2435a}
+
+.learn-page .learn-brand small,
+.learn-page .learn-back,
+.learn-page .learn-top-link{color:#506157}
+.learn-page .learn-kicker{color:#83515b}
+.learn-page .learn-hero-copy h1 em,
+.learn-page .postpartum-copy h2 em,
+.learn-page .warning-panel h2 em{color:#a2435a}
+.learn-page .learn-hero-copy>p,
+.learn-page .learn-section-heading p,
+.learn-page .learn-resource-card p,
+.learn-page .care-map-step p,
+.learn-page .warning-panel>p,
+.learn-page .warning-action span,
+.learn-page .postpartum-copy>p,
+.learn-page .learn-source-note,
+.learn-page .learn-footer{color:#536258}
+.learn-page .learn-review-pill{color:#3e684f}
+
+.account-shell .account-intro,
+.account-shell .account-privacy p,
+.account-shell .account-footnote,
+.account-shell .account-switch,
+.account-shell .feedback-count,
+.account-shell .account-unavailable p{color:#526056}
+.account-shell .account-switch a,
+.account-shell .account-footnote a{color:#8d3e51}
+.account-shell .feedback-back{color:#80515a}
+.tester-welcome>p,
+.tester-feature p{color:#536258}
+.tester-feature>a{color:#8d3e51}
+.tester-boundary{color:#7d4944}
