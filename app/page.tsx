@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowRight, HeartHandshake, ShieldCheck, BookOpen, Hospital, Users,
   Menu, X, LockKeyhole, AlertTriangle, Stethoscope, Baby, Utensils,
@@ -49,23 +49,23 @@ const topics = [
 ];
 
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);\n  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <main className="public-site">\n      <a className="sr-only" href="#main-content">Skip to page content</a>
+    <main className="public-site" id="main-content" tabIndex={-1} aria-labelledby="hero-heading">
       <header className="public-header">
         <a className="public-brand" href="/" aria-label="Preggy Mom Aid home">
           <Image src="/logo.png" alt="" width={48} height={48} priority />
           <span><strong>Preggy Mom Aid</strong><small>MATERNAL HEALTH SUPPORT</small></span>
         </a>
-        <nav id="primary-navigation" className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation">
+        <nav id="primary-navigation" className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation" onKeyDown={(event) => { if (event.key === "Escape") { setMenuOpen(false); menuButtonRef.current?.focus(); } }}>
           {nav.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
         </nav>
         <div className="header-account-links"><a className="header-signin" href="/login">Sign in</a><a className="header-cta" href="/signup">Join as a tester <ArrowRight size={16} /></a></div>
-        <button type="button" className="public-menu-toggle" aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
+        <button ref={menuButtonRef} type="button" className="public-menu-toggle" aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
-      <section className="public-hero" id="main-content" aria-labelledby="hero-heading" tabIndex={-1}>
+      <section className="public-hero">
         <div className="hero-copy-public">
           <span className="eyebrow-public"><span /> SUPPORT THROUGH PREGNANCY AND BEYOND</span>
           <h1 id="hero-heading">Care, knowledge<br />and support for<br /><em>every step.</em></h1>
