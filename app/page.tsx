@@ -1,94 +1,90 @@
- "use client";
+"use client";
+
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Activity, AlertCircle, ArrowDownRight, ArrowRight, Baby, Bell, BookOpen,
-  CalendarDays, Check, CheckCircle2, ChevronDown, CircleHelp, Clock3,
-  Heart, HeartPulse, Home, Hospital, Info, LifeBuoy, LogOut, Menu, MessageCircle,
-  Plus, Search, ShieldCheck, Sparkles, Stethoscope, UserRound, Users, X,
-  Eye, Phone, Printer, Trash2, TrendingUp, ClipboardList, Pill, Settings,
-  ChevronRight, Send, Droplets
-} from "lucide-react";
-import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend
-} from "recharts";
+import { useState } from "react";
+import { ArrowRight, HeartHandshake, ShieldCheck, BookOpen, Hospital, Users, Menu, X, LockKeyhole, ExternalLink } from "lucide-react";
 
-type Reading = {id:string; sys:number; dia:number; pulse:number|null; date:string; note:string};
-type Appointment = {id:string; title:string; place:string; date:string; time:string; done:boolean};
-type Profile = {name:string; weeks:number; due:string; status:string; phone:string; emergencyName:string; emergencyPhone:string; state:string; lga:string};
-type Symptom = {id:string; date:string; answers:string[]; level:string; notes:string};
-const seedReadings: Reading[] = [
-  {id:"r1",sys:132,dia:86,pulse:82,date:"2026-11-11T08:10",note:"Morning reading"},
-  {id:"r2",sys:136,dia:88,pulse:84,date:"2026-11-12T08:15",note:"Seated after rest"},
-  {id:"r3",sys:138,dia:90,pulse:80,date:"2026-11-13T19:20",note:"Evening reading"},
-  {id:"r4",sys:134,dia:87,pulse:79,date:"2026-11-14T08:05",note:"Morning reading"},
-  {id:"r5",sys:140,dia:92,pulse:86,date:"2026-11-15T08:30",note:"Demo reading"},
-  {id:"r6",sys:136,dia:89,pulse:83,date:"2026-11-16T08:20",note:"Morning reading"}
-];
-const seedAppointments: Appointment[] = [
-  {id:"a1",title:"Antenatal review",place:"Your maternity clinic",date:"2026-11-20",time:"10:30",done:false},
-  {id:"a2",title:"Blood pressure review",place:"Your maternity clinic",date:"2026-11-25",time:"09:00",done:false}
-];
 const nav = [
-  ["Overview",Home],["Blood pressure",Activity],["Symptom check",ClipboardList],
-  ["Health assistant",MessageCircle],["Find a facility",Hospital],["Learn",BookOpen],
-  ["Appointments",CalendarDays],["My profile",UserRound]
-] as const;
-const questions = [
-  "Are you experiencing a severe or persistent headache?",
-  "Are you having blurred vision, flashing lights or other changes in vision?",
-  "Do you have severe pain beneath your ribs or in your upper abdomen?",
-  "Are you experiencing sudden swelling of your face or hands?",
-  "Are you having difficulty breathing?",
-  "Have you had a seizure, fainted or collapsed?",
-  "Have you noticed reduced or changed baby movements?",
-  "Do you feel suddenly or unusually unwell?"
+  { label: "Our mission", href: "#mission" },
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Facility directory", href: "#facilities" },
+  { label: "For professionals", href: "#professionals" },
 ];
-const articles = [
-  {category:"Understanding",title:"What is pre-eclampsia?",desc:"A plain-language introduction to high blood pressure conditions in pregnancy.",read:"4 min"},
-  {category:"Warning signs",title:"When symptoms need urgent attention",desc:"Recognise symptoms that should never be ignored, including after birth.",read:"3 min"},
-  {category:"Monitoring",title:"Taking a blood pressure reading",desc:"Practical steps for recording a consistent home measurement.",read:"5 min"},
-  {category:"After birth",title:"Your health after delivery",desc:"Why blood pressure and symptoms still matter in the postpartum period.",read:"4 min"},
-  {category:"Support",title:"How family can support you",desc:"Simple ways a trusted person can help with appointments and urgent care.",read:"3 min"},
-  {category:"Appointments",title:"Preparing for your antenatal visit",desc:"Questions and information you may want to discuss with your care team.",read:"4 min"}
-];
-const demoFacilities = [
-  {name:"Demonstration maternity facility A",location:"Ikeja, Lagos",type:"Teaching / referral example",status:"Demo data – verification required"},
-  {name:"Demonstration maternity facility B",location:"Yaba, Lagos",type:"General maternity example",status:"Demo data – verification required"},
-  {name:"Demonstration maternity facility C",location:"Surulere, Lagos",type:"General maternity example",status:"Demo data – verification required"}
-];
-const answers: Record<string,string> = {
-  "What is pre-eclampsia?":"Pre-eclampsia is a pregnancy-related condition involving high blood pressure that can affect a pregnant person's organs and the baby. It can develop after 20 weeks of pregnancy and can also occur after birth. Only a qualified healthcare professional can assess and diagnose it.",
-  "What warning signs should I know?":"Warning signs can include a severe or persistent headache, changes in vision, severe pain below the ribs, vomiting, sudden swelling of the face or hands, and difficulty breathing. Seek urgent medical assessment for concerning symptoms. A seizure or collapse is an emergency.",
-  "Can it happen after delivery?":"Yes. Pre-eclampsia can persist or first appear after childbirth. Keep postpartum appointments and follow your clinician's blood pressure plan. Severe headache, vision changes, upper abdominal pain, breathing difficulty or seizure after birth need urgent medical attention.",
-  "How do I measure my blood pressure?":"Follow the instructions from your care team and monitor schedule. In general, rest quietly first, sit with your back supported and feet flat, keep your arm supported at heart level, use the correct cuff size, and record the result and time. Do not change medication based on an app reading.",
-  "What happens if my reading is high?":"A high reading needs to be interpreted in context by your maternity team. This demo flags readings at 140/90 or above for prompt contact and readings at 160/110 or above for urgent emergency assessment. Follow your clinician's own instructions; do not wait for another app message if you feel unwell."
-};
-const uid = () => Math.random().toString(36).slice(2,10);
-const dateLabel = (v:string) => new Date(v).toLocaleDateString("en-NG",{day:"numeric",month:"short"});
-const timeLabel = (v:string) => new Date(v).toLocaleTimeString("en-NG",{hour:"2-digit",minute:"2-digit"});
-function bpLevel(s:number,d:number){return s>=160||d>=110?"urgent":s>=140||d>=90?"raised":"recorded";}
-function triage(a:string[]){if(a.includes(questions[5])||a.includes(questions[4]))return "emergency"; if([questions[0],questions[1],questions[2],questions[6],questions[7]].some(q=>a.includes(q)))return "urgent"; if(a.includes(questions[3]))return "prompt"; return "routine";}
 
-export default function Page(){
-  const [section,setSection]=useState("Overview");
-  const [mobileOpen,setMobileOpen]=useState(false);
-  const [profile,setProfile]=useState<Profile>({name:"Amara Johnson",weeks:28,due:"2027-02-09",status:"Diagnosed with pre-eclampsia",phone:"",emergencyName:"",emergencyPhone:"",state:"Lagos",lga:"Ikeja"});
-  const [readings,setReadings]=useState<Reading[]>(seedReadings);
-  const [appointments,setAppointments]=useState<Appointment[]>(seedAppointments);
-  const [symptoms,setSymptoms]=useState<Symptom[]>([]);
-  const [bpForm,setBpForm]=useState({sys:"",dia:"",pulse:"",note:""});
-  const [symptomAnswers,setSymptomAnswers]=useState<string[]>([]);
-  const [symptomNotes,setSymptomNotes]=useState("");
-  const [chat,setChat]=useState<{from:"bot"|"user";text:string}[]>([{from:"bot",text:"Hello. I'm the Preggy Mom Aid educational assistant. I can explain pre-eclampsia and help you find information. I cannot diagnose or replace your maternity team. If you have a seizure, collapse or severe breathing difficulty, seek emergency help now."}]);
-  const [chatInput,setChatInput]=useState("");
-  const [facilityQuery,setFacilityQuery]=useState("");
-  const [appointmentForm,setAppointmentForm]=useState({title:"",place:"",date:"",time:""});
-  const [showAppointment,setShowAppointment]=useState(false);
-  const [toast,setToast]=useState("");
-  const [profileEdit,setProfileEdit]=useState(false);
-  const [article,setArticle]=useState<typeof articles[number]|null>(null);
-  const [loaded,setLoaded]=useState(false);
+export default function HomePage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <main className="public-site">
+      <header className="public-header">
+        <a className="public-brand" href="#" aria-label="Preggy Mom Aid home">
+          <Image src="/logo.png" alt="" width={48} height={48} priority />
+          <span><strong>Preggy Mom Aid</strong><small>MATERNAL HEALTH SUPPORT</small></span>
+        </a>
+        <nav className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation">
+          {nav.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
+        </nav>
+        <a className="header-cta" href="#professionals">Partner with us <ArrowRight size={16} /></a>
+        <button className="public-menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
+      </header>
+
+      <section className="public-hero">
+        <div className="hero-copy-public">
+          <span className="eyebrow-public"><span /> SUPPORT THROUGH PREGNANCY AND BEYOND</span>
+          <h1>Care, knowledge<br />and support for<br /><em>every step.</em></h1>
+          <p>Preggy Mom Aid is being built to help women affected by, or at risk of, pre-eclampsia and eclampsia stay informed, connected and supported throughout pregnancy and after birth.</p>
+          <div className="hero-actions">
+            <a className="primary-public-btn" href="#mission">Discover our mission <ArrowRight size={17} /></a>
+            <a className="secondary-public-btn" href="#professionals">For healthcare professionals</a>
+          </div>
+          <div className="hero-note"><ShieldCheck size={17} /><span>Built around privacy, trusted information and responsible care.</span></div>
+        </div>
+        <div className="hero-art-public" aria-hidden="true">
+          <div className="art-ring ring-one" /><div className="art-ring ring-two" />
+          <div className="art-card"><Image src="/logo.png" alt="" width={104} height={104} /><span>With you, through every chapter.</span></div>
+          <div className="art-leaf leaf-one">✦</div><div className="art-leaf leaf-two">✿</div>
+          <div className="art-caption"><HeartHandshake size={18} /><span><b>Compassion first</b><small>Support that respects every journey</small></span></div>
+        </div>
+      </section>
+
+      <section className="trust-strip" aria-label="Our principles">
+        <div><ShieldCheck /><span><b>Privacy by design</b><small>Your information deserves care.</small></span></div>
+        <div><BookOpen /><span><b>Trusted education</b><small>Health content with clinical review.</small></span></div>
+        <div><Users /><span><b>Connected care</b><small>Designed around women and care teams.</small></span></div>
+      </section>
+
+      <section className="public-section mission-section" id="mission">
+        <div className="section-kicker">WHY PREGGY MOM AID</div>
+        <div className="section-intro"><h2>Every mother deserves<br /><em>to feel supported.</em></h2><p>Pre-eclampsia can bring uncertainty to pregnancy and the weeks after birth. Our goal is to make reliable information and continuity of support easier to access, while keeping qualified healthcare professionals at the centre of care.</p></div>
+        <div className="mission-grid">
+          <article><span className="mission-icon pink-icon"><HeartHandshake /></span><h3>Support without judgement</h3><p>A welcoming space designed around the real questions and concerns women may have during pregnancy and postpartum recovery.</p></article>
+          <article><span className="mission-icon green-icon"><BookOpen /></span><h3>Information you can trust</h3><p>Educational resources will be reviewed by appropriate maternal-health professionals and clearly distinguished from personal medical advice.</p></article>
+          <article><span className="mission-icon gold-icon"><ShieldCheck /></span><h3>Privacy matters</h3><p>We are designing secure access and patient control into the platform before opening health-record features.</p></article>
+        </div>
+      </section>
+
+      <section className="how-section" id="how-it-works">
+        <div className="how-inner">
+          <div><div className="section-kicker">A THOUGHTFUL APPROACH</div><h2>Designed for support.<br /><em>Built with care.</em></h2><p>We are developing Preggy Mom Aid in stages so that each feature is ready for the responsibility it carries.</p></div>
+          <div className="how-steps">
+            <div><span>01</span><section><b>Learn and understand</b><p>Access clear, reviewed information about pre-eclampsia, eclampsia and maternal wellbeing.</p></section></div>
+            <div><span>02</span><section><b>Stay connected</b><p>Patient accounts and personal health records will open only after privacy and security safeguards are in place.</p></section></div>
+            <div><span>03</span><section><b>Work with care teams</b><p>Verified healthcare professionals will be able to connect with patients who have authorised that relationship.</p></section></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="public-section directory-section" id="facilities">
+        <div className="directory-heading"><div><div className="section-kicker">FINDING MATERNITY CARE</div><h2>Facility directory</h2><p>We are preparing a directory using publicly available facility information. Listings will be clearly marked as independently unverified until details are confirmed directly.</p></div><span className="directory-icon"><Hospital size={28} /></span></div>
+        <div className="directory-empty"><Hospital size={24} /><div><b>No facility listings published yet</b><p>We will not invent hospital names, contact details or service capabilities. Directory entries will be added only when their source information is recorded.</p></div></div>
+        <p className="directory-disclaimer"><ShieldCheck size={15} /> A public listing will not mean a facility has been inspected, endorsed or confirmed to provide emergency or specialist maternity services. Always contact a facility or local emergency service directly to confirm current care options.</p>
+      </section>
+
+      <section className="professional-section" id="professionals">
+        <div className="professional-copy"><div className="section-kicker">FOR MATERNAL HEALTH PROFESSIONALS</div><h2>Better support is<br /><em>a shared effort.</em></h2><p>We welcome interest from doctors, nurses and midwives who share our commitment to respectful, evidence-informed maternal care.</p><p>Professional accounts will require credential verification. Access to a patient's records will require that patient's separate authorisation.</p></div>
+        <div className="professional-card"><div className="professional-card-icon"><LockKeyhole /></div><h3>Professional onboarding is being prepared</h3><p>Applications and patient-record access are not open yet. We are completing the verification, privacy and security foundations first.</p><a href="#launch-status">See launch status <ArrowRight size={16} /></a></div>
+      </section>
+
+      <section className="launch-status" id="launch-status"><div><span className="status-dot" /> CURRENT PLATFORM STATUS</div><h2>Public information first.<br /><em>Patient accounts later.</em></h2><p>The public website is being prepared. Patient registration, professional accounts and personal health records remain closed while the secure platform and clinical safeguards are developed.</p><span className="status-label"><LockKeyhole size={14} /> Patient registration is not open</span></section>
 
   useEffect(()=>{
     try {
@@ -141,9 +137,5 @@ export default function Page(){
       </div>
       <footer className="footer"><div className="footer-brand"><Image src="/logo.png" alt="" width={26} height={26}/><b>Preggy Mom Aid</b></div><span>Care, knowledge & support through every step.</span><span>Demo prototype · Not a medical device</span></footer>
     </main>
-    <div className="mobile-bottom">{[["Overview",Home],["Blood pressure",Activity],["Symptom check",ClipboardList],["Emergency",LifeBuoy]].map(([label,Icon]:any)=><button key={label} className={section===label?"active":""} onClick={()=>setPage(label)}><Icon size={19}/><span>{label==="Blood pressure"?"BP":label==="Symptom check"?"Symptoms":label}</span></button>)}</div>
-    {toast&&<div className="toast"><CheckCircle2 size={17}/>{toast}<button onClick={()=>setToast("")}><X size={15}/></button></div>}
-    <div className="disclaimer">Preggy Mom Aid provides educational and health-monitoring support only. It does not diagnose, treat or replace professional medical care. In an emergency, seek immediate medical attention.</div>
-  </div>;
+  );
 }
-function PageTitle({eyebrow,title,desc}:{eyebrow:string;title:string;desc:string}){return <div className="page-title"><span>{eyebrow}</span><h1>{title}</h1><p>{desc}</p></div>;}
