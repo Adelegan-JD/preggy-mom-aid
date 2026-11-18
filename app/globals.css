@@ -155,3 +155,13 @@
 .interactive-emergency b{font:800 11px Manrope}
 .interactive-emergency span{font-size:10px;line-height:1.7;color:#ffefed}
 @media(max-width:760px){.interactive-stage-heading{flex-direction:column}.stage-switch{width:100%}.stage-choice{flex:1;justify-content:center}.stage-detail{grid-template-columns:1fr;padding:18px}.stage-flow{grid-template-columns:1fr}.stage-flow-step{min-height:0;flex-direction:row;align-items:center}.stage-flow-step i{display:none}.interactive-warning-grid{grid-template-columns:1fr}.interactive-stage,.interactive-warning{border-radius:17px;padding:19px}.interactive-stage-heading h3,.interactive-warning h3{font-size:21px}}
+
+
+/* Clear account-service state when Supabase has not yet been provisioned */
+.account-unavailable{display:flex;align-items:flex-start;gap:12px;padding:15px 16px;margin:18px 0;border:1px solid #f0dfcf;border-radius:13px;background:linear-gradient(135deg,#fff8ef,#fff4f1);color:#9b765e}
+.account-unavailable svg{flex:none;margin-top:2px;color:#bf8b65}
+.account-unavailable p{margin:0;color:#806f61;font-size:11px;line-height:1.75}
+.account-available-links{display:grid;gap:10px;margin:18px 0}
+.account-available-links a{display:flex;align-items:center;gap:9px;padding:13px 14px;border:1px solid #eee5dc;border-radius:12px;background:#fff;color:#a66f70;text-decoration:none;font-size:11px;font-weight:800}
+.account-available-links a svg:last-child{margin-left:auto}
+.account-footnote a{color:#bd7779;font-weight:800;text-decoration:none}
