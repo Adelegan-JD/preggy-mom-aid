@@ -1,8 +1,6 @@
 -- Account roles and first patient-owned health records.
 -- No role can self-approve professional verification. No cross-user clinical access is granted here.
 
--- Ensure the identity table exists even if the earlier optional foundation
--- migration has not yet been applied to this newly provisioned project.
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
@@ -28,22 +26,14 @@ alter table public.profiles
   add column if not exists professional_type text,
   add column if not exists verification_status text not null default 'not_applicable';
 
-alter table public.profiles
-  drop constraint if exists profiles_account_type_check;
-alter table public.profiles
-  add constraint profiles_account_type_check
+alter table public.profiles drop constraint if exists profiles_account_type_check;
+alter table public.profiles add constraint profiles_account_type_check
   check (account_type in ('patient','professional'));
-
-alter table public.profiles
-  drop constraint if exists profiles_professional_type_check;
-alter table public.profiles
-  add constraint profiles_professional_type_check
+alter table public.profiles drop constraint if exists profiles_professional_type_check;
+alter table public.profiles add constraint profiles_professional_type_check
   check (professional_type is null or professional_type in ('doctor','nurse','midwife'));
-
-alter table public.profiles
-  drop constraint if exists profiles_verification_status_check;
-alter table public.profiles
-  add constraint profiles_verification_status_check
+alter table public.profiles drop constraint if exists profiles_verification_status_check;
+alter table public.profiles add constraint profiles_verification_status_check
   check (verification_status in ('not_applicable','pending','verified','rejected','expired'));
 
 update public.profiles
@@ -82,9 +72,8 @@ begin
 
   return new;
 end;
-$;
+$$;
 
--- Backfill accounts that were created before the profile trigger was installed.
 insert into public.profiles (id, full_name, account_type, professional_type, verification_status)
 select
   users.id,
@@ -105,8 +94,6 @@ create trigger on_auth_user_created_profile
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
--- Ensure the feedback tables exist even when a project was provisioned before
--- the earlier foundation migrations were applied.
 create table if not exists public.feedback_reviewers (
   user_id uuid primary key references auth.users(id) on delete cascade,
   created_at timestamptz not null default now()
@@ -119,14 +106,14 @@ create policy "Reviewers can read their own reviewer grant"
   on public.feedback_reviewers for select to authenticated
   using ((select auth.uid()) = user_id);
 
--- Rename the feedback table so no testing terminology remains in the database API.
 do $$
 begin
   if to_regclass('public.tester_feedback') is not null
      and to_regclass('public.product_feedback') is null then
     alter table public.tester_feedback rename to product_feedback;
   end if;
-end $;
+end;
+$$;
 
 create table if not exists public.product_feedback (
   id uuid primary key default gen_random_uuid(),
@@ -141,7 +128,6 @@ create index if not exists product_feedback_user_id_idx on public.product_feedba
 alter table public.product_feedback enable row level security;
 revoke all on public.product_feedback from anon;
 grant insert,select on public.product_feedback to authenticated;
-
 drop policy if exists "Testers can submit feedback for themselves" on public.product_feedback;
 drop policy if exists "Testers can read their own feedback" on public.product_feedback;
 drop policy if exists "Approved feedback reviewers can read feedback" on public.product_feedback;
@@ -160,8 +146,6 @@ create policy "Users can read their own product feedback"
     )
   );
 
--- Users can record their own readings. No diagnosis, threshold interpretation,
--- alerts or clinician visibility is implemented by this schema.
 create table if not exists public.blood_pressure_readings (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
@@ -170,9 +154,12 @@ create table if not exists public.blood_pressure_readings (
   pulse smallint check (pulse between 25 and 250),
   measured_at timestamptz not null,
   note text check (note is null or char_length(note) <= 500),
-  created_at timestamptz not null default now(),
-  constraint bp_values_not_equal check (systolic <> diastolic)
+  created_at timestamptz not null default now()
 );
+alter table public.blood_pressure_readings drop constraint if exists bp_values_not_equal;
+alter table public.blood_pressure_readings drop constraint if exists bp_values_ordered;
+alter table public.blood_pressure_readings
+  add constraint bp_values_ordered check (systolic > diastolic);
 create index if not exists blood_pressure_readings_user_measured_idx
   on public.blood_pressure_readings(user_id, measured_at desc);
 alter table public.blood_pressure_readings enable row level security;
@@ -184,8 +171,6 @@ create policy "Users manage their own blood pressure readings"
   using ((select auth.uid()) = user_id)
   with check ((select auth.uid()) = user_id);
 
--- Symptom notes are private to the account owner. This is a record-keeping feature,
--- not an automated triage or emergency-response service.
 create table if not exists public.symptom_reports (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
@@ -205,8 +190,6 @@ create policy "Users manage their own symptom reports"
   using ((select auth.uid()) = user_id)
   with check ((select auth.uid()) = user_id);
 
--- Professional applications are private and remain pending until an authorised
--- internal reviewer verifies registration against the relevant Nigerian regulator.
 create table if not exists public.professional_applications (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null unique references auth.users(id) on delete cascade,
@@ -223,10 +206,12 @@ drop policy if exists "Professionals submit and view own application" on public.
 create policy "Professionals submit and view own application"
   on public.professional_applications for select to authenticated
   using ((select auth.uid()) = user_id);
+drop policy if exists "Professionals may submit their own application" on public.professional_applications;
 create policy "Professionals may submit their own application"
   on public.professional_applications for insert to authenticated
   with check (
-    (select auth.uid()) = user_id
+    status = 'pending'
+    and (select auth.uid()) = user_id
     and exists (
       select 1 from public.profiles
       where profiles.id = (select auth.uid())
@@ -235,5 +220,5 @@ create policy "Professionals may submit their own application"
     )
   );
 
--- No public or user-facing route can change verification status. An authorised
--- internal process must update the profile and application after regulator checks.
+-- No user-facing route can change verification status. An authorised internal
+-- reviewer process must update both the profile and application after regulator checks.

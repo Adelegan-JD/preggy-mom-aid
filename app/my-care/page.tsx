@@ -7,6 +7,9 @@ export const dynamic="force-dynamic";
 export const metadata={title:"My health dashboard | Preggy Mom Aid"};
 
 export default async function MyCarePage(){
+ if(!process.env.NEXT_PUBLIC_SUPABASE_URL||!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY){
+  return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><div className="account-kicker">YOUR PERSONAL SPACE</div><h1>Your health dashboard</h1><p className="account-intro">Your secure health space is temporarily unavailable because the account service has not been configured for this deployment.</p><div className="patient-safety-note"><ShieldCheck size={20}/><p>Your health information has not been loaded. Please return when account services are available. Do not send medical details through feedback or email.</p></div><Link className="patient-back-link" href="/login">Return to sign in</Link></section></main>;
+ }
  const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)redirect("/login?next=/my-care");
  const {data:profile}=await supabase.from("profiles").select("full_name,account_type,verification_status").eq("id",user.id).maybeSingle();
  if(profile?.account_type==="professional")redirect("/professional");
@@ -15,7 +18,7 @@ export default async function MyCarePage(){
   supabase.from("symptom_reports").select("id",{count:"exact",head:true}).eq("user_id",user.id),
   supabase.from("blood_pressure_readings").select("systolic,diastolic,measured_at").eq("user_id",user.id).order("measured_at",{ascending:false}).limit(3)
  ]);
- const firstName=profile?.full_name?.trim().split(/\\s+/)[0]||"there";
+ const firstName=profile?.full_name?.trim().split(/\s+/)[0]||"there";
  return <main className="patient-dashboard" id="main-content" tabIndex={-1}>
   <header className="patient-dashboard-header"><Link href="/" className="account-brand"><span className="account-brand-mark"><HeartPulse size={20}/></span><span><b>Preggy Mom Aid</b><small>MY HEALTH SPACE</small></span></Link><nav aria-label="Account navigation"><Link href="/learn">Learning Centre</Link><Link href="/feedback">Feedback</Link><form action={async()=>{"use server";const client=await createClient();await client.auth.signOut();redirect("/login");}}><button className="account-signout">Sign out</button></form></nav></header>
   <section className="patient-dashboard-content">
