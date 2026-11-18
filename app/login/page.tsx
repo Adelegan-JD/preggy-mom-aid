@@ -2,17 +2,17 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { ArrowRight, Heart, ShieldCheck } from "lucide-react";
 
 export default function LoginPage() {
-  const router=useRouter(); const params=useSearchParams();
+  const router=useRouter();
   const [email,setEmail]=useState(""); const [password,setPassword]=useState("");
   const [busy,setBusy]=useState(false); const [error,setError]=useState("");
   async function submit(event:FormEvent<HTMLFormElement>){
     event.preventDefault();setBusy(true);setError("");
-    try{const supabase=createClient();const {error:authError}=await supabase.auth.signInWithPassword({email,password});if(authError)throw authError;router.push(params.get("next")==="/feedback"?"/feedback":"/my-care");router.refresh();}
+    try{const supabase=createClient();const {error:authError}=await supabase.auth.signInWithPassword({email,password});if(authError)throw authError;router.push("/my-care");router.refresh();}
     catch(e){setError(e instanceof Error?e.message:"We could not sign you in. Check your details and try again.");}
     finally{setBusy(false);}
   }
