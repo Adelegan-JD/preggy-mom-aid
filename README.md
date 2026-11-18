@@ -2,29 +2,30 @@
 
 Preggy Mom Aid is a public-first maternal health support platform focused on clear, responsible information for women affected by, or at risk of, pre-eclampsia/eclampsia.
 
-## Current release
+## Product
 
-The public website is the current release. It introduces the project, explains the staged approach to care support, provides general introductory health information and describes the facility directory and professional onboarding plans.
+The application is being built for real patient accounts and real user-entered information. Patient capabilities include account access, a personal profile and pregnancy/postpartum journey, private blood-pressure and symptom logs, a personal appointment calendar, private health-document storage, learning resources and product feedback.
 
-The following are intentionally not available yet: patient registration, patient profiles, personal health records, blood-pressure logging, symptom submissions, clinician accounts, appointments, messaging, referrals and emergency-response services.
+Patient records are private to the signed-in patient. No practitioner access is enabled by the patient foundation. Any future care-team connection must require verified professional identity, explicit patient consent, revocation and audited access controls.
 
-## Real information only
+The patient experience must not display fabricated identities, clinical readings, appointments, clinicians, facilities or outcomes. The hospital directory remains unavailable until its listings and service details have verifiable sources and clear verification labels.
 
-Public pages do not contain fictional patient identities, invented clinical readings, fabricated appointments, fake clinician accounts or made-up hospital listings. The facility directory remains empty until source information is available. Publicly sourced listings will be marked independently unverified until directly confirmed.
+## Current implementation status
 
-Health information on the site is general introductory education. Detailed clinical content and any future clinical workflows require documented review and approval by appropriately qualified Nigerian maternal-health clinicians.
+The patient foundation is in the repository, but a merged code change is not the same as a live, production-ready service. The Supabase migrations, authentication configuration, private storage policies, deployment and end-to-end security checks must be completed and verified before real patients are invited to enter sensitive health information.
 
-## Early reviewer guide
-
-People reviewing the current public site should read [the early review guide](docs/TESTER_GUIDE.md). Reviewers must not submit personal or patient health information. The site is not a medical service or emergency service.
-
-## Production architecture and implementation
-
+See:
+- [Patient experience completion plan](docs/PATIENT_EXPERIENCE_COMPLETION_PLAN.md)
 - [Production architecture](docs/PRODUCTION_ARCHITECTURE.md)
 - [Production implementation plan](docs/PRODUCTION_IMPLEMENTATION_PLAN.md)
-- [Supabase setup](docs/SUPABASE_SETUP.md)
+- [Supabase setup and launch steps](docs/SUPABASE_SETUP.md)
+- [Accessibility and personalisation standard](docs/ACCESSIBILITY_AND_PERSONALISATION_STANDARD.md)
 
-Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level security, and private storage. Infrastructure region, vendor terms and data-transfer arrangements require privacy/legal review before sensitive health information is processed.
+## Real information and clinical safety
+
+Public pages do not contain fictional patient identities, invented clinical readings, fabricated appointments, fake clinician accounts or made-up hospital listings. Publicly sourced facilities must be labelled independently unverified until directly confirmed.
+
+Preggy Mom Aid is not an emergency service and does not diagnose, prescribe, interpret readings or replace professional maternity care. Clinical education, thresholds, symptom guidance and emergency pathways require documented approval by appropriately qualified Nigerian maternal-health clinicians before clinical use. Users with urgent concerns must seek medical assessment rather than wait for an app response.
 
 ## Local development
 
@@ -37,15 +38,12 @@ Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level sec
 
 - `npm run typecheck` — TypeScript validation.
 - `npm run build` — production build.
+- `npx playwright test` — browser and accessibility coverage where configured.
 
-A successful build or deployment does not establish clinical, privacy, regulatory or security readiness.
+A successful build or deployment does not by itself establish clinical, privacy, regulatory or security readiness.
 
-## Accessibility and personalisation
+## Privacy, security and accessibility
 
-The site is being developed toward WCAG 2.2 Level AA. Users can choose a colour theme, accent palette, text size, contrast, motion preference and content width from the global Display settings panel. Preferences are stored locally on the device and do not alter clinical content or patient records. Automated scans are not a substitute for manual keyboard, screen-reader, zoom and assistive-technology testing. See [the accessibility and personalisation standard](docs/ACCESSIBILITY_AND_PERSONALISATION_STANDARD.md).
+Before processing real patient information, complete the applicable Nigeria Data Protection Act / NDPC review, a Data Protection Impact Assessment, privacy notices and consent workflows, region and cross-border transfer review, retention and deletion rules, access-control testing, incident response and backup/restore checks.
 
-## Clinical, privacy and security boundaries
-
-Preggy Mom Aid is not an emergency service and does not diagnose, prescribe or replace professional maternity care. Any clinical education, thresholds, symptom guidance or decision-support must be approved by appropriately qualified Nigerian maternal-health clinicians before release.
-
-Before collecting real patient information, complete the applicable Nigerian privacy/legal review, Data Protection Impact Assessment, consent and notice workflows, security review, access-control testing, incident response and backup/restore checks.
+The application is being developed toward WCAG 2.2 Level AA. Automated scans must be supplemented by manual keyboard, screen-reader, zoom and assistive-technology testing.
