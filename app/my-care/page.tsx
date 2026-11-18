@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Activity,CalendarHeart,ClipboardList,FileHeart,HeartPulse,MessageSquareText,ShieldCheck,Stethoscope,BookOpen,ArrowRight } from "lucide-react";
+import { Activity,CalendarHeart,ClipboardList,FileHeart,HeartPulse,MessageSquareText,ShieldCheck,BookOpen,ArrowRight } from "lucide-react";
 
 export const dynamic="force-dynamic";
 export const metadata={title:"My health dashboard | Preggy Mom Aid"};
@@ -13,7 +13,7 @@ export default async function MyCarePage(){
  const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)redirect("/login?next=/my-care");
  const {data:profile}=await supabase.from("profiles").select("full_name,account_type,verification_status").eq("id",user.id).maybeSingle();
  if(profile?.account_type==="professional")redirect("/professional");
- const [{count:bpCount},{count:symptomCount},{data:recentReadings}]=await Promise.all([
+ const [{count:bpCount},{count:symptomCount},{data:recentReadings},{data:patientJourney}]=await Promise.all([
   supabase.from("blood_pressure_readings").select("id",{count:"exact",head:true}).eq("user_id",user.id),
   supabase.from("symptom_reports").select("id",{count:"exact",head:true}).eq("user_id",user.id),
   supabase.from("blood_pressure_readings").select("systolic,diastolic,measured_at").eq("user_id",user.id).order("measured_at",{ascending:false}).limit(3)
@@ -24,7 +24,7 @@ export default async function MyCarePage(){
   <section className="patient-dashboard-content">
    <div className="patient-welcome"><div><div className="account-kicker">YOUR PERSONAL SPACE</div><h1>Welcome, {firstName}</h1><p>Your pregnancy and postpartum support space. You control your information and who can access it.</p></div><span className="patient-welcome-mark"><HeartPulse size={34}/></span></div>
    <div className="patient-safety-note"><ShieldCheck size={20}/><p><b>Your health information is private.</b> This space stores information you choose to record. It is not continuously monitored and does not replace your maternity team or emergency care.</p></div>
-   <div className="patient-stat-grid"><article><span>Blood pressure entries</span><strong>{bpCount??0}</strong><small>Records you have saved</small></article><article><span>Symptom notes</span><strong>{symptomCount??0}</strong><small>Entries you have recorded</small></article><article><span>Care access</span><strong>Private</strong><small>No clinician access unless you authorise it</small></article></div>
+   <section className="patient-recent-panel"><div className="account-kicker">YOUR JOURNEY</div><h2>{patientJourney?.pregnancy_status==="postpartum"?"Your postpartum journey":patientJourney?.pregnancy_status==="not_currently_pregnant"?"Your health space":"Your pregnancy journey"}</h2>{patientJourney?.pregnancy_status==="pregnant"&&estimatedWeeks!==null?<p>Your estimated pregnancy stage is around <strong>{estimatedWeeks} weeks</strong>{daysToDue!==null&&daysToDue>=0?`, with an estimated ${daysToDue} days until your due date`:""}. This is a calendar estimate based only on the due date you entered, not a clinical dating assessment.</p>:patientJourney?.pregnancy_status==="postpartum"&&daysPostpartum!==null?<p>You are around <strong>{daysPostpartum} days</strong> after the birth date you entered. Continue your postnatal care with your maternity team.</p>:patientJourney?.pregnancy_status==="not_currently_pregnant"?<p>Your personal health space remains available for your wellbeing and records.</p>:<p>Add your pregnancy status and estimated due date or birth date to see a personal journey summary here.</p>}<Link href="/my-care/profile">Update journey details <ArrowRight size={15}/></Link></section>\n   <div className="patient-stat-grid"><article><span>Blood pressure entries</span><strong>{bpCount??0}</strong><small>Records you have saved</small></article><article><span>Symptom notes</span><strong>{symptomCount??0}</strong><small>Entries you have recorded</small></article><article><span>Care access</span><strong>Private</strong><small>No clinician access unless you authorise it</small></article></div>
    <div className="patient-section-heading"><div><div className="account-kicker">YOUR HEALTH TOOLS</div><h2>Keep track of your care</h2></div></div>
    <div className="patient-profile-prompt"><div><div className="account-kicker">MAKE THIS SPACE YOURS</div><strong>Complete your personal and pregnancy profile</strong><p>Add your preferred name, language and pregnancy or postpartum dates to personalise your dashboard.</p></div><Link href="/my-care/profile">Update my profile <ArrowRight size={15}/></Link></div>
    <div className="patient-feature-grid">
