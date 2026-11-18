@@ -115,3 +115,43 @@
 
 .header-account-links{display:flex;align-items:center;gap:17px}.header-signin{font-size:10px;font-weight:800;color:#a66f70;text-decoration:none}.header-account-links .header-cta{white-space:nowrap}
 @media(max-width:760px){.header-account-links{gap:9px}.header-signin{font-size:9px}.header-account-links .header-cta{font-size:9px;padding:10px 12px}}
+
+
+/* Interactive patient learning components */
+.interactive-learning{display:grid;gap:34px}
+.interactive-stage,.interactive-warning{border:1px solid #e9eee8;border-radius:22px;background:linear-gradient(145deg,#fff,#f8fbf7);padding:clamp(20px,3vw,34px);box-shadow:0 15px 38px #456b570c}
+.interactive-stage-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:22px}
+.interactive-stage-heading h3,.interactive-warning h3{font:800 24px Manrope;letter-spacing:-.7px;margin:8px 0;color:#2b4038}
+.interactive-stage-heading p,.interactive-warning-title p{font-size:11px;line-height:1.7;color:#829087;margin:0;max-width:520px}
+.stage-switch{display:flex;gap:8px;flex-wrap:wrap}
+.stage-choice{display:flex;align-items:center;gap:8px;padding:11px 14px;border:1px solid #e7ece7;border-radius:30px;background:#fff;color:#74847a;font-size:10px;font-weight:800}
+.stage-choice.active{background:#eaf4ed;border-color:#cfe3d5;color:#477b61}
+.stage-detail{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;align-items:center;padding:23px;border-radius:17px;background:linear-gradient(120deg,#f1f7f1,#fff7f6)}
+.stage-detail-icon{width:46px;height:46px;border-radius:15px;background:#fff;color:#d67f8c;display:grid;place-items:center;box-shadow:0 8px 18px #8c6c5c12}
+.stage-detail h4{font:800 17px Manrope;margin:14px 0 8px;color:#3e5147}
+.stage-detail-copy p{font-size:11px;line-height:1.8;color:#7d8c82;margin:0}
+.stage-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.stage-flow-step{position:relative;min-height:115px;padding:15px 12px;border:1px solid #e6ece6;border-radius:13px;background:#ffffffd9;display:flex;flex-direction:column;gap:12px}
+.stage-flow-step>span{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#fbe9ec;color:#c86f80;font-size:10px;font-weight:900}
+.stage-flow-step b{font:700 10px/1.5 Manrope;color:#586a5e}
+.stage-flow-step i{position:absolute;right:-8px;top:43%;font-style:normal;color:#d58b99;z-index:1}
+.interactive-footnote{display:flex;gap:8px;align-items:flex-start;color:#718779;font-size:9px;line-height:1.6;margin:16px 0 0}
+.interactive-footnote svg{flex:none}
+.interactive-warning{background:linear-gradient(145deg,#fff9f5,#fff1ef);border-color:#f2dfd9}
+.interactive-warning-title{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.warning-icon{width:44px;height:44px;border-radius:14px;background:#fff;color:#c66d64;display:grid;place-items:center;box-shadow:0 7px 18px #b96f5a17;flex:none}
+.interactive-warning h3{margin:5px 0 7px}
+.interactive-warning-title p{max-width:650px}
+.interactive-warning-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.warning-card{border:1px solid #f0ded9;border-radius:13px;padding:15px;background:#ffffffc9;text-align:left;color:#765e58;transition:background .2s,border-color .2s}
+.warning-card:hover,.warning-card.expanded{background:#fff;border-color:#e8b9b1}
+.warning-card-top{display:flex;align-items:center;gap:10px}
+.warning-card-top>svg:first-child{color:#c5766f;flex:none}
+.warning-card-top b{font:700 11px Manrope;line-height:1.5;flex:1}
+.warning-chevron{transition:transform .2s;flex:none;color:#a98a80}
+.warning-card.expanded .warning-chevron{transform:rotate(180deg)}
+.warning-card-detail{display:block;padding:12px 2px 2px 29px;font-size:10px;line-height:1.8;color:#8c736b}
+.interactive-emergency{display:flex;flex-direction:column;gap:5px;margin-top:16px;padding:16px 18px;border-radius:13px;background:#9f4d48;color:#fff}
+.interactive-emergency b{font:800 11px Manrope}
+.interactive-emergency span{font-size:10px;line-height:1.7;color:#ffefed}
+@media(max-width:760px){.interactive-stage-heading{flex-direction:column}.stage-switch{width:100%}.stage-choice{flex:1;justify-content:center}.stage-detail{grid-template-columns:1fr;padding:18px}.stage-flow{grid-template-columns:1fr}.stage-flow-step{min-height:0;flex-direction:row;align-items:center}.stage-flow-step i{display:none}.interactive-warning-grid{grid-template-columns:1fr}.interactive-stage,.interactive-warning{border-radius:17px;padding:19px}.interactive-stage-heading h3,.interactive-warning h3{font-size:21px}}
