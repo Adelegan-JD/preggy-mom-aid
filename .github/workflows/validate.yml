@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  build-and-accessibility:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -15,10 +15,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
       - name: Install dependencies
         run: npm install
       - name: Type-check
         run: npm run typecheck
       - name: Build Next.js application
         run: npm run build
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser accessibility and interaction tests
+        run: npm run test:a11y
