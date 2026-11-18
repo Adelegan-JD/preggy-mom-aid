@@ -1,38 +1,30 @@
-# Preggy Mom Aid — Early public-site review guide
+# Preggy Mom Aid — Patient tester review guide
 
-Thank you for helping review Preggy Mom Aid.
+Thank you for joining the patient testing group.
 
-## What is available to review
+## Getting started
+1. Open the public website and choose **Join as a tester**, or visit `/signup`.
+2. Register with your own email address and create a password.
+3. If email confirmation is enabled, open the confirmation email and follow its link.
+4. Sign in at `/login` and open your patient tester space.
+5. Explore the Learning Centre, then use **Give feedback** in your tester space to submit your review.
 
-- The public homepage, responsive navigation and new illustrated Learning Centre at /learn.
-- The project mission and staged-release explanation.
-- General introductory information about pre-eclampsia/eclampsia warning signs, pregnancy and postpartum care, including the care-map diagram and links to WHO, NHS and NICE resources.
-- The facility-directory explanation and its intentionally empty state.
-- Information for healthcare professionals and the current platform status.
+## What you can test
+- Creating an account, email confirmation and signing in.
+- The protected patient tester space and sign-out.
+- The Learning Centre, navigation, readability and mobile layout.
+- The feedback form and confirmation after submission.
 
-## What is not open
+## What is not available
+This is a product/usability test only. Personal medical records, pregnancy tracking, blood-pressure logging, symptom reporting, clinical advice, clinician messaging, appointments, referrals and emergency-response services are not enabled.
 
-Patient registration, patient profiles, blood-pressure logging, symptom submissions, clinician accounts, messaging, appointments, referrals and emergency-response services are not available. Do not expect these to work.
+## Safety and privacy
+- Do not enter pregnancy dates, symptoms, blood-pressure readings, diagnoses, medication details, medical history, medical records or any other health information.
+- Do not include personal health information in the feedback form, screenshots or recordings.
+- Use your own email address and account. Never share your password.
+- The site is not a medical or emergency service. For urgent concerns, contact your maternity care team or seek emergency medical care immediately.
 
-## Important safety and privacy rules
+## What useful feedback looks like
+Please tell us which page or feature you used, what you expected, what happened, what was confusing, and what would make the experience easier. Keep feedback focused on usability, language, accessibility, trust and design.
 
-- This site is not a medical service, diagnostic tool or emergency service.
-- Do not use it to make care decisions or delay contacting a qualified healthcare professional.
-- Do not enter, send or share anyone's name, phone number, medical history, pregnancy details, blood-pressure readings, symptoms or other personal health information as part of this review.
-- Do not use real patient information in screenshots, recordings or feedback.
-- If someone has urgent symptoms or a seizure/collapse, seek emergency medical care immediately; do not wait for this website.
-
-## What to check
-
-1. Open the site on a phone and a desktop browser.
-2. Check that the navigation links move to the correct sections.
-3. Check that text is readable, buttons and links are easy to use, and there is no content overflowing the screen.
-4. Review whether the wording is clear, respectful and easy to understand.
-5. Note broken links, spelling issues, layout problems and confusing wording.
-6. Treat all health information as general introductory information pending formal clinical review.
-
-## Feedback
-
-Share observations with the project team through the review invitation you received. Please include the device/browser, the page or section, what you expected, and what happened. Keep feedback free of personal or patient health information.
-
-This is an early review of the public information experience, not approval for clinical use or patient onboarding.
+All health education is introductory and remains subject to Nigerian clinical review. This testing release is not approval for clinical use.
