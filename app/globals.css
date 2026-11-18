@@ -382,3 +382,15 @@ html[data-contrast="high"] .pma-preferences-panel{box-shadow:0 0 0 3px #fff,0 0 
 .tester-feature p{color:#536258}
 .tester-feature>a{color:#8d3e51}
 .tester-boundary{color:#7d4944}
+
+/* Final contrast adjustments from the multi-route axe report */
+.public-site .section-intro>p,
+.public-site .how-inner>div:first-child>p{color:#536258}
+.public-site .how-steps>div>span{color:#9c4057}
+.learn-page .learn-notice>div>p{color:#665147}
+.learn-page .stage-choice{color:#526157}
+.learn-page .stage-choice.active{color:#315c46}
+.learn-page .warning-card-detail{color:#5d4942}
+.learn-page .postpartum-copy>a,
+.learn-page .learn-resource-card>a{color:#176b68}
+.account-available-links a{color:#873d50}
