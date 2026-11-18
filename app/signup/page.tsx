@@ -50,13 +50,13 @@ export default function SignUpPage() {
       <section className="account-card">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={22} /></span>
-          <span><b>Preggy Mom Aid</b><small>PATIENT TESTER ACCESS</small></span>
+          <span><b>Preggy Mom Aid</b><small>PATIENT ACCOUNT</small></span>
         </Link>
         <div className="account-kicker">A WELCOMING PLACE TO BEGIN</div>
         <h1>Create your account</h1>
         <p className="account-intro">
-          Join the patient testing group to explore the learning experience and
-          tell us what works well and what needs to improve.
+          Create your Preggy Mom Aid account. Account access currently covers sign-in and your personal space; clinical records and care features are not yet available. Explore the Learning Centre and share product feedback.
+          
         </p>
         {supabaseConfigured ? (
           <form className="account-form" onSubmit={submit}>
@@ -66,7 +66,7 @@ export default function SignUpPage() {
             <input id="signupEmail" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
             <label htmlFor="signupPassword">Password</label>
             <input id="signupPassword" type="password" autoComplete="new-password" minLength={10} required value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 10 characters" />
-            <button className="account-submit" disabled={busy}>{busy ? "Creating account…" : "Create patient tester account"} <ArrowRight size={17} /></button>
+            <button className="account-submit" disabled={busy}>{busy ? "Creating account…" : "Create account"} <ArrowRight size={17} /></button>
           </form>
         ) : (
           <div className="account-unavailable" role="status">
@@ -82,7 +82,7 @@ export default function SignUpPage() {
         {message && <p className="account-success" role="status">{message}</p>}
         <div className="account-privacy">
           <ShieldCheck size={18} />
-          <p><b>Your privacy matters.</b> This testing account is for exploring the site and giving feedback only. Do not submit symptoms, pregnancy details, blood-pressure readings or medical records.</p>
+          <p><b>Your privacy matters.</b> Your account currently provides access to the website and product feedback only. Do not submit symptoms, pregnancy details, blood-pressure readings or medical records.</p>
         </div>
         {supabaseConfigured && <p className="account-switch">Already registered? <Link href="/login">Sign in</Link></p>}
         <p className="account-footnote">
