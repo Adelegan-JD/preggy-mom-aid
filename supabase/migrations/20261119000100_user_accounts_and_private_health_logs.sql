@@ -154,9 +154,12 @@ create table if not exists public.blood_pressure_readings (
   pulse smallint check (pulse between 25 and 250),
   measured_at timestamptz not null,
   note text check (note is null or char_length(note) <= 500),
-  created_at timestamptz not null default now(),
-  constraint bp_values_ordered check (systolic > diastolic)
+  created_at timestamptz not null default now()
 );
+alter table public.blood_pressure_readings drop constraint if exists bp_values_not_equal;
+alter table public.blood_pressure_readings drop constraint if exists bp_values_ordered;
+alter table public.blood_pressure_readings
+  add constraint bp_values_ordered check (systolic > diastolic);
 create index if not exists blood_pressure_readings_user_measured_idx
   on public.blood_pressure_readings(user_id, measured_at desc);
 alter table public.blood_pressure_readings enable row level security;
