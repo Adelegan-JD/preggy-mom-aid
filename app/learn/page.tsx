@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   description: "Introductory information about pre-eclampsia, pregnancy and postpartum care, with clear clinical review status."
 };
 import Link from "next/link";
+import InteractiveLearning from "./interactive-learning";
 import { ArrowLeft, ArrowRight, AlertTriangle, Baby, BookOpen, CalendarCheck, ClipboardList, HeartPulse, ShieldCheck, Stethoscope, Activity, Eye, Hand, Zap, ExternalLink } from "lucide-react";
 
 const resources = [
@@ -47,6 +48,7 @@ export default function LearnPage(){
     <span className="resource-number">0{index+1}</span><span className="resource-category">{item.category}</span><h3>{item.title}</h3><p>{item.description}</p><a href={item.href} target="_blank" rel="noreferrer">{item.source} <ExternalLink size={13}/></a>
    </article>)}</div>
   </section>
+  <section className="learn-section learn-interactive-section"><InteractiveLearning /></section>
   <section className="learn-section learn-diagram-section">
    <div className="learn-section-heading"><div><span className="learn-kicker">A SIMPLE CARE MAP</span><h2>How routine checks fit together</h2><p>This is a conversation guide, not a diagnostic pathway. Your clinician decides which checks and next steps are appropriate.</p></div><span className="learn-heading-icon peach-heading"><ClipboardList size={26}/></span></div>
    <div className="care-map">
