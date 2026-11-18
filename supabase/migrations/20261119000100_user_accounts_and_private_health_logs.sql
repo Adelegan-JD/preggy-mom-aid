@@ -156,10 +156,14 @@ create table if not exists public.blood_pressure_readings (
   note text check (note is null or char_length(note) <= 500),
   created_at timestamptz not null default now()
 );
+-- Legacy entries may contain reversed values from the earlier form.
+-- Do not rewrite a patient's historical health data automatically. NOT VALID
+-- enforces this rule for new/updated rows while allowing existing rows to be
+-- reviewed and corrected through a separate, auditable patient-data workflow.
 alter table public.blood_pressure_readings drop constraint if exists bp_values_not_equal;
 alter table public.blood_pressure_readings drop constraint if exists bp_values_ordered;
 alter table public.blood_pressure_readings
-  add constraint bp_values_ordered check (systolic > diastolic);
+  add constraint bp_values_ordered check (systolic > diastolic) not valid;
 create index if not exists blood_pressure_readings_user_measured_idx
   on public.blood_pressure_readings(user_id, measured_at desc);
 alter table public.blood_pressure_readings enable row level security;

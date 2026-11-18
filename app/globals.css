@@ -722,3 +722,50 @@ html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df
 .professional-signup-note p{font-size:12px;line-height:1.6;color:var(--pma-muted);margin:0}
 
 .account-signout{border:1px solid var(--pma-border);border-radius:30px;padding:9px 17px;background:var(--pma-surface);color:var(--pma-rose);font-size:11px;font-weight:800;cursor:pointer}
+
+
+/* Patient profile and pregnancy journey setup */
+.patient-profile-prompt{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;margin:0 0 22px;border:1px solid var(--pma-border);border-radius:16px;background:var(--pma-surface);box-shadow:var(--pma-shadow-card)}
+.patient-profile-prompt strong{display:block;margin:5px 0;color:var(--pma-ink);font:800 16px Manrope}
+.patient-profile-prompt p{margin:0;color:var(--pma-muted);font-size:13px;line-height:1.55}
+.patient-profile-prompt>a{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;color:var(--pma-green);font-weight:800;text-decoration:none}
+.patient-profile-form{display:flex;flex-direction:column;gap:11px;max-width:760px;margin:24px 0;padding:clamp(18px,3vw,30px)}
+.patient-profile-form h2{font:800 22px Manrope;color:var(--pma-ink);margin:0 0 2px}
+.patient-profile-form label{font-size:13px;font-weight:750;color:var(--pma-ink);margin-top:4px}
+.patient-profile-form label span{font-weight:500;color:var(--pma-muted)}
+.patient-profile-form input,.patient-profile-form select{width:100%;min-height:46px;border:1px solid var(--pma-border);border-radius:10px;padding:11px 13px;background:var(--pma-surface);color:var(--pma-ink)}
+.patient-profile-form input:focus-visible,.patient-profile-form select:focus-visible{outline:3px solid #e9a1b0;outline-offset:2px}
+.patient-profile-divider{height:1px;background:var(--pma-border);margin:12px 0}
+@media(max-width:640px){.patient-profile-prompt{align-items:flex-start;flex-direction:column}.patient-profile-prompt>a{min-height:42px}.patient-profile-form{padding:18px}}
+
+
+/* Patient appointment calendar */
+.patient-appointments-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;gap:20px;margin-top:24px}
+.patient-appointment-list{display:grid;gap:16px;min-width:0}
+.patient-appointment-item{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:15px 0;border-bottom:1px solid var(--pma-border)}
+.patient-appointment-item:last-child{border-bottom:0}
+.patient-appointment-item>div:first-child{display:grid;gap:5px;min-width:0}
+.patient-appointment-item strong{color:var(--pma-ink);font-size:14px}
+.patient-appointment-item span{color:var(--pma-muted);font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.patient-appointment-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.patient-appointment-item button{border:1px solid var(--pma-border);border-radius:8px;background:var(--pma-surface);padding:7px 9px;color:var(--pma-green);font-size:11px;font-weight:750}
+.patient-appointment-item button:hover{border-color:var(--pma-green)}
+.appointment-status{display:inline-flex;width:max-content;padding:4px 8px;border-radius:20px;background:var(--pma-surface-soft);font-weight:750;text-transform:capitalize}
+.appointment-status.cancelled{background:#fff0ef;color:#a33d38}
+.appointment-status.completed{background:#eaf5ee;color:#36765c}
+@media(max-width:800px){.patient-appointments-layout{grid-template-columns:1fr}}
+@media(max-width:520px){.patient-appointment-item{flex-direction:column}.patient-appointment-actions{justify-content:flex-start}}
+
+
+/* Private patient health records */
+.patient-documents-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;gap:20px;margin-top:24px}
+.patient-document-item{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid var(--pma-border)}
+.patient-document-item:last-child{border-bottom:0}
+.patient-document-item>div:first-child{display:grid;gap:5px;min-width:0}
+.patient-document-item strong{color:var(--pma-ink);font-size:14px;overflow-wrap:anywhere}
+.patient-document-item span{color:var(--pma-muted);font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.patient-document-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:7px}
+.patient-document-actions button{border:1px solid var(--pma-border);border-radius:8px;background:var(--pma-surface);padding:8px 10px;color:var(--pma-green);font-size:11px;font-weight:750}
+.patient-document-actions button:last-child{color:#a33d38}
+@media(max-width:800px){.patient-documents-layout{grid-template-columns:1fr}}
+@media(max-width:520px){.patient-document-item{flex-direction:column}.patient-document-actions{justify-content:flex-start}}
