@@ -40,6 +40,10 @@ Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level sec
 
 A successful build or deployment does not establish clinical, privacy, regulatory or security readiness.
 
+## Accessibility and personalisation
+
+The site is being developed toward WCAG 2.2 Level AA. Users can choose a colour theme, accent palette, text size, contrast, motion preference and content width from the global Display settings panel. Preferences are stored locally on the device and do not alter clinical content or patient records. Automated scans are not a substitute for manual keyboard, screen-reader, zoom and assistive-technology testing. See [the accessibility and personalisation standard](docs/ACCESSIBILITY_AND_PERSONALISATION_STANDARD.md).
+
 ## Clinical, privacy and security boundaries
 
 Preggy Mom Aid is not an emergency service and does not diagnose, prescribe or replace professional maternity care. Any clinical education, thresholds, symptom guidance or decision-support must be approved by appropriately qualified Nigerian maternal-health clinicians before release.

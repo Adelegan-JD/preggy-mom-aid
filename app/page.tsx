@@ -52,23 +52,23 @@ export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <main className="public-site">
+    <main className="public-site">\n      <a className="sr-only" href="#main-content">Skip to page content</a>
       <header className="public-header">
-        <a className="public-brand" href="#" aria-label="Preggy Mom Aid home">
+        <a className="public-brand" href="/" aria-label="Preggy Mom Aid home">
           <Image src="/logo.png" alt="" width={48} height={48} priority />
           <span><strong>Preggy Mom Aid</strong><small>MATERNAL HEALTH SUPPORT</small></span>
         </a>
-        <nav className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation">
+        <nav id="primary-navigation" className={menuOpen ? "public-nav is-open" : "public-nav"} aria-label="Main navigation">
           {nav.map((item) => <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a>)}
         </nav>
         <div className="header-account-links"><a className="header-signin" href="/login">Sign in</a><a className="header-cta" href="/signup">Join as a tester <ArrowRight size={16} /></a></div>
-        <button className="public-menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
+        <button type="button" className="public-menu-toggle" aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
-      <section className="public-hero">
+      <section className="public-hero" id="main-content" aria-labelledby="hero-heading" tabIndex={-1}>
         <div className="hero-copy-public">
           <span className="eyebrow-public"><span /> SUPPORT THROUGH PREGNANCY AND BEYOND</span>
-          <h1>Care, knowledge<br />and support for<br /><em>every step.</em></h1>
+          <h1 id="hero-heading">Care, knowledge<br />and support for<br /><em>every step.</em></h1>
           <p>Preggy Mom Aid is being built to help women affected by, or at risk of, pre-eclampsia and eclampsia find clear information, understand warning signs and feel supported throughout pregnancy and after birth.</p>
           <div className="hero-actions">
             <a className="primary-public-btn" href="/learn">Explore health information <ArrowRight size={17} /></a>
