@@ -204,8 +204,8 @@ html[data-accent="plum"]{--pma-accent:#68409a;--pma-accent-soft:#f5effc}
 .public-site{--pub-teal:var(--pma-accent)}
 .header-cta,.primary-public-btn,.account-submit{background:var(--pma-accent)!important;background-image:none!important;color:#fff!important}
 .pma-preferences>summary svg{color:var(--pma-accent)}
-html[data-text-size="large"] :where(p,li,label,input,textarea,select,button,a){font-size:1.12em}
-html[data-text-size="largest"] :where(p,li,label,input,textarea,select,button,a){font-size:1.25em}
+html[data-text-size="large"] :where(h1,h2,h3,h4,h5,h6,p,li,label,input,textarea,select,button,a,small,summary,figcaption,blockquote){font-size:1.12em}
+html[data-text-size="largest"] :where(h1,h2,h3,h4,h5,h6,p,li,label,input,textarea,select,button,a,small,summary,figcaption,blockquote){font-size:1.25em}
 html[data-text-size="large"] :where(p,li){line-height:1.75}
 html[data-text-size="largest"] :where(p,li){line-height:1.8}
 html[data-layout="wide"] .public-header,
