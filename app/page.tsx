@@ -97,7 +97,7 @@ export default function HomePage() {
         <div className="mission-grid">
           <article><span className="mission-icon pink-icon"><HeartHandshake /></span><h3>Support without judgement</h3><p>A welcoming space designed around the real questions and concerns women may have during pregnancy and postpartum recovery.</p></article>
           <article><span className="mission-icon green-icon"><BookOpen /></span><h3>Information with context</h3><p>We will distinguish general education from personal medical advice and identify content that is awaiting clinical review.</p></article>
-          <article><span className="mission-icon gold-icon"><ShieldCheck /></span><h3>Privacy matters</h3><p>Patient accounts and personal health records will remain closed until the required privacy, security and clinical safeguards are ready.</p></article>
+          <article><span className="mission-icon gold-icon"><ShieldCheck /></span><h3>Privacy matters</h3><p>Patient-controlled health information remains private. Access by a healthcare professional requires separate patient authorisation.</p></article>
         </div>
       </section>
 
@@ -106,7 +106,7 @@ export default function HomePage() {
           <div><div className="section-kicker">A THOUGHTFUL APPROACH</div><h2>Designed for support.<br /><em>Built with care.</em></h2><p>We are releasing Preggy Mom Aid in stages so that every feature is ready for the responsibility it carries.</p></div>
           <div className="how-steps">
             <div><span>01</span><section><b>Learn and understand</b><p>Explore public information about warning signs, pregnancy, postpartum health and care conversations.</p></section></div>
-            <div><span>02</span><section><b>Secure patient access</b><p>Patient accounts and personal health records will open only after privacy and security safeguards are in place.</p></section></div>
+            <div><span>02</span><section><b>Secure patient access</b><p>Create a private patient account, record your own readings and notes, and keep control of your health information.</p></section></div>
             <div><span>03</span><section><b>Work with care teams</b><p>Doctors, nurses and midwives will undergo profession-appropriate credential verification. Patient record access will require patient authorisation.</p></section></div>
           </div>
         </div>
@@ -131,11 +131,11 @@ export default function HomePage() {
       </section>
 
       <section className="professional-section" id="professionals">
-        <div className="professional-copy"><div className="section-kicker">FOR MATERNAL HEALTH PROFESSIONALS</div><h2>Better support is<br /><em>a shared effort.</em></h2><p>We welcome interest from doctors, nurses and midwives who share our commitment to respectful, evidence-informed maternal care.</p><p>Professional accounts will require credential verification. Access to a patient's records will require that patient's separate authorisation.</p></div>
-        <div className="professional-card"><div className="professional-card-icon"><LockKeyhole /></div><h3>Professional onboarding is being prepared</h3><p>Applications and patient-record access are not open yet. We are completing the verification, privacy and security foundations first.</p><a href="#contact">Register your interest <ArrowRight size={16} /></a></div>
+        <div className="professional-copy"><div className="section-kicker">FOR MATERNAL HEALTH PROFESSIONALS</div><h2>Better support is<br /><em>a shared effort.</em></h2><p>We welcome interest from doctors, nurses and midwives who share our commitment to respectful, evidence-informed maternal care.</p><p>Professional accounts require registration checks. Access to a patient's records requires that patient's separate authorisation.</p></div>
+        <div className="professional-card"><div className="professional-card-icon"><LockKeyhole /></div><h3>Professional verification required</h3><p>Healthcare professionals can create an account and submit their registration details. Practitioner access remains restricted until an authorised reviewer verifies credentials.</p><a href="#contact">Register your interest <ArrowRight size={16} /></a></div>
       </section>
 
-      <section className="launch-status" id="launch-status"><div><span className="status-dot" /> CURRENT PLATFORM STATUS</div><h2>Public information first.<br /><em>Patient accounts later.</em></h2><p>The public information site is available for review. Patient registration, professional accounts and personal health records remain closed while the secure platform and clinical safeguards are completed.</p><span className="status-label"><LockKeyhole size={14} /> Patient registration is not open</span></section>
+      <section className="launch-status" id="launch-status"><div><span className="status-dot" /> CURRENT PLATFORM STATUS</div><h2>Public information.<br /><em>Private accounts and care tools.</em></h2><p>Patients can create private accounts and record their own information once the database migration is applied. Professional accounts remain restricted until credentials are verified. Features that require clinical review or patient consent are activated only after their safeguards are complete.</p><span className="status-label"><LockKeyhole size={14} /> Account registration available</span></section>
 
       <section className="public-section" id="contact">
         <div className="section-kicker">PARTNERSHIPS AND ENQUIRIES</div>

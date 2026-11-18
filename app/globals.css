@@ -618,3 +618,107 @@ html[data-contrast="high"] .header-cta,html[data-contrast="high"] .primary-publi
 @media(prefers-reduced-motion:reduce){
  .mission-grid article,.learn-resource-card,.header-cta,.primary-public-btn,.account-submit{transition:none!important}
 }
+
+
+/* Patient and practitioner spaces: responsive, accessible production surfaces */
+.patient-dashboard,.professional-dashboard{min-height:100vh;background:var(--pma-canvas,#f7f8f5);color:var(--pma-ink,#243a32)}
+.patient-dashboard-header,.professional-dashboard-header{min-height:76px;padding:14px clamp(18px,4vw,54px);display:flex;align-items:center;justify-content:space-between;background:var(--pma-surface,#fff);border-bottom:1px solid var(--pma-border,#dce6df)}
+.patient-dashboard-header nav{display:flex;align-items:center;gap:22px}
+.patient-dashboard-header nav a,.patient-back-link{color:var(--pma-green,#286653);font-weight:700;text-decoration:none}
+.patient-dashboard-header nav form{margin:0}
+.patient-dashboard-content,.professional-dashboard-content{width:min(1120px,100%);margin:0 auto;padding:44px clamp(18px,4vw,38px) 64px}
+.patient-welcome{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:24px}
+.patient-welcome h1,.professional-dashboard-content>h1{font:800 clamp(30px,4vw,42px) Manrope,sans-serif;letter-spacing:-1.5px;margin:8px 0;color:var(--pma-ink)}
+.patient-welcome p{max-width:650px;color:var(--pma-muted);line-height:1.7;margin:0}
+.patient-welcome-mark,.professional-verification-icon{width:76px;height:76px;border-radius:24px;display:grid;place-items:center;background:var(--pma-rose-soft);color:var(--pma-rose);flex-shrink:0}
+.patient-safety-note{display:flex;align-items:flex-start;gap:13px;padding:17px 19px;border:1px solid var(--pma-border);border-radius:16px;background:var(--pma-surface);color:var(--pma-green);margin:22px 0}
+.patient-safety-note p{margin:0;color:var(--pma-muted);line-height:1.6}
+.patient-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0 38px}
+.patient-stat-grid article,.patient-feature-card,.patient-recent-panel,.professional-verification-panel{border:1px solid var(--pma-border);border-radius:18px;background:var(--pma-surface);padding:20px;box-shadow:var(--pma-shadow-card);min-width:0}
+.patient-stat-grid article span,.patient-stat-grid article small{display:block;color:var(--pma-muted);font-size:12px}
+.patient-stat-grid article strong{display:block;font:800 30px Manrope;margin:10px 0 4px;color:var(--pma-ink)}
+.patient-section-heading h2,.patient-recent-panel h2{font:800 24px Manrope;margin:5px 0 16px;color:var(--pma-ink)}
+.patient-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.patient-feature-card{display:flex;flex-direction:column;align-items:flex-start;min-height:225px;text-decoration:none;color:inherit;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.patient-feature-card:hover{transform:translateY(-4px);box-shadow:var(--pma-shadow-raised);border-color:#9eb9aa}
+.patient-feature-card h3{font:750 18px Manrope;margin:15px 0 7px;color:var(--pma-ink)}
+.patient-feature-card p{font-size:13px;line-height:1.65;color:var(--pma-muted);margin:0 0 16px}
+.patient-feature-card>span:last-child{display:flex;align-items:center;gap:7px;margin-top:auto;color:var(--pma-green);font-weight:750;font-size:12px}
+.patient-feature-card small{margin-top:auto;color:var(--pma-muted);font-weight:700}
+.patient-feature-card.coming{background:var(--pma-surface-soft);box-shadow:none}
+.patient-feature-icon{width:42px;height:42px;border-radius:13px;background:var(--pma-green-soft);color:var(--pma-green);display:grid;place-items:center}
+.patient-feature-icon.rose{background:var(--pma-rose-soft);color:var(--pma-rose)}
+.patient-recent-panel{margin-top:24px}
+.patient-recent-panel>p{color:var(--pma-muted);line-height:1.65}
+.patient-recent-panel ul{list-style:none;margin:12px 0;padding:0}
+.patient-recent-panel li{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--pma-border)}
+.patient-recent-panel li strong{color:var(--pma-ink)}
+.patient-recent-panel li span{color:var(--pma-muted);font-size:12px}
+.patient-recent-panel>a{display:inline-flex;align-items:center;gap:8px;color:var(--pma-green);font-weight:750;text-decoration:none}
+.patient-emergency-note{margin:24px 0 0;padding:17px 19px;border-left:4px solid #b64a4a;border-radius:8px;background:#fff2f0;color:#713a36;line-height:1.65;font-size:13px}
+.patient-feedback-link{display:flex;align-items:center;gap:9px;margin-top:20px}
+.patient-feedback-link a{color:var(--pma-green);font-weight:700}
+.patient-back-link{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px}
+.patient-dashboard-content>h1{display:flex;align-items:center;gap:12px;font:800 34px Manrope;margin:8px 0 12px}
+.health-log-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:25px}
+.health-log-form{display:flex;flex-direction:column;gap:12px}
+.health-log-form h2{font:800 21px Manrope;margin:0 0 5px}
+.health-log-form label,.professional-application-form label{font-weight:700;color:var(--pma-ink)}
+.health-log-form input,.health-log-form textarea,.professional-application-form input{width:100%;border:1px solid var(--pma-border);border-radius:10px;padding:12px;background:var(--pma-surface);color:var(--pma-ink)}
+.health-reading-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.health-reading-fields>div{display:grid;gap:7px}
+.symptom-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;border:1px solid var(--pma-border);border-radius:12px;padding:14px}
+.symptom-options legend{font-weight:750;padding:0 5px}
+.symptom-options label{display:flex;align-items:center;gap:8px;font-size:13px}
+.symptom-options input{width:auto}
+.professional-dashboard-header .account-brand{display:flex;align-items:center;gap:10px}
+.professional-dashboard-content .account-intro{color:var(--pma-muted);line-height:1.7}
+.professional-verification-panel{max-width:760px;margin-top:28px;padding:clamp(22px,4vw,36px)}
+.professional-verification-panel h2{font:800 24px Manrope;margin:18px 0 10px}
+.professional-verification-panel h3{font:750 18px Manrope;margin:26px 0 12px}
+.professional-verification-panel>p{color:var(--pma-muted);line-height:1.7}
+.verification-status{padding:12px 14px;border-radius:10px;background:var(--pma-surface-soft)}
+.professional-application-form{box-shadow:none;border:0;padding:0;background:transparent}
+.professional-dashboard-links{display:flex;flex-wrap:wrap;gap:18px}
+.professional-dashboard-links a{display:flex;align-items:center;gap:8px;color:var(--pma-green);font-weight:700}
+.maternal-journey{padding:clamp(22px,4vw,42px);border:1px solid var(--pma-border);border-radius:24px;background:linear-gradient(145deg,#fff 0%,#f4f8f4 100%);box-shadow:var(--pma-shadow-card)}
+.journey-heading h2{font:800 clamp(24px,3vw,32px) Manrope;margin:12px 0 8px;color:var(--pma-ink)}
+.journey-heading p{color:var(--pma-muted);line-height:1.65}
+.journey-visual{margin:28px 0 12px}
+.journey-track{width:100%;height:auto;max-height:120px;overflow:visible}
+.journey-line{fill:none;stroke:#d6e3da;stroke-width:5;stroke-linecap:round}
+.journey-line-active{stroke:var(--pma-green);stroke-width:5;transition:d .35s ease}
+.journey-node circle:first-child{fill:#fff;stroke:#c9d9cf;stroke-width:2}
+.journey-node-inner{fill:var(--pma-rose-soft);stroke:none}
+.journey-node text{font:700 11px "DM Sans";fill:var(--pma-muted)}
+.journey-node.selected circle:first-child{stroke:var(--pma-rose);stroke-width:4;animation:journey-pulse 2.4s ease-in-out infinite}
+.journey-stage-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.journey-stage{display:flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:10px;border:1px solid var(--pma-border);border-radius:12px;background:var(--pma-surface);color:var(--pma-muted);font-weight:700;cursor:pointer}
+.journey-stage[aria-pressed="true"]{border-color:var(--pma-green);background:var(--pma-green-soft);color:var(--pma-green)}
+.journey-detail{display:flex;gap:15px;align-items:flex-start;padding:22px;border-radius:16px;background:var(--pma-surface-soft);animation:journey-enter .32s ease both}
+.journey-detail-icon{width:44px;height:44px;display:grid;place-items:center;flex-shrink:0;border-radius:13px;background:var(--pma-surface);color:var(--pma-rose)}
+.journey-detail-label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pma-rose)}
+.journey-detail h3{font:800 20px Manrope;margin:6px 0;color:var(--pma-ink)}
+.journey-detail p{color:var(--pma-muted);line-height:1.7;margin:0}
+.journey-disclaimer{font-size:12px;color:var(--pma-muted);line-height:1.6;margin:17px 0 0}
+@keyframes journey-pulse{0%,100%{stroke-width:3;opacity:1}50%{stroke-width:7;opacity:.65}}
+@keyframes journey-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.patient-dashboard-header,.professional-dashboard-header{align-items:flex-start;gap:12px;flex-wrap:wrap}.patient-dashboard-header nav{width:100%;justify-content:space-between;gap:12px}.patient-stat-grid{grid-template-columns:1fr}.patient-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.health-log-layout{grid-template-columns:1fr}.patient-recent-panel li{flex-direction:column;gap:5px}}
+@media(max-width:520px){.patient-feature-grid{grid-template-columns:1fr}.patient-welcome-mark{width:54px;height:54px;border-radius:17px}.journey-stage-buttons{grid-template-columns:1fr}.journey-track{display:none}.journey-detail{padding:16px}.health-reading-fields{grid-template-columns:1fr}.symptom-options{grid-template-columns:1fr}}
+html[data-motion="reduce"] :where(.patient-feature-card,.journey-detail,.journey-node.selected circle:first-child){animation:none!important;transition:none!important;transform:none!important}
+html[data-motion="allow"] .journey-node.selected circle:first-child{animation:journey-pulse 2.4s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.patient-feature-card,.journey-detail,.journey-node.selected circle:first-child{animation:none!important;transition:none!important;transform:none!important}}
+html[data-theme="dark"] .maternal-journey{background:var(--pma-surface);border-color:var(--pma-border)}
+html[data-theme="dark"] .journey-stage{background:var(--pma-surface);border-color:var(--pma-border);color:var(--pma-muted)}
+html[data-theme="dark"] .journey-stage[aria-pressed="true"],html[data-theme="dark"] .journey-detail{background:var(--pma-green-soft);color:var(--pma-ink)}
+html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df}
+
+
+.account-type-choice{display:grid;gap:10px;border:1px solid var(--pma-border);border-radius:13px;padding:14px;margin:4px 0 8px}
+.account-type-choice legend{font-weight:800;color:var(--pma-ink);padding:0 5px}
+.account-type-choice label{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--pma-ink);font-weight:650}
+.account-type-choice input{width:17px;height:17px;accent-color:var(--pma-green)}
+.professional-signup-note{display:grid;gap:8px;padding:14px;border-radius:12px;background:var(--pma-surface-soft)}
+.professional-signup-note p{font-size:12px;line-height:1.6;color:var(--pma-muted);margin:0}
+
+.account-signout{border:1px solid var(--pma-border);border-radius:30px;padding:9px 17px;background:var(--pma-surface);color:var(--pma-rose);font-size:11px;font-weight:800;cursor:pointer}

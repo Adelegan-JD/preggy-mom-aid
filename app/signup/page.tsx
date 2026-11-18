@@ -14,6 +14,8 @@ const supabaseConfigured = Boolean(
 export default function SignUpPage() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
+  const [accountType, setAccountType] = useState<"patient" | "professional">("patient");
+  const [professionalType, setProfessionalType] = useState<"doctor" | "nurse" | "midwife">("doctor");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -31,7 +33,7 @@ export default function SignUpPage() {
         email,
         password,
         options: {
-          data: { full_name: fullName.trim() },
+          data: { full_name: fullName.trim(), account_type: accountType, professional_type: accountType === "professional" ? professionalType : null },
           emailRedirectTo: `${window.location.origin}/auth/callback?next=/my-care`
         }
       });
@@ -50,18 +52,20 @@ export default function SignUpPage() {
       <section className="account-card">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={22} /></span>
-          <span><b>Preggy Mom Aid</b><small>PATIENT ACCOUNT</small></span>
+          <span><b>Preggy Mom Aid</b><small>CREATE YOUR ACCOUNT</small></span>
         </Link>
         <div className="account-kicker">A WELCOMING PLACE TO BEGIN</div>
         <h1>Create your account</h1>
         <p className="account-intro">
-          Create your Preggy Mom Aid account. Account access currently covers sign-in and your personal space; clinical records and care features are not yet available. Explore the Learning Centre and share product feedback.
+          Create an account as a patient or healthcare professional. We will guide you to the right secure space after email confirmation.
           
         </p>
         {supabaseConfigured ? (
           <form className="account-form" onSubmit={submit}>
             <label htmlFor="fullName">Your name</label>
             <input id="fullName" autoComplete="name" required maxLength={120} value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full name" />
+            <fieldset className="account-type-choice"><legend>How will you use Preggy Mom Aid?</legend><label><input type="radio" name="accountType" value="patient" checked={accountType === "patient"} onChange={() => setAccountType("patient")} /> Patient / pregnant or postpartum user</label><label><input type="radio" name="accountType" value="professional" checked={accountType === "professional"} onChange={() => setAccountType("professional")} /> Healthcare professional</label></fieldset>
+            {accountType === "professional" && <div className="professional-signup-note"><label htmlFor="professionalType">Your profession</label><select id="professionalType" value={professionalType} onChange={e => setProfessionalType(e.target.value as "doctor" | "nurse" | "midwife")}><option value="doctor">Doctor</option><option value="nurse">Nurse</option><option value="midwife">Midwife</option></select><p>Professional accounts require credential verification before practitioner features or patient information become available.</p></div>}
             <label htmlFor="signupEmail">Email address</label>
             <input id="signupEmail" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
             <label htmlFor="signupPassword">Password</label>
@@ -82,7 +86,7 @@ export default function SignUpPage() {
         {message && <p className="account-success" role="status">{message}</p>}
         <div className="account-privacy">
           <ShieldCheck size={18} />
-          <p><b>Your privacy matters.</b> Your account currently provides access to the website and product feedback only. Do not submit symptoms, pregnancy details, blood-pressure readings or medical records.</p>
+          <p><b>Your privacy matters.</b> Your account type determines which services you can request. Professional accounts remain restricted until credentials are verified, and patient information is never shared without permission.</p>
         </div>
         {supabaseConfigured && <p className="account-switch">Already registered? <Link href="/login">Sign in</Link></p>}
         <p className="account-footnote">

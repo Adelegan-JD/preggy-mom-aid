@@ -40,7 +40,7 @@ export default function LoginPage() {
       <section className="account-card">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={22} /></span>
-          <span><b>Preggy Mom Aid</b><small>PATIENT ACCOUNT</small></span>
+          <span><b>Preggy Mom Aid</b><small>ACCOUNT ACCESS</small></span>
         </Link>
         <div className="account-kicker">WELCOME BACK</div>
         <h1>Sign in</h1>
@@ -66,7 +66,7 @@ export default function LoginPage() {
         {error && <p className="account-error" role="alert">{error}</p>}
         <div className="account-privacy">
           <ShieldCheck size={18} />
-          <p>Only use your own account. Personal health records and clinical care features are not yet available.</p>
+          <p>Your health information is private. Professional accounts require verification, and access to patient information requires the patient's permission.</p>
         </div>
         {supabaseConfigured && <p className="account-switch">New to Preggy Mom Aid? <Link href="/signup">Create an account</Link></p>}
         <p className="account-footnote">
