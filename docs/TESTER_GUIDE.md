@@ -4,9 +4,9 @@ Thank you for helping review Preggy Mom Aid.
 
 ## What is available to review
 
-- The public homepage and responsive navigation.
+- The public homepage, responsive navigation and new illustrated Learning Centre at /learn.
 - The project mission and staged-release explanation.
-- General introductory information about pre-eclampsia/eclampsia warning signs, pregnancy and postpartum care, medicines, nutrition and working with a maternity team.
+- General introductory information about pre-eclampsia/eclampsia warning signs, pregnancy and postpartum care, including the care-map diagram and links to WHO, NHS and NICE resources.
 - The facility-directory explanation and its intentionally empty state.
 - Information for healthcare professionals and the current platform status.
 
