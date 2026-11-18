@@ -87,3 +87,16 @@ This plan replaces the prototype's browser-only demo behaviour with a staged, au
 ## Current repository findings
 
 The public homepage and Learning Centre are now the production-facing public experience. The former patient dashboard and all known seeded records were removed from the homepage. The obsolete dashboard styling was also removed. The Learning Centre provides source-linked introductory drafts, a non-diagnostic care-conversation diagram and an urgent-warning panel; its content is explicitly marked as awaiting Nigerian clinical review. Patient identity, clinical records, professional applications and clinician access remain unimplemented and closed. The next engineering phase is secure identity and professional verification, beginning with a separate staging environment, reviewed migrations, server-side authentication and automated row-level-security tests. Do not enable patient health-data collection until privacy, security, clinical and operational release gates are signed off.
+
+
+## Patient tester release — implementation added
+
+A patient-only tester account experience is now proposed on branch `feature/patient-tester-access`:
+
+- Email/password registration and sign-in with Supabase Auth; email confirmation callback.
+- Protected `/my-care` tester landing page with Learning Centre and feedback entry points.
+- Non-clinical feedback form backed by `tester_feedback`, protected by row-level security.
+- Explicit reviewer grants through a database-owner action; no public admin role or self-assigned reviewer privileges.
+- Session refresh middleware and an updated tester guide.
+
+This release deliberately does not collect pregnancy details, symptoms, blood-pressure readings, diagnoses, medications, clinical records or clinician relationships. It must not be announced as open until both migrations are applied, Supabase Auth redirect/email/CAPTCHA settings are verified, reviewer access is granted appropriately, and production registration + feedback tests pass.
