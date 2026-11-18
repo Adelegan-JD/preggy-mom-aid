@@ -84,6 +84,22 @@ begin
 end;
 $;
 
+-- Backfill accounts that were created before the profile trigger was installed.
+insert into public.profiles (id, full_name, account_type, professional_type, verification_status)
+select
+  users.id,
+  nullif(left(trim(coalesce(users.raw_user_meta_data ->> 'full_name', '')), 120), ''),
+  case when users.raw_user_meta_data ->> 'account_type' = 'professional' then 'professional' else 'patient' end,
+  case
+    when users.raw_user_meta_data ->> 'account_type' = 'professional'
+     and users.raw_user_meta_data ->> 'professional_type' in ('doctor','nurse','midwife')
+    then users.raw_user_meta_data ->> 'professional_type'
+    else null
+  end,
+  case when users.raw_user_meta_data ->> 'account_type' = 'professional' then 'pending' else 'not_applicable' end
+from auth.users as users
+on conflict (id) do nothing;
+
 drop trigger if exists on_auth_user_created_profile on auth.users;
 create trigger on_auth_user_created_profile
   after insert on auth.users
