@@ -612,7 +612,7 @@ html[data-theme="dark"] .footer{background:var(--pma-surface);border-color:var(-
 html[data-theme="dark"] .footer>span{color:var(--pma-muted)}
 /* Keep user-selected high contrast stronger than the decorative design layer */
 html[data-contrast="high"] :where(.public-header,.learn-topbar,.account-card,.mission-grid article,.learn-resource-card,.professional-card,.directory-empty){border:2px solid currentColor!important}
-html[data-contrast="high"] :where(.public-site p,.learn-page p,.account-shell p,.public-nav a,.learn-page a){color:CanvasText!important}
+html[data-contrast="high"] :where(.public-site p,.learn-page p,.account-shell p,.public-nav a,.learn-page a,.pma-preferences-kicker){color:CanvasText!important}
 html[data-contrast="high"] :where(.public-site a,.learn-page a,.account-shell a){text-decoration:underline;text-underline-offset:3px}
 html[data-contrast="high"] .header-cta,html[data-contrast="high"] .primary-public-btn,html[data-contrast="high"] .account-submit{outline:2px solid currentColor;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){
