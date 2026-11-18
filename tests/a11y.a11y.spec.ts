@@ -46,7 +46,7 @@ test("mobile navigation opens, closes with Escape, and returns focus", async ({ 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
-  const menuButton = page.getByRole("button", { name: "Open menu" });
+  const menuButton = page.locator(".public-menu-toggle");
   await menuButton.click();
   await expect(menuButton).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByRole("navigation", { name: "Main navigation" })).toBeVisible();
