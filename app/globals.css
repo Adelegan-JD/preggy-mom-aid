@@ -720,3 +720,5 @@ html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df
 .account-type-choice input{width:17px;height:17px;accent-color:var(--pma-green)}
 .professional-signup-note{display:grid;gap:8px;padding:14px;border-radius:12px;background:var(--pma-surface-soft)}
 .professional-signup-note p{font-size:12px;line-height:1.6;color:var(--pma-muted);margin:0}
+
+.account-signout{border:1px solid var(--pma-border);border-radius:30px;padding:9px 17px;background:var(--pma-surface);color:var(--pma-rose);font-size:11px;font-weight:800;cursor:pointer}
