@@ -49,6 +49,8 @@ The patient feature migrations added in the current implementation sequence are:
    - Private health-document metadata and private Storage bucket with per-user folder policies.
 5. `supabase/migrations/20261119000500_patient_health_log_updates.sql`
    - Grants authenticated patients the database permission needed to edit their own blood-pressure and symptom entries; RLS continues to constrain ownership.
+6. `supabase/migrations/20261119000600_patient_only_health_log_policies.sql`
+   - Restricts blood-pressure and symptom log policies to patient accounts as well as row ownership.
 
 Also apply any earlier identity and feedback foundation migrations already present in `supabase/migrations` before these files. Check the directory and use the complete timestamp order. If a migration has already been applied, do not rerun it manually without first checking the schema and migration history.
 
