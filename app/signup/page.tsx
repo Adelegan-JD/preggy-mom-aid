@@ -46,7 +46,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="account-shell">
+    <main className="account-shell" id="main-content" tabIndex={-1}>
       <section className="account-card">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={22} /></span>

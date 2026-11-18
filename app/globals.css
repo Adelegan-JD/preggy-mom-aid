@@ -204,8 +204,8 @@ html[data-accent="plum"]{--pma-accent:#68409a;--pma-accent-soft:#f5effc}
 .public-site{--pub-teal:var(--pma-accent)}
 .header-cta,.primary-public-btn,.account-submit{background:var(--pma-accent)!important;background-image:none!important;color:#fff!important}
 .pma-preferences>summary svg{color:var(--pma-accent)}
-html[data-text-size="large"] :where(p,li,label,input,textarea,select,button,a){font-size:1.12em}
-html[data-text-size="largest"] :where(p,li,label,input,textarea,select,button,a){font-size:1.25em}
+html[data-text-size="large"] :where(h1,h2,h3,h4,h5,h6,p,li,label,input,textarea,select,button,a,small,summary,figcaption,blockquote){font-size:1.12em}
+html[data-text-size="largest"] :where(h1,h2,h3,h4,h5,h6,p,li,label,input,textarea,select,button,a,small,summary,figcaption,blockquote){font-size:1.25em}
 html[data-text-size="large"] :where(p,li){line-height:1.75}
 html[data-text-size="largest"] :where(p,li){line-height:1.8}
 html[data-layout="wide"] .public-header,
@@ -315,8 +315,8 @@ html[data-theme="dark"] .account-privacy p{color:#e3eee7!important}
 }
 
 @media(prefers-reduced-motion:reduce){
- html{scroll-behavior:auto!important}
- *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+ html:not([data-motion="allow"]){scroll-behavior:auto!important}
+ html:not([data-motion="allow"]) *,html:not([data-motion="allow"]) *::before,html:not([data-motion="allow"]) *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 html[data-motion="reduce"] *,html[data-motion="reduce"] *::before,html[data-motion="reduce"] *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 html[data-motion="allow"] *,html[data-motion="allow"] *::before,html[data-motion="allow"] *::after{scroll-behavior:smooth}
@@ -329,3 +329,76 @@ html[data-contrast="high"] :where(.pma-preferences>summary,.pma-preferences-pane
 html[data-contrast="high"] .pma-preferences-panel{box-shadow:0 0 0 3px #fff,0 0 0 6px #111}
 :where(.public-header a,.learn-topbar a,.public-menu-toggle,.header-account-links a,.account-submit,.tester-signout,.pma-preferences>summary,.pma-preferences-reset){touch-action:manipulation}
 @media(max-width:650px){body{padding-bottom:72px}.public-nav a{min-height:48px}}
+
+/* WCAG AA text-contrast corrections informed by axe browser scans */
+.public-site .public-brand small,
+.public-site .art-caption small,
+.public-site .trust-strip small,
+.public-site .mission-grid p,
+.public-site .how-steps p,
+.public-site .directory-heading p,
+.public-site .directory-empty p,
+.public-site .directory-disclaimer,
+.public-site .hero-note,
+.public-site .professional-copy>p,
+.public-site .professional-card p{color:#536258}
+.public-site .header-signin{color:#884657}
+.public-site .section-kicker,
+.public-site .eyebrow-public{color:#78535b}
+.public-site .hero-copy-public h1 em,
+.public-site .section-intro h2 em,
+.public-site .how-inner h2 em,
+.public-site .professional-copy h2 em,
+.public-site .launch-status h2 em{color:#a2435a}
+
+.learn-page .learn-brand small,
+.learn-page .learn-back,
+.learn-page .learn-top-link{color:#506157}
+.learn-page .learn-kicker{color:#83515b}
+.learn-page .learn-hero-copy h1 em,
+.learn-page .postpartum-copy h2 em,
+.learn-page .warning-panel h2 em{color:#a2435a}
+.learn-page .learn-hero-copy>p,
+.learn-page .learn-section-heading p,
+.learn-page .learn-resource-card p,
+.learn-page .care-map-step p,
+.learn-page .warning-panel>p,
+.learn-page .warning-action span,
+.learn-page .postpartum-copy>p,
+.learn-page .learn-source-note,
+.learn-page .learn-footer{color:#536258}
+.learn-page .learn-review-pill{color:#3e684f}
+
+.account-shell .account-intro,
+.account-shell .account-privacy p,
+.account-shell .account-footnote,
+.account-shell .account-switch,
+.account-shell .feedback-count,
+.account-shell .account-unavailable p{color:#526056}
+.account-shell .account-switch a,
+.account-shell .account-footnote a{color:#8d3e51}
+.account-shell .feedback-back{color:#80515a}
+.tester-welcome>p,
+.tester-feature p{color:#536258}
+.tester-feature>a{color:#8d3e51}
+.tester-boundary{color:#7d4944}
+
+/* Final contrast adjustments from the multi-route axe report */
+.public-site .section-intro>p,
+.public-site .how-inner>div:first-child>p{color:#536258}
+.public-site .how-steps>div>span{color:#9c4057}
+.learn-page .learn-notice>div>p{color:#665147}
+.learn-page .stage-choice{color:#526157}
+.learn-page .stage-choice.active{color:#315c46}
+.learn-page .warning-card-detail{color:#5d4942}
+.learn-page .postpartum-copy>a,
+.learn-page .learn-resource-card>a{color:#176b68}
+.account-available-links a{color:#873d50}
+
+/* Last contrast refinements identified on the homepage and Learning Centre */
+.public-site .notice>div>p{color:#62423d}
+.public-site #launch-status>div{color:#3e624f}
+.public-site #launch-status>p{color:#536258}
+.public-site .status-label{color:#5c5048}
+.public-site .footer>span{color:#536258}
+.learn-page .learn-footer a{color:#176b68}

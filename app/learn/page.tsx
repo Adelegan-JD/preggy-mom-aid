@@ -23,7 +23,7 @@ const warningSigns = [
 ];
 
 export default function LearnPage(){
- return <main className="learn-page">
+ return <main className="learn-page" id="main-content" tabIndex={-1}>
   <header className="learn-topbar">
    <Link className="learn-back" href="/"><ArrowLeft size={16}/> Home</Link>
    <Link className="learn-brand" href="/"><span className="learn-brand-mark"><HeartPulse size={20}/></span><span><b>Preggy Mom Aid</b><small>LEARNING CENTRE</small></span></Link>

@@ -17,7 +17,7 @@ const supabaseConfigured = Boolean(
 export default async function MyCarePage() {
   if (!supabaseConfigured) {
     return (
-      <main className="account-shell">
+      <main className="account-shell" id="main-content" tabIndex={-1}>
         <section className="account-card">
           <Link href="/" className="account-brand">
             <span className="account-brand-mark"><Heart size={20} /></span>
@@ -71,7 +71,7 @@ export default async function MyCarePage() {
   const firstName = profile?.full_name?.trim().split(/\s+/)[0] || "there";
 
   return (
-    <main className="tester-space">
+    <main className="tester-space" id="main-content" tabIndex={-1}>
       <header className="tester-topbar">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={20} /></span>
