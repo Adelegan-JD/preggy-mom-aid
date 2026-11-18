@@ -62,6 +62,20 @@ begin
 end;
 $$;
 
+-- Ensure the feedback tables exist even when a project was provisioned before
+-- the earlier foundation migrations were applied.
+create table if not exists public.feedback_reviewers (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.feedback_reviewers enable row level security;
+revoke all on public.feedback_reviewers from anon, authenticated;
+grant select on public.feedback_reviewers to authenticated;
+drop policy if exists "Reviewers can read their own reviewer grant" on public.feedback_reviewers;
+create policy "Reviewers can read their own reviewer grant"
+  on public.feedback_reviewers for select to authenticated
+  using ((select auth.uid()) = user_id);
+
 -- Rename the feedback table so no testing terminology remains in the database API.
 do $$
 begin
@@ -69,7 +83,21 @@ begin
      and to_regclass('public.product_feedback') is null then
     alter table public.tester_feedback rename to product_feedback;
   end if;
-end $$;
+end $;
+
+create table if not exists public.product_feedback (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  rating smallint not null check (rating between 1 and 5),
+  area text not null check (char_length(area) between 1 and 80),
+  comments text not null check (char_length(comments) between 1 and 2500),
+  created_at timestamptz not null default now()
+);
+create index if not exists product_feedback_created_at_idx on public.product_feedback(created_at desc);
+create index if not exists product_feedback_user_id_idx on public.product_feedback(user_id);
+alter table public.product_feedback enable row level security;
+revoke all on public.product_feedback from anon;
+grant insert,select on public.product_feedback to authenticated;
 
 drop policy if exists "Testers can submit feedback for themselves" on public.product_feedback;
 drop policy if exists "Testers can read their own feedback" on public.product_feedback;
