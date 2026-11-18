@@ -1,30 +1,30 @@
 # Preggy Mom Aid
 
-A public-first maternal health support platform being developed for women affected by, or at risk of, pre-eclampsia/eclampsia.
+Preggy Mom Aid is a public-first maternal health support platform focused on clear, responsible information for women affected by, or at risk of, pre-eclampsia/eclampsia.
 
-## Current release status
+## Current release
 
-The current branch replaces the former patient-demo dashboard with a public information site. Patient registration, professional accounts, patient health records, clinical decision-support and appointment workflows are **not open or implemented as production services**.
+The public website is the current release. It introduces the project, explains the staged approach to care support, provides general introductory health information and describes the facility directory and professional onboarding plans.
 
-The public site intentionally contains:
-- Product mission and staged platform approach.
-- A facility-directory explanation with no invented facility entries.
-- A professional onboarding information page; applications are not yet open.
-- A clear launch-status notice and medical/emergency disclaimer.
+The following are intentionally not available yet: patient registration, patient profiles, personal health records, blood-pressure logging, symptom submissions, clinician accounts, appointments, messaging, referrals and emergency-response services.
 
-## No demo health data
+## Real information only
 
-Production-facing pages must not contain fictional patient identities, seeded blood-pressure readings, fabricated symptom histories, demo appointments, fake clinician accounts, synthetic hospital entries or scripted chatbot answers presented as live services.
+Public pages do not contain fictional patient identities, invented clinical readings, fabricated appointments, fake clinician accounts or made-up hospital listings. The facility directory remains empty until source information is available. Publicly sourced listings will be marked independently unverified until directly confirmed.
 
-Development fixtures, if used for visual testing, must be isolated from production builds and clearly labelled. Never enter real patient health information into a prototype or an environment that has not passed the privacy and security release gates.
+Health information on the site is general introductory education. Detailed clinical content and any future clinical workflows require documented review and approval by appropriately qualified Nigerian maternal-health clinicians.
 
-## Planned production architecture
+## Early reviewer guide
 
-See:
+People reviewing the current public site should read [the early review guide](docs/TESTER_GUIDE.md). Reviewers must not submit personal or patient health information. The site is not a medical service or emergency service.
+
+## Production architecture and implementation
+
 - [Production architecture](docs/PRODUCTION_ARCHITECTURE.md)
 - [Production implementation plan](docs/PRODUCTION_IMPLEMENTATION_PLAN.md)
+- [Supabase setup](docs/SUPABASE_SETUP.md)
 
-Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level security, and private storage. Infrastructure, region, contractual terms and data-transfer arrangements must be reviewed before processing sensitive health information.
+Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level security, and private storage. Infrastructure region, vendor terms and data-transfer arrangements require privacy/legal review before sensitive health information is processed.
 
 ## Local development
 
@@ -40,7 +40,7 @@ Target stack: Next.js on Vercel, Supabase Auth and PostgreSQL with row-level sec
 
 A successful build or deployment does not establish clinical, privacy, regulatory or security readiness.
 
-## Clinical and privacy boundaries
+## Clinical, privacy and security boundaries
 
 Preggy Mom Aid is not an emergency service and does not diagnose, prescribe or replace professional maternity care. Any clinical education, thresholds, symptom guidance or decision-support must be approved by appropriately qualified Nigerian maternal-health clinicians before release.
 
