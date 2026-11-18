@@ -21,20 +21,18 @@ export default async function MyCarePage() {
         <section className="account-card">
           <Link href="/" className="account-brand">
             <span className="account-brand-mark"><Heart size={20} /></span>
-            <span><b>Preggy Mom Aid</b><small>PATIENT TESTER ACCESS</small></span>
+            <span><b>Preggy Mom Aid</b><small>YOUR ACCOUNT</small></span>
           </Link>
-          <div className="account-kicker">PRIVATE TESTER SPACE</div>
+          <div className="account-kicker">YOUR PRIVATE SPACE</div>
           <h1>Account access is not active yet</h1>
           <p className="account-intro">
             The secure account service has not been connected to this deployment.
-            Your private tester space will become available after authentication
-            is configured and verified.
+            Your private account space will become available after authentication is configured and verified.
           </p>
           <div className="account-unavailable" role="status">
             <ShieldCheck size={20} />
             <p>
-              No sign-in, patient profile or private health information is being
-              collected through this page while account services are unavailable.
+              No patient health information is collected through this page while account services are unavailable.
             </p>
           </div>
           <div className="account-available-links">
@@ -75,15 +73,15 @@ export default async function MyCarePage() {
       <header className="tester-topbar">
         <Link href="/" className="account-brand">
           <span className="account-brand-mark"><Heart size={20} /></span>
-          <span><b>Preggy Mom Aid</b><small>YOUR TESTER SPACE</small></span>
+          <span><b>Preggy Mom Aid</b><small>YOUR ACCOUNT</small></span>
         </Link>
         <form action={signOut}><button className="tester-signout">Sign out</button></form>
       </header>
       <section className="tester-welcome">
-        <div className="account-kicker">YOUR PATIENT TESTER SPACE</div>
+        <div className="account-kicker">YOUR ACCOUNT</div>
         <h1>Hello, {firstName} <span>♥</span></h1>
-        <p>Thank you for helping us make Preggy Mom Aid clearer, kinder and more useful. Explore the information and tell us about your experience.</p>
-        <div className="tester-safe-note"><ShieldCheck size={19} /><span>This is a product-testing space, not a personal medical record or clinical care service.</span></div>
+        <p>Welcome to Preggy Mom Aid. Explore the learning resources and share feedback about your experience.</p>
+        <div className="tester-safe-note"><ShieldCheck size={19} /><span>This account space is not a personal medical record or clinical care service.</span></div>
       </section>
       <section className="tester-grid">
         <article className="tester-feature">
@@ -103,8 +101,8 @@ export default async function MyCarePage() {
         <article className="tester-feature sage">
           <span className="tester-feature-icon"><Sparkles /></span>
           <div className="account-kicker">WHAT&apos;S NEXT</div>
-          <h2>Help shape the experience</h2>
-          <p>Your feedback will guide improvements to accessibility, navigation, language and the overall experience.</p>
+          <h2>Help us improve</h2>
+          <p>Your feedback helps us improve accessibility, navigation, language and the overall experience.</p>
           <Link href="/feedback">Suggest an improvement <ArrowRight size={16} /></Link>
         </article>
       </section>
