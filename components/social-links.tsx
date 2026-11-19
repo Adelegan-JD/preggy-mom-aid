@@ -17,7 +17,7 @@ function TikTokMark() {
 
 export default function SocialLinks({ compact = false, className = "" }: SocialLinksProps) {
   return (
-    <div className={[\"pma-social-links\", compact ? \"is-compact\" : \"\", className].filter(Boolean).join(\" \" )} aria-label="Preggy Mom Aid social media">
+    <div className={["pma-social-links", compact ? "is-compact" : "", className].filter(Boolean).join(" " )} aria-label="Preggy Mom Aid social media">
       {!compact && <span className="pma-social-label">Follow our community</span>}
       <a href="https://www.tiktok.com/@preggymum_aid" target="_blank" rel="noopener noreferrer" aria-label="Preggy Mom Aid on TikTok">
         <TikTokMark /><span className="pma-social-name">TikTok</span>
