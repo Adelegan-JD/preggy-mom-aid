@@ -8,6 +8,7 @@ const publicAndAccountRoutes = [
   "/signup",
   "/feedback",
   "/my-care",
+  "/my-care/settings",
 ];
 
 for (const route of publicAndAccountRoutes) {
