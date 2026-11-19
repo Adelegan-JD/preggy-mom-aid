@@ -1039,3 +1039,17 @@ html[data-theme="dark"][data-contrast="high"] :where(.public-site,.learn-page) a
  .patient-subpage .patient-dashboard-content{padding:22px 15px 36px}
  .patient-subpage-mobile-nav{display:grid}
 }
+
+
+/* Patient language preference and speech controls */
+.pma-language-switcher{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--pma-ink,#263238);white-space:nowrap}
+.pma-language-switcher select{max-width:145px;min-height:34px;padding:5px 8px;border:1px solid var(--pma-border,#dce5df);border-radius:8px;background:var(--pma-surface,#fff);color:inherit}
+.pma-speak-control{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pma-speak-control button{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--pma-border,#dce5df);border-radius:999px;padding:8px 12px;background:var(--pma-surface,#fff);color:var(--pma-ink,#263238);font-weight:700}
+.pma-speak-control small{color:var(--pma-muted,#66736c)}
+@media(max-width:760px){.patient-subpage-header nav .pma-language-switcher{display:none}.pma-language-switcher{margin:8px 0}}
+html[data-theme="dark"] .pma-language-switcher select{background:#101917;color:#eef4f0;border-color:#60766a}
+html[data-theme="dark"][data-contrast="high"] .patient-dashboard .patient-back-link,
+html[data-theme="dark"][data-contrast="high"] .patient-dashboard h1,
+html[data-theme="dark"][data-contrast="high"] .patient-dashboard .account-intro{color:#f4f7f4!important}
+html[data-theme="dark"][data-contrast="high"] .patient-dashboard .patient-back-link{text-decoration:underline}
