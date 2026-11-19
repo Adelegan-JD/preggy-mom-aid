@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/language-provider";
 
 type PatientProfile = {
@@ -16,6 +17,7 @@ type PatientProfile = {
 
 export default function PatientProfileForm({ initialProfile }: { initialProfile: PatientProfile | null }) {
   const { language: appLanguage, setLanguage, t } = useLanguage();
+  const router = useRouter();
   const [preferredName, setPreferredName] = useState(initialProfile?.preferred_name ?? "");
   const [phone, setPhone] = useState(initialProfile?.phone_number ?? "");
   const [state, setState] = useState(initialProfile?.state_or_territory ?? "");
@@ -27,7 +29,11 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
   const [error, setError] = useState("");
   const [saved, setSaved] = useState("");
 
-  useEffect(() => {\n    if (initialProfile?.preferred_language && initialProfile.preferred_language !== "other") {\n      try { if (!window.localStorage.getItem("pma-language-v1")) setLanguage(initialProfile.preferred_language); } catch { /* Keep the active session language. */ }\n    }\n  }, [initialProfile?.preferred_language, setLanguage]);
+  useEffect(() => {
+    if (initialProfile?.preferred_language && initialProfile.preferred_language !== "other") {
+      try { if (!window.localStorage.getItem("pma-language-v1")) setLanguage(initialProfile.preferred_language); } catch { /* Keep the active session language. */ }
+    }
+  }, [initialProfile?.preferred_language, setLanguage]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -73,7 +79,7 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
       <label htmlFor="patientState">State or territory <span>(optional)</span></label>
       <input id="patientState" value={state} maxLength={80} onChange={event => setState(event.target.value)} autoComplete="address-level1" placeholder="e.g. Lagos" />
       <label htmlFor="patientLanguage">{t("preferredLanguage")}</label>
-      <select id="patientLanguage" value={language} onChange={event => { const next = event.target.value as PatientProfile["preferred_language"]; setProfileLanguage(next); if (next !== "other") setLanguage(next); }}>
+      <select id="patientLanguage" value={language} onChange={event => { const next = event.target.value as PatientProfile["preferred_language"]; setProfileLanguage(next); if (next !== "other") { setLanguage(next); router.refresh(); } }}>
         <option value="en">English</option>
         <option value="yo">Yorùbá</option>
         <option value="ig">Igbo</option>
