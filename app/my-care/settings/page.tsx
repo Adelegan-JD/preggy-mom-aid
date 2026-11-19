@@ -28,7 +28,7 @@ export default async function PatientSettingsPage() {
     <PatientPageNavigation active="settings"/>
     <section className="patient-dashboard-content">
       <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
-      <div className="account-kicker">YOUR PERSONAL SPACE</div><h1><Settings size={28}/> Privacy and account settings</h1>
+      <div className="account-kicker">YOUR PERSONAL SPACE</div><h1><Settings size={28}/> {t("settingsTitle")}</h1>
       <p className="account-intro">{t("settingsIntro")}</p>
       <div className="patient-safety-note"><ShieldCheck size={20}/><p>{t("clinicianAccessOff")}</p></div>
       <PatientAccountSettings initialPreferences={preferences ?? { appointment_email_reminders: false, product_email_updates: false }} initialDeletionRequested={Boolean(deletionRequest)}/>
