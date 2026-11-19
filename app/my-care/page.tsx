@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import LanguageSwitcher from "@/components/language-switcher";
 import SpeakButton from "@/components/speak-button";
+import HealthServicesCards from "@/components/health-services-cards";
 import { normalizeLanguage, translate, TranslationKey } from "@/lib/i18n/translations";
 import { Activity, CalendarHeart, ClipboardList, FileHeart, HeartPulse, MessageSquareText, ShieldCheck, BookOpen, ArrowRight, Home, UserRound, Settings, Plus, Clock3, Sparkles, Stethoscope, ChevronRight } from "lucide-react";
 
@@ -77,6 +78,7 @@ export default async function MyCarePage() {
         <Link href="/my-care/records" className="patient-feature-card"><span className="patient-feature-icon rose"><FileHeart/></span><h3>{t("healthRecords") }</h3><p>{t("recordsCardText")}</p><span>{t("manageRecords")} <ArrowRight size={16}/></span></Link>
         <Link href="/learn" className="patient-feature-card"><span className="patient-feature-icon"><BookOpen/></span><h3>{t("learningCentre") }</h3><p>{t("learningCardText")}</p><span>{t("exploreLearning")} <ArrowRight size={16}/></span></Link>
       </div>
+      <HealthServicesCards language={language} />
       <section className="patient-recent-panel"><div><div className="account-kicker">{t("recentReadings")}</div><h2>{t("latestReadings")}</h2></div>{recentReadings?.length ? <ul>{recentReadings.map((reading, index) => <li key={index}><strong>{reading.systolic}/{reading.diastolic} mmHg</strong><span>{new Date(reading.measured_at).toLocaleString(language === "yo" ? "yo-NG" : language === "ha" ? "ha-NG" : language === "ig" ? "ig-NG" : "en-NG")}</span></li>)}</ul> : <p>{t("noDashboardReadings")}</p>}<Link href="/my-care/blood-pressure">{t("viewHistory")} <ArrowRight size={15}/></Link></section>
       <section className="patient-urgent-panel" aria-labelledby="patient-urgent-title"><span className="patient-urgent-icon"><HeartPulse size={20}/></span><div><div className="account-kicker">{t("urgentHealthInfo")}</div><h2 id="patient-urgent-title">{t("urgentHelpTitle")}</h2><p>{t("urgentHelpBody")}</p></div><Link href="/learn">{t("readWarningSigns")} <ArrowRight size={15}/></Link></section>
       <p className="patient-feedback-link"><MessageSquareText size={16}/> <Link href="/feedback">{t("shareExperience")}</Link></p>

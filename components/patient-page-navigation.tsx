@@ -3,9 +3,10 @@ import { cookies } from "next/headers";
 import { Activity, BookOpen, CalendarHeart, ClipboardList, FileHeart, HeartPulse, Home, UserRound } from "lucide-react";
 import LanguageSwitcher from "@/components/language-switcher";
 import { normalizeLanguage, translate, TranslationKey } from "@/lib/i18n/translations";
+import { healthServicesText as hs } from "@/lib/i18n/health-services";
 
 type PatientPageNavigationProps = {
-  active: "blood-pressure" | "symptoms" | "appointments" | "records" | "profile" | "settings";
+  active: "blood-pressure" | "symptoms" | "appointments" | "records" | "profile" | "settings" | "hospitals" | "emergency";
 };
 
 export default async function PatientPageNavigation({ active }: PatientPageNavigationProps) {
@@ -19,6 +20,8 @@ export default async function PatientPageNavigation({ active }: PatientPageNavig
     { href: "/my-care/appointments", label: t("appointments"), icon: CalendarHeart, key: "appointments" },
     { href: "/my-care/records", label: t("healthRecords"), icon: FileHeart, key: "records" },
     { href: "/learn", label: t("learningCentre"), icon: BookOpen, key: "learn" },
+    { href: "/hospitals", label: hs(language, "directory"), icon: BookOpen, key: "hospitals" },
+    { href: "/emergency", label: hs(language, "emergencyPage"), icon: HeartPulse, key: "emergency" },
   ] as const;
   return <>
     <header className="patient-dashboard-header patient-subpage-header">

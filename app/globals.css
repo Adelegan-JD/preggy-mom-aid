@@ -1063,3 +1063,59 @@ html[data-theme="dark"][data-contrast="high"] .patient-subpage .patient-back-lin
 html[data-theme="dark"][data-contrast="high"] .patient-subpage h1,
 html[data-theme="dark"][data-contrast="high"] .patient-subpage .account-intro{color:#fff!important}
 html[data-theme="dark"][data-contrast="high"] .patient-subpage{background:#000!important;color:#fff!important}
+
+
+/* Public hospital directory and emergency support */
+.health-services-page .health-directory-notice,.health-emergency-warning{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border:1px solid var(--pma-border);border-radius:16px;background:var(--pma-surface);color:var(--pma-ink);margin:22px 0}
+.health-directory-notice svg,.health-emergency-warning svg{flex:0 0 auto;color:var(--pma-green)}
+.health-directory-notice p,.health-emergency-warning p{margin:0;line-height:1.65;font-size:13px}
+.health-directory-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto auto;gap:12px;align-items:end;padding:18px;border:1px solid var(--pma-border);border-radius:18px;background:var(--pma-surface);margin:20px 0 24px}
+.health-directory-filters label{display:grid;gap:7px;font-size:12px;font-weight:750;color:var(--pma-ink)}
+.health-directory-filters input,.health-directory-filters select{width:100%;min-height:44px;border:1px solid var(--pma-border);border-radius:10px;padding:8px 10px;background:var(--pma-page);color:var(--pma-ink)}
+.health-directory-filters button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;border:0;border-radius:10px;padding:0 17px;background:var(--pma-green);color:#fff;font-weight:800}
+.health-directory-filters>a{font-size:12px;font-weight:750;color:var(--pma-green);padding:12px 5px}
+.health-directory-empty{padding:44px 20px;text-align:center;border:1px dashed var(--pma-border);border-radius:20px;background:var(--pma-surface)}
+.health-directory-empty svg{color:var(--pma-green)}
+.health-directory-empty h2{font-size:20px;margin:12px 0 8px;color:var(--pma-ink)}
+.health-directory-empty p{max-width:580px;margin:auto;color:var(--pma-muted);line-height:1.7;font-size:13px}
+.health-facility-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.health-facility-card{padding:20px;border:1px solid var(--pma-border);border-radius:18px;background:var(--pma-surface);box-shadow:0 8px 26px #203b3208}
+.health-facility-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.health-facility-card-top>small{color:var(--pma-muted);font-size:11px}
+.health-verification{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800}
+.health-verification.verified{background:#e5f4eb;color:#17643d}
+.health-verification.unverified{background:#fff1dc;color:#80500c}
+.health-facility-card h2{font-size:19px;margin:14px 0;color:var(--pma-ink)}
+.health-facility-card p{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.6;color:var(--pma-muted)}
+.health-facility-card p svg{flex:0 0 auto;margin-top:2px}
+.health-facility-card a,.health-directory-footer a,.health-emergency-source a{color:var(--pma-green);font-weight:750}
+.health-facility-card ul{padding-left:22px;color:var(--pma-muted);font-size:12px;line-height:1.7}
+.health-facility-card>small{display:block;margin-top:14px;color:var(--pma-muted);font-size:11px}
+.health-facility-emergency{font-weight:800;color:var(--pma-green)!important}
+.health-directory-footer{margin:24px 0;text-align:center}
+.health-services-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.health-services-shortcuts>a{display:flex;align-items:flex-start;gap:13px;padding:18px;border:1px solid var(--pma-border);border-radius:17px;background:var(--pma-surface);text-decoration:none;color:var(--pma-ink);box-shadow:0 8px 26px #203b3208}
+.health-services-shortcuts>a>span{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:var(--pma-green-soft);color:var(--pma-green)}
+.health-services-shortcuts .emergency-shortcut>span{background:#fff0ed;color:#a72e29}
+.health-services-shortcuts b,.health-services-shortcuts small{display:block}
+.health-services-shortcuts b{font-size:14px;margin:2px 0 6px}
+.health-services-shortcuts small{font-size:11px;line-height:1.5;color:var(--pma-muted)}
+.health-emergency-hero{text-align:center;padding:38px 22px;border:1px solid #f1c9c2;border-radius:24px;background:linear-gradient(145deg,#fff4f1,#fff 68%);margin:18px 0}
+.health-emergency-hero>span{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 14px;border-radius:18px;background:#fce2dd;color:#a72e29}
+.health-emergency-hero h1{font-size:clamp(25px,4vw,38px);color:#7f2925}
+.health-emergency-hero p{max-width:620px;margin:10px auto 22px;color:#693b37;line-height:1.65}
+.health-call-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:0 28px;border-radius:15px;background:#a72e29;color:#fff;text-decoration:none;font-size:20px;font-weight:900;box-shadow:0 8px 22px #a72e2930}
+.health-emergency-hero>small{display:block;margin-top:12px;color:#693b37;font-size:11px}
+.health-emergency-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.health-emergency-steps article{display:flex;align-items:flex-start;gap:10px;padding:16px;border:1px solid var(--pma-border);border-radius:16px;background:var(--pma-surface)}
+.health-emergency-steps article>span{color:var(--pma-green)}
+.health-emergency-steps p{margin:0;font-size:12px;line-height:1.65;color:var(--pma-ink)}
+.health-emergency-warning{background:#fff7f2;border-color:#f1d3c9;color:#713b2f}
+.health-emergency-warning>div{font-size:12px;line-height:1.65}
+.health-emergency-warning p{margin-top:7px}
+.health-emergency-source{display:flex;justify-content:center;align-items:center;gap:6px;font-size:11px}
+@media(max-width:760px){.health-directory-filters{grid-template-columns:1fr 1fr}.health-directory-filters label:nth-child(3){grid-column:1/-1}.health-facility-grid,.health-services-shortcuts{grid-template-columns:1fr}.health-emergency-steps{grid-template-columns:1fr}.health-emergency-hero{padding:28px 16px}}
+html[data-theme="dark"] .health-emergency-hero{background:#251b1a;border-color:#70423b}
+html[data-theme="dark"] .health-emergency-hero h1,html[data-theme="dark"] .health-emergency-hero p,html[data-theme="dark"] .health-emergency-hero>small{color:#fff0ec}
+html[data-theme="dark"][data-contrast="high"] .health-services-page{background:#000!important;color:#fff!important}
+html[data-theme="dark"][data-contrast="high"] .health-services-page h1,html[data-theme="dark"][data-contrast="high"] .health-services-page h2,html[data-theme="dark"][data-contrast="high"] .health-services-page p,html[data-theme="dark"][data-contrast="high"] .health-services-page label{color:#fff!important}
