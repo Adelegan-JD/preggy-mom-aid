@@ -6,7 +6,7 @@ test("patient language selection updates the interface and persists after reload
   test.skip(hasConfiguredSupabase, "The safe fallback is used here; authenticated locale smoke tests need a dedicated patient fixture.");
   await page.goto("/my-care");
 
-  const language = page.getByLabel("Choose language");
+  const language = page.locator(".pma-language-fallback").getByLabel("Choose language");
   await expect(language).toHaveValue("en");
   await language.selectOption("yo");
 
@@ -15,6 +15,6 @@ test("patient language selection updates the interface and persists after reload
   await expect.poll(() => page.evaluate(() => localStorage.getItem("pma-language-v1"))).toBe("yo");
 
   await page.reload();
-  await expect(page.getByLabel("Choose language")).toHaveValue("yo");
+  await expect(page.locator(".pma-language-fallback").getByLabel("Choose language")).toHaveValue("yo");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ojú ìṣàkóso ìlera rẹ");
 });
