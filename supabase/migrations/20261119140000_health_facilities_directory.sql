@@ -21,7 +21,7 @@ create table if not exists public.health_facilities (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint health_facilities_verified_metadata_check
-    check (verification_status <> 'verified' or (verified_at is not null and verified_by is not null))
+    check (verification_status <> 'verified' or verified_at is not null)
 );
 
 create index if not exists health_facilities_published_state_city_idx
@@ -39,7 +39,7 @@ create policy "Public can read published health facilities"
   on public.health_facilities
   for select
   to anon, authenticated
-  using (is_published = true);
+  using (is_published = true and verification_status <> 'rejected');
 
 -- Deliberately no client INSERT/UPDATE/DELETE policies. Unverified facilities may be
 -- published as clearly labelled information, but must never be presented as verified.
