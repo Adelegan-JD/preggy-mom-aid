@@ -1012,3 +1012,30 @@ html[data-theme="dark"][data-contrast="high"] :where(.public-site,.learn-page) a
 @media(prefers-reduced-motion:reduce){
  .patient-dashboard-redesign *,.patient-dashboard-redesign *::before,.patient-dashboard-redesign *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+
+/* Shared patient subpage navigation */
+.patient-subpage{display:block;min-height:100vh;background:var(--pma-page,#f7f8f6)}
+.patient-subpage-header{position:sticky;top:0;z-index:25;min-height:72px;padding:10px clamp(18px,4vw,54px);gap:18px;box-shadow:0 4px 18px #203b3207}
+.patient-subpage-header .account-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--pma-ink)}
+.patient-subpage-header .account-brand b,.patient-subpage-header .account-brand small{display:block}
+.patient-subpage-header .account-brand b{font:800 14px Manrope}
+.patient-subpage-header .account-brand small{font-size:9px;letter-spacing:1.2px;color:var(--pma-muted);margin-top:3px}
+.patient-subpage-header nav{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.patient-subpage-header nav a{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 10px;border-radius:10px;color:var(--pma-muted);font-size:10px;font-weight:750;text-decoration:none}
+.patient-subpage-header nav a:hover,.patient-subpage-header nav a[aria-current=page]{background:var(--pma-green-soft);color:var(--pma-green)}
+.patient-subpage .patient-dashboard-content{padding-top:36px}
+.patient-subpage-mobile-nav{display:none}
+@media(max-width:900px){
+ .patient-subpage-header{align-items:center}
+ .patient-subpage-header nav{gap:1px}
+ .patient-subpage-header nav a{padding:0 7px;font-size:9px}
+ .patient-subpage-header nav a svg{display:none}
+}
+@media(max-width:760px){
+ .patient-subpage{padding-bottom:76px}
+ .patient-subpage-header{position:relative;min-height:60px;padding:9px 15px}
+ .patient-subpage-header nav{display:none}
+ .patient-subpage .patient-dashboard-content{padding:22px 15px 36px}
+ .patient-subpage-mobile-nav{display:grid}
+}
