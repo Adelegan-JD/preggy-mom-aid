@@ -13,14 +13,14 @@ type Props = {
 
 const copy: Record<string, {
   title: string; intro: string; week: string; calendar: string; postpartum: string;
-  days: string; wellbeing: string; profile: string; stages: string[];
+  days: string; wellbeing: string; profile: string; update: string; stages: string[];
   stageNotes: string[]; selected: string; note: string;
 }> = {
   en: {
     title: "Your journey, at your pace", intro: "A calm place to keep track of the details you choose to share.",
     week: "Week", calendar: "of 40 · calendar estimate, not a clinical assessment",
     postpartum: "Your postpartum journey", days: "days since birth",
-    wellbeing: "Your wellbeing journey", profile: "Add your journey details",
+    wellbeing: "Your wellbeing journey", profile: "Add your journey details", update: "Update your journey", update: "Update your journey",
     stages: ["First chapter", "Middle chapter", "Final chapter"],
     stageNotes: ["A space to note questions, plan appointments and talk through your care with your maternity team.",
       "Keep your appointments and the questions you want to raise with your care team together in one place.",
@@ -31,7 +31,7 @@ const copy: Record<string, {
     title: "Irin-ajo rẹ, ni iyara tirẹ", intro: "Ibi ifọkanbalẹ lati tọju awọn alaye ti o yan lati pin.",
     week: "Ọsẹ", calendar: "ti 40 · iṣiro kalẹnda, kii ṣe ayẹwo iṣoogun",
     postpartum: "Irin-ajo rẹ lẹ́yìn ìbímọ", days: "ọjọ́ lati ìbí",
-    wellbeing: "Irin-ajo ìlera rẹ", profile: "Fi awọn alaye irin-ajo rẹ kun",
+    wellbeing: "Irin-ajo ìlera rẹ", profile: "Fi awọn alaye irin-ajo rẹ kun", update: "Ṣe imudojuiwọn irin-ajo rẹ",
     stages: ["Ìbẹ̀rẹ̀", "Àárín", "Ìparí"],
     stageNotes: ["Kọ awọn ibeere rẹ silẹ ki o jiroro itọju pẹlu ẹgbẹ alaboyun rẹ.", "Pa awọn ipinnu lati pade ati awọn ibeere rẹ mọ ni ibi kan.", "Mura awọn ibeere nipa ibimọ ati itọju lẹhin ibimọ pẹlu awọn amoye ilera rẹ."],
     selected: "Abala irin-ajo", note: "Awọn abala wọnyi jẹ iranlọwọ iṣeto nikan, kii ṣe awọn ami iṣoogun."
@@ -40,7 +40,7 @@ const copy: Record<string, {
     title: "Tafiyarku, a hankali", intro: "Wuri mai natsuwa don tsara bayanan da kuka zaɓa ku raba.",
     week: "Mako", calendar: "na 40 · ƙididdigar kalanda ce, ba gwajin likita ba",
     postpartum: "Lokacin murmurewa bayan haihuwa", days: "kwanaki tun haihuwa",
-    wellbeing: "Tafiyar lafiyarku", profile: "Ƙara bayanan tafiyarku",
+    wellbeing: "Tafiyar lafiyarku", profile: "Ƙara bayanan tafiyarku", update: "Sabunta tafiyarku",
     stages: ["Farko", "Tsakiya", "Ƙarshe"],
     stageNotes: ["Rubuta tambayoyinku kuma ku tattauna kulawa da ma'aikatan lafiyar uwa.", "Ajiye ranakun ziyara da tambayoyinku wuri guda.", "Shirya tambayoyin haihuwa da bayan haihuwa tare da ƙwararrun ma'aikatan lafiya."],
     selected: "Matakin tafiya", note: "Waɗannan matakai na taimakon tsari ne kawai, ba alamomin lafiya ba."
@@ -49,7 +49,7 @@ const copy: Record<string, {
     title: "Njem gị, n'oge nke gị", intro: "Ebe dị jụụ iji hazie nkọwa ị họọrọ ịkekọrịta.",
     week: "Izu", calendar: "n'ime 40 · atụmatụ kalenda, ọ bụghị nyocha ahụike",
     postpartum: "Njem gị mgbe ị mụsịrị nwa", days: "ụbọchị kemgbe ọmụmụ",
-    wellbeing: "Njem ahụike gị", profile: "Tinye nkọwa njem gị",
+    wellbeing: "Njem ahụike gị", profile: "Tinye nkọwa njem gị", update: "Melite njem gị",
     stages: ["Mmalite", "Etiti", "Ọgwụgwụ"],
     stageNotes: ["Dee ajụjụ gị ma soro ndị na-elekọta ahụike nne kparịta ya.", "Debe oge nleta na ajụjụ gị n'otu ebe.", "Soro ndị ọkachamara ahụike gị kwadebe ajụjụ gbasara ọmụmụ na nlekọta mgbe ọmụmụ gasịrị."],
     selected: "Akụkụ njem", note: "Akụkụ ndị a bụ enyemaka nhazi, ọ bụghị akara ahụike."
@@ -103,7 +103,7 @@ export default function PregnancyJourneyVisual({ pregnancyStatus, estimatedWeeks
         ) : (
           <div className="pma-wellbeing-copy"><p>{t.intro}</p><Link href="/my-care/profile">{t.profile} <ArrowRight size={15}/></Link></div>
         )}
-        <Link className="pma-journey-link" href="/my-care/profile">Update your journey <ArrowRight size={15}/></Link>
+        <Link className="pma-journey-link" href="/my-care/profile">{t.update} <ArrowRight size={15}/></Link>
       </div>
     </section>
   );
