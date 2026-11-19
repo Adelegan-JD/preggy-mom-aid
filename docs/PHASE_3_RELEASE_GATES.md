@@ -12,9 +12,10 @@
 ## Required Supabase deployment configuration
 Deploy the two functions from `supabase/functions`.
 - `process-account-deletion`: JWT verification enabled. Uses platform-provided Supabase URL, publishable and secret keys (or legacy anon/service-role keys).
-- `process-patient-reminders`: JWT verification disabled only because it authenticates a private `x-cron-secret` itself. Set `CRON_SECRET`, `RESEND_API_KEY`, and `REMINDER_FROM_EMAIL` as Edge Function secrets. Never commit these values.
-- Schedule a POST to `/functions/v1/process-patient-reminders` every 15 minutes with `x-cron-secret`. Use a protected scheduler/worker. Do not expose CRON_SECRET to the browser.
-- Configure Resend sender-domain verification and SPF/DKIM before enabling reminders for users.
+- `process-patient-reminders`: gateway JWT verification is disabled because the scheduled caller uses a Supabase secret API key in the `apikey` header; the function compares it with the Edge Function's `SUPABASE_SECRET_KEYS.default` value.
+- A Supabase `pg_cron` job is active every 15 minutes and invokes the function through `pg_net`. It sends no request until the required Vault secret exists.
+- In Supabase Dashboard > Database > Vault, add a secret named `supabase_secret_key` with the project's Supabase **secret API key** (Settings > API Keys). Do not use a publishable key. This allows the database scheduler to authenticate without exposing the key in SQL history or client code.
+- Add `RESEND_API_KEY` and `REMINDER_FROM_EMAIL` as Edge Function secrets. Verify the sender domain and SPF/DKIM with Resend before enabling reminders for patients.
 
 ## Production gates not executable from source alone
 - Configure and verify Vercel production environment variables and deploy a production build.
@@ -27,9 +28,9 @@ Deploy the two functions from `supabase/functions`.
 
 ## Email provider and scheduling setup
 
-The reminder function is deployed, but delivery remains disabled until the owner configures:
-1. A Resend account and verified sender domain.
-2. Supabase Edge Function secrets: `RESEND_API_KEY`, `REMINDER_FROM_EMAIL`, and a long random `CRON_SECRET`.
-3. A trusted scheduler that calls the reminder function every 15 minutes with `x-cron-secret`. Keep the secret server-side only.
+The reminder function and 15-minute Supabase cron job are deployed. Delivery remains disabled until the owner:
+1. Adds the Supabase secret API key to Database > Vault under the exact name `supabase_secret_key`.
+2. Adds `RESEND_API_KEY` and `REMINDER_FROM_EMAIL` under Edge Functions > Secrets.
+3. Verifies the sender domain with Resend (including SPF/DKIM).
 
 The deployed account-deletion function requires a valid signed-in patient JWT and a prior patient deletion request. It removes files from the private patient bucket before deleting the Auth user (which cascades the patient's database records). If file cleanup fails, it stops without deleting the account.
