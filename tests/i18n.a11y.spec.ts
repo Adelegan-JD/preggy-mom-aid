@@ -16,6 +16,6 @@ test("patient language selection updates the interface and persists after reload
   await expect.poll(() => page.evaluate(() => localStorage.getItem("pma-language-v1"))).toBe("yo");
 
   await page.reload();
-  await expect(page.locator(".pma-language-fallback").getByLabel("Choose language")).toHaveValue("yo");
+  await expect(page.locator(".pma-language-fallback select")).toHaveValue("yo");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Ojú ìṣàkóso ìlera rẹ");
 });
