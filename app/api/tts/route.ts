@@ -11,7 +11,7 @@ const languageAliases: Record<AppLanguage, string[]> = {
 
 type YarnVoice = {
   id?: unknown; name?: unknown; voice_id?: unknown; voice?: unknown; default?: unknown;
-  languages?: unknown; language?: unknown; language_codes?: unknown; supported_languages?: unknown;
+  languages?: unknown; language?: unknown; language_codes?: unknown; supported_languages?: unknown; supportedLanguages?: unknown;
 };
 
 function voiceList(payload: unknown): YarnVoice[] {
@@ -25,7 +25,7 @@ function voiceList(payload: unknown): YarnVoice[] {
 }
 
 function voiceSupportsLanguage(voice: YarnVoice, language: AppLanguage): boolean {
-  const raw = voice.languages ?? voice.language ?? voice.language_codes ?? voice.supported_languages;
+  const raw = voice.languages ?? voice.language ?? voice.language_codes ?? voice.supported_languages ?? voice.supportedLanguages;
   const values = Array.isArray(raw) ? raw : typeof raw === "string" ? raw.split(/[,;|]/) : [];
   const supported = values.map((item) => {
     if (typeof item === "string") return item.trim().toLowerCase();
@@ -35,7 +35,7 @@ function voiceSupportsLanguage(voice: YarnVoice, language: AppLanguage): boolean
     }
     return "";
   });
-  return supported.some((value) => languageAliases[language].includes(value) || value.startsWith(languageCodes[language] + "-"));
+  return supported.some((value) => languageAliases[language].some((alias) => value === alias || value.includes(alias)) || value.startsWith(languageCodes[language] + "-"));
 }
 
 async function selectLanguageVoice(apiKey: string, language: AppLanguage): Promise<string | null> {
