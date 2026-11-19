@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { SlidersHorizontal, RotateCcw } from "lucide-react";
+import LanguageSwitcher from "@/components/language-switcher";
 
 type Preferences = {
   theme: "system" | "light" | "dark";
