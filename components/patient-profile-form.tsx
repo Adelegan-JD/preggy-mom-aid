@@ -21,7 +21,6 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
   const [preferredName, setPreferredName] = useState(initialProfile?.preferred_name ?? "");
   const [phone, setPhone] = useState(initialProfile?.phone_number ?? "");
   const [state, setState] = useState(initialProfile?.state_or_territory ?? "");
-  const [language, setProfileLanguage] = useState<PatientProfile["preferred_language"]>(initialProfile?.preferred_language ?? appLanguage);
   const [status, setStatus] = useState<PatientProfile["pregnancy_status"]>(initialProfile?.pregnancy_status ?? "pregnant");
   const [dueDate, setDueDate] = useState(initialProfile?.estimated_due_date ?? "");
   const [birthDate, setBirthDate] = useState(initialProfile?.birth_date ?? "");
@@ -52,7 +51,7 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
         preferred_name: preferredName.trim() || null,
         phone_number: phone.trim() || null,
         state_or_territory: state.trim() || null,
-        preferred_language: language,
+        preferred_language: appLanguage,
         pregnancy_status: status,
         estimated_due_date: status === "pregnant" ? dueDate || null : null,
         birth_date: status === "postpartum" ? birthDate || null : null,
@@ -79,13 +78,13 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
       <label htmlFor="patientState">State or territory <span>(optional)</span></label>
       <input id="patientState" value={state} maxLength={80} onChange={event => setState(event.target.value)} autoComplete="address-level1" placeholder="e.g. Lagos" />
       <label htmlFor="patientLanguage">{t("preferredLanguage")}</label>
-      <select id="patientLanguage" value={language} onChange={event => { const next = event.target.value as PatientProfile["preferred_language"]; setProfileLanguage(next); if (next !== "other") { setLanguage(next); router.refresh(); } }}>
+      <select id="patientLanguage" value={appLanguage} onChange={event => { setLanguage(event.target.value as typeof appLanguage); router.refresh(); }}>
         <option value="en">English</option>
         <option value="yo">Yorùbá</option>
         <option value="ig">Igbo</option>
         <option value="ha">Hausa</option>
         <option value="pcm">Nigerian Pidgin</option>
-        <option value="other">Other</option>
+        
       </select>
       <div className="patient-profile-divider" />
       <div className="account-kicker">YOUR JOURNEY</div>
