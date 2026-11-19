@@ -104,7 +104,7 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
       <div className="account-kicker">YOUR COMMUNICATION CHOICES</div><h2>Notification preferences</h2>
       <p className="account-intro">Choose the emails you may want to receive. Appointment reminders are sent only when enabled. Reminder delivery requires the service to be configured by the site operator.</p>
       <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.appointment_email_reminders} onChange={event => setPreferences(current => ({ ...current, appointment_email_reminders: event.target.checked }))}/> Appointment reminder emails</label>
-      <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.product_email_updates} onChange={event => setPreferences(current => ({ ...current, product_email_updates: event.target.checked }))}/> Product and service updates</label>
+      <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.product_email_updates} onChange={event => setPreferences(current => ({ ...current, product_email_updates: event.target.checked }))}/> Product and service updates</label><p className="account-footnote">This choice is saved for future updates. Product announcement emails are not currently being sent.</p>
       <button className="account-submit" disabled={busy}>{busy ? "Saving…" : "Save preferences"}</button>
     </form>
     <section className="patient-settings-panel">
