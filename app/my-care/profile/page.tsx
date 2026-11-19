@@ -27,7 +27,7 @@ export default async function PatientProfilePage() {
       <section className="patient-dashboard-content">
         <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
         <div className="account-kicker">YOUR PERSONAL SPACE</div>
-        <h1><Heart size={28}/> My profile</h1>
+        <h1><Heart size={28}/> {t("profileTitle")}</h1>
         <p className="account-intro">{t("profileIntro")}</p>
         <div className="patient-safety-note"><ShieldCheck size={20}/><p>Your profile details are private to your account. Saving them does not share your information with a healthcare professional.</p></div>
         <PatientProfileForm initialProfile={patientProfile} />
