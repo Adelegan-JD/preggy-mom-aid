@@ -73,7 +73,9 @@ export async function POST(request: NextRequest) {
   try {
     // Choose a voice from YarnGPT's live catalogue that explicitly lists the
     // selected language. Do not translate already-localised clinical copy again.
-    const voice = await selectLanguageVoice(apiKey, language);
+    let voice: string | null = null;
+    try { voice = await selectLanguageVoice(apiKey, language); }
+    catch { return NextResponse.json({ error: "The speech voice catalogue is temporarily unavailable." }, { status: 503 }); }
     if (!voice) return NextResponse.json({ error: "No YarnGPT voice is currently listed for this language. Please use the text guidance or try again later." }, { status: 503 });
 
     const prepared = await fetch("https://api.yarngpt.ai/api/v1/tts/prepare", {
