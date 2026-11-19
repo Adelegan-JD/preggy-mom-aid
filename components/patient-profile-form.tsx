@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/language-provider";
 
@@ -26,6 +26,8 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState("");
+
+  useEffect(() => {\n    if (initialProfile?.preferred_language && initialProfile.preferred_language !== "other") {\n      try { if (!window.localStorage.getItem("pma-language-v1")) setLanguage(initialProfile.preferred_language); } catch { /* Keep the active session language. */ }\n    }\n  }, [initialProfile?.preferred_language, setLanguage]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
