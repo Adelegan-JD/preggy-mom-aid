@@ -70,7 +70,7 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
   }
 
   async function requestDeletion() {
-    if (!window.confirm("Request deletion of your Preggy Mom Aid account and associated records? This submits a request for secure review; it does not delete your data immediately.")) return;
+    if (!window.confirm("Submit a request to delete your Preggy Mom Aid account and associated records? Your account will remain active until you separately confirm permanent deletion.")) return;
     setBusy(true); setError(""); setMessage("");
     try {
       const supabase = createClient();
@@ -79,16 +79,23 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
       const { error: insertError } = await supabase.from("account_deletion_requests").insert({ user_id: user.id });
       if (insertError) throw insertError;
       setDeletionRequested(true);
-      setMessage("Your deletion request has been recorded. To permanently delete this account now, type DELETE in the confirmation prompt.");
-      const confirmation = window.prompt("Permanent account deletion cannot be undone. Type DELETE to remove your account and its stored health records.");
-      if (confirmation !== "DELETE") return;
+      setMessage("Your deletion request has been recorded. You can now separately confirm permanent deletion.");
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not submit the deletion request."); }
+    finally { setBusy(false); }
+  }
+
+  async function confirmDeletion() {
+    const confirmation = window.prompt("Permanent account deletion cannot be undone. Type DELETE to remove your account and its associated stored health records.");
+    if (confirmation !== "DELETE") return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const supabase = createClient();
       const { error: deletionError } = await supabase.functions.invoke("process-account-deletion", { body: { confirmation: "DELETE" } });
       if (deletionError) throw deletionError;
       await supabase.auth.signOut();
-      setMessage("Your account and associated records have been deleted.");
       router.replace("/?account_deleted=1");
       router.refresh();
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not submit the deletion request."); }
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "Account deletion could not be completed. Your request remains open."); }
     finally { setBusy(false); }
   }
 
@@ -108,8 +115,8 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
     <section className="patient-settings-panel">
       <div className="account-kicker">YOUR INFORMATION</div><h2>Download or delete your data</h2><p className="account-intro">You can download a copy of your account information. Document file contents remain in Health records and must be downloaded there separately.</p>
       <button className="account-submit" type="button" onClick={exportData} disabled={busy}><Download size={16}/> Download my data</button>
-      <div className="patient-safety-note"><ShieldCheck size={18}/><p>A deletion request is recorded first. You must then type DELETE to confirm permanent removal of your account and associated stored health records.</p></div>
-      <button className="patient-delete-request" type="button" onClick={requestDeletion} disabled={busy || deletionRequested}><Trash2 size={16}/> {deletionRequested ? "Deletion request submitted" : "Request account deletion"}</button>
+      <div className="patient-safety-note"><ShieldCheck size={18}/><p>First submit a deletion request. Then, when you are ready, select Confirm permanent deletion and type DELETE. This permanently removes your account and associated stored health records.</p></div>
+      {deletionRequested ? <button className="patient-delete-request" type="button" onClick={confirmDeletion} disabled={busy}><Trash2 size={16}/> Confirm permanent deletion</button> : <button className="patient-delete-request" type="button" onClick={requestDeletion} disabled={busy}><Trash2 size={16}/> Request account deletion</button>}
     </section>
     {error && <p className="account-error" role="alert">{error}</p>}
     {message && <p className="account-success" role="status">{message}</p>}
