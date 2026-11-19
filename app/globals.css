@@ -1317,3 +1317,57 @@ html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000
 
 .maternal-story-card:not(.story-quote){display:block;color:inherit;text-decoration:none}
 .maternal-story-card:not(.story-quote):focus-visible{outline:3px solid #d9788d;outline-offset:4px}
+
+
+/* Dedicated postpartum support hub */
+.postpartum-page .patient-dashboard-content{max-width:1120px}
+.postpartum-hero{display:grid;grid-template-columns:1.2fr .8fr;min-height:300px;overflow:hidden;border-radius:26px;background:linear-gradient(115deg,#f9e9e9 0%,#f6f0e8 54%,#e5f0e9 100%);margin:24px 0 22px;position:relative}
+.postpartum-hero-copy{padding:38px 42px;position:relative;z-index:2}
+.postpartum-kicker{display:inline-flex;align-items:center;gap:8px;color:#b86d7e;font-size:10px;font-weight:800;letter-spacing:1.5px}
+.postpartum-hero h1{font:800 clamp(30px,4vw,48px)/1.05 Manrope;color:#34534a;letter-spacing:-1.8px;margin:18px 0 12px}
+.postpartum-hero-copy>p{max-width:510px;color:#697d73;font-size:13px;line-height:1.8}
+.postpartum-day-count{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:10px 15px;border:1px solid #ffffffb8;border-radius:14px;background:#ffffffa8;color:#548878}
+.postpartum-day-count strong{font:800 25px Manrope;color:#3b7665}
+.postpartum-day-count span{font-size:10px;color:#73857c;max-width:190px}
+.postpartum-date-prompt{margin-top:15px;padding:12px 15px;border-radius:14px;background:#ffffffa8;max-width:350px}
+.postpartum-date-prompt p{font-size:11px;color:#718078;margin:0 0 8px}
+.postpartum-date-prompt a{display:inline-flex;align-items:center;gap:6px;color:#a95f75;font-size:11px;font-weight:800;text-decoration:none}
+.postpartum-hero-art{position:relative;min-height:260px;display:grid;place-items:center}
+.postpartum-art-sun{position:absolute;width:215px;height:215px;border-radius:50%;background:radial-gradient(circle at 50% 45%,#fff8e8 0 38%,#f2c9b9 39% 57%,#e9b7aa 58%);box-shadow:0 20px 55px #956b5b20}
+.postpartum-art-mother{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:180px;height:210px;border-radius:90px 90px 30px 30px;background:linear-gradient(145deg,#285c53,#183e3a);clip-path:ellipse(49% 49% at 50% 55%)}
+.postpartum-art-mother:before{content:"";position:absolute;top:18px;left:59px;width:67px;height:80px;border-radius:48% 48% 45% 45%;background:#8d5548;box-shadow:0 -17px 0 8px #211e20}
+.postpartum-art-mother span{position:absolute;top:112px;left:36px;width:110px;height:83px;border-radius:60% 60% 35% 35%;background:#d58c7d}
+.postpartum-art-heart{position:absolute;right:15%;top:18%;width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:#fff;color:#d7798c;box-shadow:0 12px 30px #6b555322}
+.postpartum-notice{display:flex;align-items:flex-start;gap:12px;padding:17px 19px;border:1px solid #e8eee9;border-radius:17px;background:#fff;color:#638d7d;margin-bottom:34px}
+.postpartum-notice>svg{flex:none;margin-top:2px}
+.postpartum-notice b{font-size:12px;color:#3c6254}
+.postpartum-notice p{font-size:11px;line-height:1.7;color:#78867e;margin:5px 0 0}
+.postpartum-section-heading{display:flex;gap:13px;align-items:flex-start;margin:30px 0 15px}
+.postpartum-section-heading>span{font:800 12px Manrope;color:#d47b8d;padding:8px 10px;background:#fff0f2;border-radius:10px}
+.postpartum-section-heading h2{font:800 20px Manrope;color:#344e44;margin:0}
+.postpartum-section-heading p{font-size:11px;color:#87928b;margin:5px 0 0;line-height:1.6}
+.postpartum-tool-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.postpartum-tool-grid>a{min-height:130px;padding:19px;border:1px solid #e9efea;border-radius:17px;background:#fff;color:#63917e;display:flex;flex-direction:column;gap:14px;text-decoration:none;box-shadow:0 8px 25px #344e4408;transition:transform .18s,border-color .18s}
+.postpartum-tool-grid>a:hover{transform:translateY(-3px);border-color:#b8d2c4}
+.postpartum-tool-grid>a>b{font:700 12px Manrope;color:#40574d}
+.postpartum-tool-grid>a>span{display:flex;justify-content:flex-end;color:#c87588}
+.postpartum-question-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.postpartum-question-list>div{display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;background:#f8f4f1}
+.postpartum-question-list>div>span{font:800 10px Manrope;color:#d17a8e}
+.postpartum-question-list p{font-size:11px;line-height:1.5;color:#596e63;flex:1;margin:0}
+.postpartum-question-list svg{color:#86a997;flex:none}
+.postpartum-topics{margin-top:28px}
+.postpartum-topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.postpartum-topic-grid details{border:1px solid #e8eee9;border-radius:14px;background:#fff;padding:0 15px}
+.postpartum-topic-grid summary{list-style:none;display:flex;align-items:center;gap:10px;min-height:55px;cursor:pointer;color:#40584d;font-size:11px;font-weight:700}
+.postpartum-topic-grid summary::-webkit-details-marker{display:none}
+.postpartum-topic-grid summary span{color:#d17b8e;font:800 10px Manrope}
+.postpartum-topic-grid summary svg{margin-left:auto;color:#86a997;transition:transform .18s}
+.postpartum-topic-grid details[open] summary svg{transform:rotate(90deg)}
+.postpartum-topic-grid details p{font-size:11px;line-height:1.7;color:#7a8980;padding:0 0 14px 25px;margin:0}
+.postpartum-source-links{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin:30px 0 20px;padding:18px 20px;border-radius:16px;background:#edf4ef}
+.postpartum-source-links>b{width:100%;font:800 13px Manrope;color:#3d5e50}
+.postpartum-source-links a{display:inline-flex;align-items:center;gap:6px;color:#477c68;font-size:10px;font-weight:700;text-decoration:none}
+.postpartum-source-links a:hover{text-decoration:underline}
+@media(max-width:760px){.postpartum-hero{grid-template-columns:1fr}.postpartum-hero-copy{padding:27px 23px 12px}.postpartum-hero-art{min-height:220px}.postpartum-tool-grid{grid-template-columns:1fr 1fr}.postpartum-question-list,.postpartum-topic-grid{grid-template-columns:1fr}.postpartum-source-links{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.postpartum-tool-grid>a,.postpartum-topic-grid summary svg{transition:none}.postpartum-tool-grid>a:hover{transform:none}}
