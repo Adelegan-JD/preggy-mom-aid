@@ -78,11 +78,13 @@ export default function HomePage() {
           </div>
           <div className="hero-note"><ShieldCheck size={17} /><span>Privacy-conscious design. Responsible information. Care led by qualified professionals.</span></div>
         </div>
-        <div className="hero-art-public" aria-hidden="true">
-          <div className="art-ring ring-one" /><div className="art-ring ring-two" />
-          <div className="art-card"><Image src="/logo.png" alt="" width={104} height={104} /><span>With you, through every chapter.</span></div>
-          <div className="art-leaf leaf-one">✦</div><div className="art-leaf leaf-two">✿</div>
-          <div className="art-caption"><HeartHandshake size={18} /><span><b>Compassion first</b><small>Support that respects every journey</small></span></div>
+        <div className="hero-art-public hero-photo-art">
+          <div className="hero-photo-frame">
+            <img src="https://images.unsplash.com/photo-1752240880737-128cc8cbf65c?auto=format&fit=crop&w=1200&q=85" alt="Pregnant mother holding her baby bump in a warm, peaceful setting" fetchPriority="high" />
+            <span className="hero-photo-label"><HeartHandshake size={17}/><span><b>Compassion first</b><small>Support through every chapter</small><small className="photo-credit">Photo: Arturo Añez / Unsplash</small></span></span>
+          </div>
+          <div className="hero-floating-note"><span className="hero-note-icon"><HeartHandshake size={18}/></span><span><b>You are not alone</b><small>Care, knowledge and support</small></span></div>
+          <span className="hero-photo-sparkle sparkle-a">✦</span><span className="hero-photo-sparkle sparkle-b">✿</span>
         </div>
       </section>
 
@@ -99,6 +101,16 @@ export default function HomePage() {
           <article><span className="mission-icon pink-icon"><HeartHandshake /></span><h3>Support without judgement</h3><p>A welcoming space designed around the real questions and concerns women may have during pregnancy and postpartum recovery.</p></article>
           <article><span className="mission-icon green-icon"><BookOpen /></span><h3>Information with context</h3><p>We will distinguish general education from personal medical advice and identify content that is awaiting clinical review.</p></article>
           <article><span className="mission-icon gold-icon"><ShieldCheck /></span><h3>Privacy matters</h3><p>Patient-controlled health information remains private. Access by a healthcare professional requires separate patient authorisation.</p></article>
+        </div>
+      </section>
+
+      <section className="maternal-visual-stories" aria-labelledby="maternal-stories-title">
+        <div className="section-kicker">CARE THAT SEES THE WHOLE PERSON</div>
+        <div className="maternal-stories-heading"><h2 id="maternal-stories-title">A little more support,<br /><em>at every step.</em></h2><p>From pregnancy questions to post-birth recovery, Preggy Mom Aid is designed to help you stay connected to your own care journey.</p></div>
+        <div className="maternal-story-grid">
+          <a href="/learn" className="maternal-story-card story-large"><img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=1100&q=85" alt="Expectant Black mother in a maternity portrait" loading="lazy"/><div><span>YOUR JOURNEY</span><h3>Every mother’s story is different.</h3><small>Photo: Anna Civolani / Unsplash</small></div></a>
+          <a href="/learn" className="maternal-story-card"><img src="https://images.unsplash.com/photo-1651083137688-492e79ac9a92?auto=format&fit=crop&w=800&q=80" alt="A mother and child sharing a close moment" loading="lazy"/><div><span>YOUR VOICE</span><h3>Questions deserve to be heard.</h3><small>Photo: Olivia Anne Snyder / Unsplash</small></div></a>
+          <article className="maternal-story-card story-quote"><span className="story-quote-mark">“</span><h3>Informed, supported, and at the centre of your care.</h3><p>Explore information, keep your records private and work with qualified professionals.</p><a href="/signup">Create your account <ArrowRight size={15}/></a></article>
         </div>
       </section>
 
