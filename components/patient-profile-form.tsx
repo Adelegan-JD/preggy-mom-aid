@@ -31,7 +31,7 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
 
   useEffect(() => {
     if (initialProfile?.preferred_language && initialProfile.preferred_language !== "other") {
-      try { if (!window.localStorage.getItem("pma-language-v1")) setLanguage(initialProfile.preferred_language); } catch { /* Keep the active session language. */ }
+      try { if (!window.localStorage.getItem("pma-language-v1")) { setLanguage(initialProfile.preferred_language); router.refresh(); } } catch { /* Keep the active session language. */ }
     }
   }, [initialProfile?.preferred_language, setLanguage]);
 
