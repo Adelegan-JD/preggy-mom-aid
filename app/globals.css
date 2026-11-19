@@ -1197,3 +1197,33 @@ html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000
   .pma-social-links a{transition:none}
   .pma-social-links a:hover{transform:none}
 }
+
+
+/* Public experience refinement */
+.public-header{position:sticky;top:0;z-index:40;border-bottom:1px solid rgba(232,238,233,.82);background:rgba(255,255,255,.94);backdrop-filter:blur(16px)}
+.public-nav a{position:relative;padding:10px 0}
+.public-nav a:after{content:"";position:absolute;left:0;right:100%;bottom:3px;height:2px;background:#e58b9a;border-radius:2px;transition:right .2s ease}
+.public-nav a:hover:after,.public-nav a:focus-visible:after{right:0}
+.header-cta,.primary-public-btn{box-shadow:0 8px 20px rgba(33,110,104,.14);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.header-cta:hover,.primary-public-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(33,110,104,.2);background:#185f5a}
+.mission-grid article,.professional-card,.directory-empty{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.mission-grid article:hover{transform:translateY(-3px);border-color:#d6e5dc;box-shadow:0 16px 35px rgba(38,68,54,.07)}
+.art-card{box-shadow:0 28px 75px rgba(124,85,85,.12),inset 0 1px 0 rgba(255,255,255,.9)}
+.public-site a:focus-visible,.public-site button:focus-visible{outline:3px solid #e58b9a;outline-offset:4px;border-radius:6px}
+
+/* Patient workspace: clearer hierarchy, responsive navigation and touch feedback */
+.patient-dashboard-header{position:sticky;top:0;z-index:35;backdrop-filter:blur(14px);background:rgba(255,255,255,.96)}
+.patient-dashboard-header nav a{display:inline-flex;align-items:center;gap:7px;padding:10px 11px;border-radius:10px;transition:background .18s ease,color .18s ease}
+.patient-dashboard-header nav a:hover{background:var(--pma-surface-soft,#eef5f0);color:var(--pma-ink,#24473b)}
+.patient-dashboard-header nav a[aria-current="page"]{background:var(--pma-green-soft,#e7f1eb);color:var(--pma-green,#286653)}
+.patient-dashboard-content{animation:pma-enter .28s ease-out both}
+.patient-stat-grid article,.patient-feature-card,.patient-recent-panel,.professional-verification-panel{box-shadow:0 8px 24px rgba(31,66,48,.045);transition:box-shadow .2s ease,border-color .2s ease,transform .2s ease}
+.patient-stat-grid article:hover,.patient-recent-panel:hover{border-color:#cbded1;box-shadow:0 13px 32px rgba(31,66,48,.075)}
+.patient-feature-card:focus-visible{outline:3px solid #d98798;outline-offset:3px}
+.patient-dashboard-content button,.patient-dashboard-content a,.professional-dashboard-content button,.professional-dashboard-content a{touch-action:manipulation}
+.patient-dashboard-content input,.patient-dashboard-content textarea,.patient-dashboard-content select,.professional-dashboard-content input,.professional-dashboard-content textarea,.professional-dashboard-content select{min-height:44px}
+.patient-dashboard-content button,.professional-dashboard-content button{min-height:42px}
+@keyframes pma-enter{from{opacity:.72;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:850px){.patient-dashboard-header{align-items:flex-start;gap:14px;flex-wrap:wrap}.patient-dashboard-header nav{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:5px}.patient-dashboard-header nav a{white-space:nowrap}}
+@media(max-width:650px){.patient-dashboard-header{position:relative}.patient-dashboard-content{padding-top:28px}.patient-stat-grid{grid-template-columns:1fr 1fr}.patient-feature-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.patient-dashboard-content{animation:none}.patient-dashboard-header nav a,.patient-stat-grid article,.patient-feature-card,.patient-recent-panel,.professional-verification-panel,.public-nav a:after,.header-cta,.primary-public-btn,.mission-grid article,.professional-card,.directory-empty{transition:none}.header-cta:hover,.primary-public-btn:hover,.mission-grid article:hover{transform:none}}
