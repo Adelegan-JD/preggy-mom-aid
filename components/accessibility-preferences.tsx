@@ -100,6 +100,8 @@ export default function AccessibilityPreferences() {
           <span className="pma-preferences-icon" aria-hidden="true"><SlidersHorizontal size={19} /></span>
         </div>
 
+        <div className="pma-preference-field"><LanguageSwitcher /></div>
+
         <div className="pma-preference-field">
           <label htmlFor={`pma-theme-${ids}`}>Colour theme</label>
           <select id={`pma-theme-${ids}`} value={preferences.theme} onChange={(event) => update("theme", event.currentTarget.value as Preferences["theme"], "Colour theme")}>
