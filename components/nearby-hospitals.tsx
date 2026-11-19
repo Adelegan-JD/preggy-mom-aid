@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle, LocateFixed, MapPin, Navigation, Phone, Search } from "lucide-react";
 import hospitalData from "@/data/hospitals.json";
-import { filterHospitalsByTown, findNearbyHospitals, type NearbyHospital } from "@/lib/nearby-hospitals";
+import { filterHospitalsByTown, findNearbyHospitals, type NearbyHospital, type NearbyHospitalResult } from "@/lib/nearby-hospitals";
 import type { AppLanguage } from "@/lib/i18n/translations";
 
 const records = hospitalData as NearbyHospital[];
@@ -46,7 +46,7 @@ export default function NearbyHospitals({ language }: { language: AppLanguage })
     {canShowFixtures && <label className="nearby-fixture-toggle"><input type="checkbox" checked={includeFixtures} onChange={(event)=>setIncludeFixtures(event.target.checked)}/>{t.fixtures}</label>}
     {results.length === 0 ? <div className="nearby-empty"><MapPin size={23}/><b>{t.emptyTitle}</b><p>{position ? t.emptyGps : t.emptySearch}</p></div> : <div className="nearby-results">{results.map((facility)=>{
       const placeholder=Boolean(facility.is_placeholder);
-      const distance="straightDistanceKm" in facility ? facility : null;
+      const distance="straightDistanceKm" in facility ? facility as NearbyHospitalResult : null;
       const directions=`https://www.google.com/maps/dir/?api=1&destination=${facility.lat},${facility.lng}`;
       return <article className="nearby-hospital-card" key={facility.name}>
         <div className="nearby-card-title"><div><h3>{facility.name}</h3><p><MapPin size={14}/>{facility.lga}, {facility.state}, Nigeria</p></div>{placeholder && <span className="nearby-test-badge">{t.test}</span>}</div>
