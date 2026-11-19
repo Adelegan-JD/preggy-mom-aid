@@ -24,3 +24,12 @@ Deploy the two functions from `supabase/functions`.
 - Obtain qualified Nigerian clinical review of educational and emergency content and privacy/legal review against NDPA/NDPC obligations before public onboarding.
 - Leaked-password protection remains a deferred plan-dependent Auth setting; record and recheck after plan upgrade.
 - Do not use real patient data for test runs or public onboarding until all release gates are signed off.
+
+## Email provider and scheduling setup
+
+The reminder function is deployed, but delivery remains disabled until the owner configures:
+1. A Resend account and verified sender domain.
+2. Supabase Edge Function secrets: `RESEND_API_KEY`, `REMINDER_FROM_EMAIL`, and a long random `CRON_SECRET`.
+3. A trusted scheduler that calls the reminder function every 15 minutes with `x-cron-secret`. Keep the secret server-side only.
+
+The deployed account-deletion function requires a valid signed-in patient JWT and a prior patient deletion request. It removes files from the private patient bucket before deleting the Auth user (which cascades the patient's database records). If file cleanup fails, it stops without deleting the account.
