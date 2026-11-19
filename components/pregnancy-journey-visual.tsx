@@ -20,7 +20,7 @@ const copy: Record<string, {
     title: "Your journey, at your pace", intro: "A calm place to keep track of the details you choose to share.",
     week: "Week", calendar: "of 40 · calendar estimate, not a clinical assessment",
     postpartum: "Your postpartum journey", days: "days since birth",
-    wellbeing: "Your wellbeing journey", profile: "Add your journey details", update: "Update your journey", update: "Update your journey",
+    wellbeing: "Your wellbeing journey", profile: "Add your journey details", update: "Update your journey",
     stages: ["First chapter", "Middle chapter", "Final chapter"],
     stageNotes: ["A space to note questions, plan appointments and talk through your care with your maternity team.",
       "Keep your appointments and the questions you want to raise with your care team together in one place.",
@@ -58,7 +58,7 @@ const copy: Record<string, {
     title: "Your journey, your pace", intro: "One calm place to organise the details you choose to share.",
     week: "Week", calendar: "of 40 · calendar estimate, no be medical assessment",
     postpartum: "Your after-birth journey", days: "days since birth",
-    wellbeing: "Your wellbeing journey", profile: "Add your journey details",
+    wellbeing: "Your wellbeing journey", profile: "Add your journey details", update: "Update your journey",
     stages: ["Start", "Middle", "Final stage"],
     stageNotes: ["Write down your questions and discuss your care with your maternity team.", "Keep your appointments and questions together in one place.", "Prepare birth and after-birth questions with your qualified care team."],
     selected: "Journey chapter", note: "These chapters help you organise information; they are not medical milestones."
