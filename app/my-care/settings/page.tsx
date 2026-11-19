@@ -1,4 +1,5 @@
 import PatientPageNavigation from "@/components/patient-page-navigation";
+import { getServerTranslator } from "@/lib/i18n/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft, Settings, ShieldCheck } from "lucide-react";
@@ -9,8 +10,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Privacy and account settings | Preggy Mom Aid" };
 
 export default async function PatientSettingsPage() {
+  const { t } = await getServerTranslator();
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="settings"/><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link"><ArrowLeft size={16}/> Return to sign in</Link><h1>Privacy and account settings</h1><p className="account-intro">Secure account services are not configured for this deployment.</p></section></main>;
+    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="settings"/><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link"><ArrowLeft size={16}/> Return to sign in</Link><h1>{t("settingsTitle")}</h1><p className="account-intro">Secure account services are not configured for this deployment.</p></section></main>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -25,10 +27,10 @@ export default async function PatientSettingsPage() {
   return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}>
     <PatientPageNavigation active="settings"/>
     <section className="patient-dashboard-content">
-      <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link>
+      <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
       <div className="account-kicker">YOUR PERSONAL SPACE</div><h1><Settings size={28}/> Privacy and account settings</h1>
-      <p className="account-intro">Manage communication choices, account details and requests concerning your personal information.</p>
-      <div className="patient-safety-note"><ShieldCheck size={20}/><p>Your account and health records are private to you. Clinician access is not enabled.</p></div>
+      <p className="account-intro">{t("settingsIntro")}</p>
+      <div className="patient-safety-note"><ShieldCheck size={20}/><p>{t("clinicianAccessOff")}</p></div>
       <PatientAccountSettings initialPreferences={preferences ?? { appointment_email_reminders: false, product_email_updates: false }} initialDeletionRequested={Boolean(deletionRequest)}/>
     </section>
   </main>;
