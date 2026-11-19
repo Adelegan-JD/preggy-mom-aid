@@ -31,7 +31,9 @@ Using Patient A only:
 - Upload a PDF/JPG/PNG document, view/download it through authenticated access, and delete it.
 - Export account data and verify the JSON contains Patient A's records and only document metadata.
 - Save notification preferences and confirm they persist after sign-out/sign-in. Do not expect email delivery until a provider and scheduler are configured.
-- Submit one account-deletion request and confirm it is visible as pending; do not expect automatic deletion until the protected deletion processor is deployed.
+- Submit one account-deletion request and confirm it is visible as pending. Confirm the account remains active until the separate permanent-deletion confirmation.
+- Using Patient B only, select **Confirm permanent deletion**, type `DELETE`, and verify the Edge Function removes Patient B's private Storage objects, Auth account and cascading patient records. Do not perform this destructive test on Patient A or a real user.
+- After reminder secrets and the sender domain are configured, create a synthetic appointment about 24 hours ahead, enable appointment email reminders, and confirm one generic reminder is delivered and a single `sent` delivery-ledger row is recorded. Confirm the email contains no BP readings, symptoms, diagnoses, appointment notes or other clinical details.
 
 ## Isolation and denial tests
 
