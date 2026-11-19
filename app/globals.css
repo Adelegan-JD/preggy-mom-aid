@@ -777,3 +777,27 @@ html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df
 .account-field-heading a:focus-visible{outline:3px solid var(--pma-accent);outline-offset:3px;border-radius:3px}
 .patient-recent-panel .patient-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .patient-recent-panel .patient-section-heading h2{margin:0}
+
+
+/* Patient launch accessibility hardening: retain legible text in every display mode. */
+.account-kicker{color:#80504b}
+.account-intro{color:#555b55}
+.patient-back-link,.patient-dashboard-header nav a,.patient-profile-prompt>a,
+.account-field-heading a{color:#174f3c}
+.care-map-footnote{color:#405d4a}
+.public-site :where(small,.care-map-footnote,.header-signin,h1 em,.public-nav a),
+.learn-page :where(small,.care-map-footnote,.learn-back,.learn-top-link),
+.account-shell :where(small,.account-kicker,.account-intro,.feedback-back),
+.patient-dashboard :where(.patient-back-link,.account-kicker,.account-intro){
+  color:#40564a;
+}
+html[data-theme="dark"] .patient-back-link,
+html[data-theme="dark"] .patient-dashboard-header nav a,
+html[data-theme="dark"] .patient-profile-prompt>a,
+html[data-theme="dark"] .account-field-heading a{color:#b8e2cc}
+html[data-theme="dark"] .account-kicker,
+html[data-theme="dark"] .account-intro{color:#d2ddd5}
+html[data-contrast="high"] :where(.public-site,.learn-page,.account-shell,.patient-dashboard) :where(p,small,a,span,label,li){color:CanvasText!important}
+html[data-contrast="high"] :where(.public-site,.learn-page,.account-shell,.patient-dashboard) :where(button,input,select,textarea){border-color:CanvasText!important}
+html[data-contrast="high"] .patient-back-link,
+html[data-contrast="high"] .patient-dashboard-header nav a{color:CanvasText!important;text-decoration:underline}
