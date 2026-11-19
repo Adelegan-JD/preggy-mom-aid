@@ -17,7 +17,7 @@ You can choose a different output path:
 node scripts/convert-nhfr-csv.mjs ./facilities.csv ./data/hospitals.json
 ```
 
-The converter recognises common header aliases for facility name, state, LGA, latitude, longitude, facility level, maternity status and phone. It skips rows missing a name, state, LGA or valid coordinates. Inspect the resulting JSON and compare it with the source registry before committing/deploying.
+The converter normalises headers such as “Facility Name” or “facility_name” and recognises common aliases for facility name, state, LGA, latitude, longitude, facility level, maternity status and phone. It skips rows missing a name, state, LGA or valid coordinates. Inspect the resulting JSON and compare it with the source registry before committing/deploying.
 
 ## Record schema
 
@@ -33,7 +33,7 @@ The converter recognises common header aliases for facility name, state, LGA, la
   "phone": null,
   "is_placeholder": false,
   "verification_status": "unverified",
-  "source": "NHFR download date / source reference"
+  "verification_status": "unverified",\n  "source": "NHFR download date / source reference"
 }
 ```
 
