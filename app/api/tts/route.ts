@@ -18,8 +18,12 @@ function voiceList(payload: unknown): YarnVoice[] {
   if (Array.isArray(payload)) return payload as YarnVoice[];
   if (!payload || typeof payload !== "object") return [];
   const record = payload as Record<string, unknown>;
-  for (const key of ["voices", "data", "results"]) {
+  for (const key of ["voices", "data", "results", "items"]) {
     if (Array.isArray(record[key])) return record[key] as YarnVoice[];
+    if (record[key] && typeof record[key] === "object") {
+      const nested = record[key] as Record<string, unknown>;
+      if (Array.isArray(nested.voices)) return nested.voices as YarnVoice[];
+    }
   }
   return [];
 }
