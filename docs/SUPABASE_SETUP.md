@@ -33,28 +33,17 @@ Add these values in Vercel → Project → Settings → Environment Variables fo
 
 The repository's `.env.example` contains placeholders only. Do not commit live credentials.
 
-## 4. Apply database migrations
+## 4. Activate the patient database — one SQL run
 
-Use **Supabase Dashboard → SQL Editor**. Open each migration file from the merged `master` branch, paste its complete contents into a new SQL query, and run them in timestamp order. Run each file once, in order; do not skip earlier foundation migrations and do not manually invent tables or policies.
+After the patient launch-hardening PR is merged, open **Supabase Dashboard → SQL Editor** for project reference `segggjguspycgdwtgaraq`. Confirm that this is the intended project and that you have checked whether any of these tables or policies already exist.
 
-The patient feature migrations added in the current implementation sequence are:
+Open `supabase/ACTIVATE_PATIENT_DATABASE.sql` from the merged `master` branch, copy the complete file, paste it into one new SQL Editor query, and click **Run once**. This single transaction consolidates the current patient schema and RLS policies in timestamp order. Do not also run the individual migration files manually.
 
-1. `supabase/migrations/20261119000100_user_accounts_and_private_health_logs.sql`
-   - Patient and professional account roles, profile foundation, private blood-pressure and symptom records, product feedback, and pending professional application records.
-2. `supabase/migrations/20261119000200_patient_profiles.sql`
-   - Patient-owned personal and pregnancy/postpartum profile.
-3. `supabase/migrations/20261119000300_patient_appointments.sql`
-   - Patient-owned personal appointment calendar.
-4. `supabase/migrations/20261119000400_patient_health_documents.sql`
-   - Private health-document metadata and private Storage bucket with per-user folder policies.
-5. `supabase/migrations/20261119000500_patient_health_log_updates.sql`
-   - Grants authenticated patients the database permission needed to edit their own blood-pressure and symptom entries; RLS continues to constrain ownership.
-6. `supabase/migrations/20261119000600_patient_only_health_log_policies.sql`
-   - Restricts blood-pressure and symptom log policies to patient accounts as well as row ownership.
+The script creates/updates patient accounts and health-log foundations, pregnancy profiles, appointments, private health documents and Storage policies, patient-only health-log policies, notification preferences, and account-deletion request records. It also safely handles the legacy feedback-table rename where applicable.
 
-Also apply any earlier identity and feedback foundation migrations already present in `supabase/migrations` before these files. Check the directory and use the complete timestamp order. If a migration has already been applied, do not rerun it manually without first checking the schema and migration history.
+After the query succeeds, confirm in **Table Editor** that the expected tables exist with RLS enabled. In **Storage**, confirm `patient-health-records` exists and remains private. If SQL Editor reports an error, stop and share the exact error text—do not try to repair the schema by guessing or rerunning fragments.
 
-After applying, confirm in **Table Editor** that the expected tables exist and RLS is enabled. In **Storage**, confirm `patient-health-records` exists and is private. Do not make this bucket public.
+This SQL does not configure email confirmation templates, allowed redirect URLs, Vercel environment variables, a notification delivery provider, or production deployment. Those are separate launch steps below.
 
 ## 5. Validate before inviting patients
 

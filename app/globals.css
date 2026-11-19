@@ -777,3 +777,40 @@ html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df
 .account-field-heading a:focus-visible{outline:3px solid var(--pma-accent);outline-offset:3px;border-radius:3px}
 .patient-recent-panel .patient-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .patient-recent-panel .patient-section-heading h2{margin:0}
+
+
+/* Patient launch accessibility hardening: retain legible text in every display mode. */
+.account-kicker{color:#80504b}
+.account-intro{color:#555b55}
+.patient-back-link,.patient-dashboard-header nav a,.patient-profile-prompt>a,
+.account-field-heading a{color:#174f3c}
+.care-map-footnote{color:#405d4a}
+.public-site :where(small,.care-map-footnote,.header-signin,h1 em,.public-nav a),
+.learn-page :where(small,.care-map-footnote,.learn-back,.learn-top-link),
+.account-shell :where(small,.account-kicker,.account-intro,.feedback-back),
+.patient-dashboard :where(.patient-back-link,.account-kicker,.account-intro){
+  color:#40564a;
+}
+html[data-theme="dark"] .patient-back-link,
+html[data-theme="dark"] .patient-dashboard-header nav a,
+html[data-theme="dark"] .patient-profile-prompt>a,
+html[data-theme="dark"] .account-field-heading a{color:#b8e2cc}
+html[data-theme="dark"] .account-kicker,
+html[data-theme="dark"] .account-intro{color:#d2ddd5}
+html[data-contrast="high"] :where(.public-site,.learn-page,.account-shell,.patient-dashboard) :where(p,small,a,span,label,li){color:CanvasText!important}
+html[data-contrast="high"] :where(.public-site,.learn-page,.account-shell,.patient-dashboard) :where(button,input,select,textarea){border-color:CanvasText!important}
+html[data-contrast="high"] .patient-back-link,
+html[data-contrast="high"] .patient-dashboard-header nav a{color:CanvasText!important;text-decoration:underline}
+
+
+/* Patient privacy and account settings */
+.patient-settings-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
+.patient-settings-layout>.patient-settings-panel{min-width:0;padding:clamp(18px,3vw,28px);border:1px solid var(--pma-border);border-radius:16px;background:var(--pma-surface);box-shadow:var(--pma-shadow-card)}
+.patient-settings-panel h2{font:800 21px Manrope;color:var(--pma-ink);margin:8px 0}
+.patient-settings-panel .account-intro{margin-bottom:16px}
+.patient-settings-panel .account-form{margin:0}
+.patient-setting-toggle{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid var(--pma-border);font-weight:700;color:var(--pma-ink)}
+.patient-setting-toggle input{width:19px;height:19px;accent-color:var(--pma-green);flex-shrink:0}
+.patient-delete-request{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 14px;border:1px solid #a33d38;border-radius:9px;background:transparent;color:#8c302d;font-weight:750}
+html[data-theme="dark"] .patient-delete-request{color:#ffc4bd;border-color:#ffc4bd}
+@media(max-width:760px){.patient-settings-layout{grid-template-columns:1fr}.patient-dashboard-header nav{flex-wrap:wrap}}
