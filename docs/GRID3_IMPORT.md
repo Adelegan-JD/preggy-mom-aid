@@ -27,7 +27,7 @@ The converter validates the GRID3 headers and unique IDs, emits a conversion rep
 
 1. Confirm the two GRID3 schema migrations are present in Supabase.
 2. In Supabase Table Editor, open `public.health_facilities` and import the generated CSV.
-3. Choose upsert/merge on the unique source identity columns `source_dataset,source_facility_id` if the import UI offers conflict-column selection. If it does not, do not run a second import until an idempotent server-side import route is provided.
+3. Choose upsert/merge on the unique source identity columns `source_dataset,source_facility_id`. The database has a full unique index on these columns (NULL pairs remain allowed), so PostgREST can infer the conflict target. Do not use plain INSERT for repeat imports; use upsert/merge.
 4. Verify counts and sample records with the SQL checks in the release runbook.
 5. Keep every row unpublished until the facility has been independently checked. Do not enable public display just because the source dataset is genuine.
 
