@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import SocialLinks from "@/components/social-links";
 import {
   ArrowRight, HeartHandshake, ShieldCheck, BookOpen, Hospital, Users,
   Menu, X, LockKeyhole, AlertTriangle, Stethoscope, Baby, Utensils,
@@ -143,7 +144,7 @@ export default function HomePage() {
         <div className="directory-empty"><Mail size={24} /><div><b>Contact channel coming soon</b><p>We are preparing a monitored contact address before publishing an enquiry channel. No unmonitored or invented contact details will be displayed.</p></div></div>
       </section>
 
-      <footer className="footer"><div className="footer-brand"><Image src="/logo.png" alt="" width={26} height={26}/><b>Preggy Mom Aid</b></div><span>Care, knowledge & support through every step.</span><span>Educational information only · Not an emergency service</span></footer>
+      <footer className="footer public-footer"><div className="footer-brand"><Image src="/logo.png" alt="" width={26} height={26}/><b>Preggy Mom Aid</b></div><span>Care, knowledge & support through every step.</span><SocialLinks compact /><span>Educational information only · Not an emergency service</span></footer>
     </main>
   );
 }

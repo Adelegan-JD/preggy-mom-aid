@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { Activity, BookOpen, CalendarHeart, ClipboardList, FileHeart, HeartPulse, Home, UserRound } from "lucide-react";
 import LanguageSwitcher from "@/components/language-switcher";
+import SocialLinks from "@/components/social-links";
 import { normalizeLanguage, translate, TranslationKey } from "@/lib/i18n/translations";
 import { healthServicesText as hs } from "@/lib/i18n/health-services";
 
@@ -34,6 +35,7 @@ export default async function PatientPageNavigation({ active }: PatientPageNavig
         <Link href="/my-care/settings" aria-current={active === "settings" ? "page" : undefined}>{t("privacySettings")}</Link>
         <LanguageSwitcher />
       </nav>
+      <div className="patient-nav-social"><SocialLinks compact /></div>
     </header>
     <div className="patient-mobile-language"><LanguageSwitcher /></div>
     <nav className="patient-mobile-nav patient-subpage-mobile-nav" aria-label={t("chooseLanguage")}>
