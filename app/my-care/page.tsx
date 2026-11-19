@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import LanguageSwitcher from "@/components/language-switcher";
 import SpeakButton from "@/components/speak-button";
 import HealthServicesCards from "@/components/health-services-cards";
+import PregnancyJourneyVisual from "@/components/pregnancy-journey-visual";
 import { normalizeLanguage, translate, TranslationKey } from "@/lib/i18n/translations";
 import { Activity, CalendarHeart, ClipboardList, FileHeart, HeartPulse, MessageSquareText, ShieldCheck, BookOpen, ArrowRight, Home, UserRound, Settings, Plus, Clock3, Sparkles, Stethoscope, ChevronRight } from "lucide-react";
 
@@ -61,13 +62,7 @@ export default async function MyCarePage() {
     <section className="patient-dashboard-content">
       <div className="patient-welcome patient-welcome-hero"><div className="patient-welcome-copy"><div className="patient-hero-eyebrow"><Sparkles size={14}/> {t("personalSpace") }</div><h1>{t("welcome")}, {firstName} <span aria-hidden="true">♥</span></h1><p>{t("dashboardIntro") }</p><div className="patient-hero-actions"><Link href="/my-care/blood-pressure"><Plus size={16}/> {t("logBloodPressure") }</Link><Link href="/my-care/appointments"><CalendarHeart size={16}/> {t("addAppointment") }</Link></div></div><div className="patient-hero-art" aria-hidden="true"><div className="patient-hero-orbit orbit-one"/><div className="patient-hero-orbit orbit-two"/><span className="patient-hero-heart"><HeartPulse size={52}/></span><span className="patient-hero-sparkle"><Sparkles size={20}/></span></div></div>
       <div className="patient-safety-note"><ShieldCheck size={20}/><p><b>{t("privateHealth") }</b> {t("privateHealthText") }</p><SpeakButton text={t("privateHealthText") }/></div>
-      <section className="patient-recent-panel"><div className="account-kicker">{t("yourJourney") }</div><h2>{patientJourney?.pregnancy_status === "postpartum" ? t("postpartumJourney") : patientJourney?.pregnancy_status === "not_currently_pregnant" ? t("healthSpace") : t("pregnancyJourney")}</h2>
-        {patientJourney?.pregnancy_status === "pregnant" && estimatedWeeks !== null ? <p>{t("journeyEstimateIntro")} <strong>{estimatedWeeks} {t("weeks") }</strong>{daysToDue !== null && daysToDue >= 0 ? `, with about ${daysToDue} ${t("daysUntilDue")}` : ""}. {t("calendarEstimate") }</p>
-        : patientJourney?.pregnancy_status === "postpartum" && daysPostpartum !== null ? <p>{t("journeyPostpartum")} <strong>{daysPostpartum} {t("days")}</strong> {t("journeyPostpartumTail")}</p>
-        : patientJourney?.pregnancy_status === "not_currently_pregnant" ? <p>{t("healthSpace") }</p>
-        : <p>{t("addJourneyDetails")}</p>}
-        <Link href="/my-care/profile">{t("updateJourney") } <ArrowRight size={15}/></Link>
-      </section>
+      <PregnancyJourneyVisual pregnancyStatus={patientJourney?.pregnancy_status ?? null} estimatedWeeks={estimatedWeeks} daysPostpartum={daysPostpartum} language={language} />
       <div className="patient-stat-grid patient-stat-grid-modern"><article><span className="patient-stat-icon"><Activity size={17}/></span><div><span>{t("bloodPressureLogs")}</span><strong>{bpCount ?? 0}</strong><small>{t("savedReadings") }</small></div></article><article><span className="patient-stat-icon rose"><ClipboardList size={17}/></span><div><span>{t("symptomNotes") }</span><strong>{symptomCount ?? 0}</strong><small>{t("savedNotes") }</small></div></article><article><span className="patient-stat-icon sage"><ShieldCheck size={17}/></span><div><span>{t("privacyStatus") }</span><strong className="patient-private-value">{t("protected") }</strong><small>{t("controlRecords") }</small></div></article></div>
       <div className="patient-section-heading patient-section-heading-modern"><div><div className="account-kicker">{t("healthTools") }</div><h2>{t("everythingInOnePlace") }</h2><p>{t("chooseSpace")}</p></div><span className="patient-section-note"><ShieldCheck size={15}/> {t("privateToYou") }</span></div>
       <div className="patient-profile-prompt"><div><div className="account-kicker">{t("personalise") }</div><strong>{t("completeProfile") }</strong><p>{t("profilePrompt")}</p></div><Link href="/my-care/profile">{t("updateProfile") } <ArrowRight size={15}/></Link></div>
