@@ -1,19 +1,19 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret", "Access-Control-Allow-Methods": "POST, OPTIONS", "Content-Type": "application/json" };
+const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type", "Access-Control-Allow-Methods": "POST, OPTIONS", "Content-Type": "application/json" };
 
 function json(body: unknown, status = 200) { return new Response(JSON.stringify(body), { status, headers: cors }); }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
-  const cronSecret = Deno.env.get("CRON_SECRET");
-  const supplied = req.headers.get("x-cron-secret");
-  if (!cronSecret || !supplied || supplied !== cronSecret) return json({ error: "Unauthorized" }, 401);
-
   const url = Deno.env.get("SUPABASE_URL");
   const secretMap = Deno.env.get("SUPABASE_SECRET_KEYS");
   const adminKey = secretMap ? JSON.parse(secretMap).default : Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  // The scheduler sends the Supabase secret key in the apikey header. This
+  // function disables gateway JWT verification but enforces this secret itself.
+  const suppliedKey = req.headers.get("apikey");
+  if (!adminKey || !suppliedKey || suppliedKey !== adminKey) return json({ error: "Unauthorized" }, 401);
   const resendKey = Deno.env.get("RESEND_API_KEY");
   const from = Deno.env.get("REMINDER_FROM_EMAIL");
   if (!url || !adminKey || !resendKey || !from) return json({ error: "Reminder service is not fully configured" }, 503);
