@@ -1286,3 +1286,6 @@ html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000
 
 .hero-photo-label .photo-credit{font-size:8px;color:#a2aaa4;margin-top:4px}
 .maternal-story-card>div>small{display:block;margin-top:7px;font-size:8px;letter-spacing:.2px;color:rgba(255,255,255,.8)}
+
+.maternal-story-card:not(.story-quote){display:block;color:inherit;text-decoration:none}
+.maternal-story-card:not(.story-quote):focus-visible{outline:3px solid #d9788d;outline-offset:4px}
