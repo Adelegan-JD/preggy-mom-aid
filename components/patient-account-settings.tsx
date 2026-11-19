@@ -7,13 +7,13 @@ import { Download, Mail, ShieldCheck, Trash2 } from "lucide-react";
 
 type Preferences = { appointment_email_reminders: boolean; product_email_updates: boolean };
 
-export default function PatientAccountSettings({ initialPreferences }: { initialPreferences: Preferences }) {
+export default function PatientAccountSettings({ initialPreferences, initialDeletionRequested = false }: { initialPreferences: Preferences; initialDeletionRequested?: boolean }) {
   const [preferences, setPreferences] = useState(initialPreferences);
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [deletionRequested, setDeletionRequested] = useState(false);
+  const [deletionRequested, setDeletionRequested] = useState(initialDeletionRequested);
 
   async function savePreferences(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
