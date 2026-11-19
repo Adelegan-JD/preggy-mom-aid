@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
 import { languageOptions } from "@/lib/i18n/translations";
@@ -9,10 +9,14 @@ export default function SpeakButton({ text, className = "" }: { text: string; cl
   const { language, t } = useLanguage();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => () => { audioRef.current?.pause(); window.speechSynthesis?.cancel(); }, []);
 
   async function speak() {
     if (busy) {
       window.speechSynthesis?.cancel();
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; audioRef.current = null; }
       setBusy(false);
       return;
     }
@@ -44,8 +48,9 @@ export default function SpeakButton({ text, className = "" }: { text: string; cl
         throw new Error(t("speechUnavailable"));
       }
       const audio = new Audio(URL.createObjectURL(await response.blob()));
-      audio.onended = () => { URL.revokeObjectURL(audio.src); setBusy(false); };
-      audio.onerror = () => { URL.revokeObjectURL(audio.src); setBusy(false); setMessage(t("speechUnavailable")); };
+      audioRef.current = audio;
+      audio.onended = () => { URL.revokeObjectURL(audio.src); audioRef.current = null; setBusy(false); };
+      audio.onerror = () => { URL.revokeObjectURL(audio.src); audioRef.current = null; setBusy(false); setMessage(t("speechUnavailable")); };
       await audio.play();
     } catch (error) {
       setBusy(false);
