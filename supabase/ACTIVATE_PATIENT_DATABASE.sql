@@ -7,6 +7,9 @@
 
 begin;
 
+-- Lock down the pre-existing project-wide RLS event-trigger function.
+revoke all on function public.rls_auto_enable() from public, anon, authenticated;
+
 -- ===== Source: supabase/migrations/20261119000100_user_accounts_and_private_health_logs.sql =====
 -- Account roles and first patient-owned health records.
 -- No role can self-approve professional verification. No cross-user clinical access is granted here.
@@ -82,7 +85,7 @@ begin
 
   return new;
 end;
-$;
+$$;
 
 -- Trigger functions must not be callable through the Data API.
 revoke all on function public.handle_new_user() from public, anon, authenticated;
