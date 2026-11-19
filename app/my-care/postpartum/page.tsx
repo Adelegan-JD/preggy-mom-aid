@@ -105,7 +105,7 @@ export default async function PostpartumSupportPage() {
       <div className="postpartum-section-heading"><span>02</span><div><h2>{t.conversation}</h2><p>{t.organiseText}</p></div></div>
       <div className="postpartum-question-list">{t.questions.map((question,index)=><div key={question}><span>0{index+1}</span><p>{question}</p><MessageCircleHeart size={17}/></div>)}</div>
       <div className="postpartum-topics"><div className="postpartum-section-heading"><span>03</span><div><h2>{t.kicker}</h2><p>{t.intro}</p></div></div><div className="postpartum-topic-grid">{t.topics.map((topic,index)=><details key={topic}><summary><span>0{index+1}</span>{topic}<ArrowRight size={15}/></summary><p>{t.descriptions[index]}</p></details>)}</div></div>
-      <div className="postpartum-source-links"><b>{t.sources}</b><a href="https://www.who.int/publications/i/item/9789240045989" target="_blank" rel="noreferrer">{t.sourceText} <ArrowRight size={14}/></a><a href="https://www.nhs.uk/conditions/your-body-after-the-birth/" target="_blank" rel="noreferrer">{t.source2} <ArrowRight size={14}/></a></div>
+      <div className="postpartum-source-links"><b>{t.sources}</b><a href="https://www.who.int/publications/i/item/9789240045989" target="_blank" rel="noreferrer">{t.sourceText} <ArrowRight size={14}/></a><a href="https://www.nhs.uk/pregnancy/labour-and-birth/your-body/" target="_blank" rel="noreferrer">{t.source2} <ArrowRight size={14}/></a></div>
     </section>
   </main>;
 }
