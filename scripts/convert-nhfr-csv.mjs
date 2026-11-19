@@ -58,7 +58,7 @@ const records = parseCsv(fs.readFileSync(input, "utf8")).map((row, index) => {
   if (!name || !state || !lga || lat === null || lng === null || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
   return {
     name: name.trim(), state: state.trim(), lga: lga.trim(), lat, lng,
-    facility_level: first(row, ["facility_level", "facility_type", "level", "ownership_type"]) || "Unclassified",
+    facility_level: first(row, ["facility_level", "facility_type", "level", "facility_level_name"]) || "Unclassified",
     has_maternity: maternity(first(row, ["has_maternity", "maternity", "maternity_services", "delivery_services"])),
     phone: first(row, ["phone", "telephone", "phone_number", "contact_phone"]) || null,
     is_placeholder: false,
