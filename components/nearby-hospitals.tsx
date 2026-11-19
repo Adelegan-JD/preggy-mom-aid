@@ -6,7 +6,7 @@ import hospitalData from "@/data/hospitals.json";
 import { filterHospitalsByTown, findNearbyHospitals, type NearbyHospital, type NearbyHospitalResult } from "@/lib/nearby-hospitals";
 import type { AppLanguage } from "@/lib/i18n/translations";
 
-const records = hospitalData as NearbyHospital[];
+const fixtureRecords = hospitalData as NearbyHospital[];
 const labels: Record<AppLanguage, Record<string, string>> = {
   en: { kicker:"LOCAL FACILITY FINDER", title:"Nearby hospitals", intro:"Find facilities using your device location or search by town, LGA or state.", locate:"Use my location", locating:"Finding location…", search:"Search town or LGA (e.g. Sapele)", permission:"Location permission was not granted. Search by town or LGA instead.", unavailable:"Location is unavailable. Check your device settings or search manually.", within:"Showing facilities within 20 km straight-line distance. Road distance and drive time are estimates, not live traffic or routing data.", fixtures:"Include clearly marked synthetic Sapele test records (never use for navigation)", emptyTitle:"No facility records found", emptyGps:"No imported facility records are within 20 km. Try the manual town/LGA search.", emptySearch:"Search by town or LGA. The local data file contains test-only fixtures, not real hospital listings.", verification:"Facility information: Not independently verified — confirm before travel", maternityYes:"Maternity Ward: Yes", maternityNo:"Maternity Ward: No", maternityUnknown:"Maternity Ward: Unverified — Call Ahead", test:"TEST ONLY — NOT REAL", directions:"Get Directions", distance:"straight-line", road:"by road", drive:"min drive", disclaimer:"Synthetic test data with approximate coordinates. Not a real facility. Directions and calls are disabled.", footnote:"Distance uses the Haversine formula, a 1.35 road-distance multiplier and an assumed average speed of 30 km/h. Actual routes, traffic, access and facility services may differ. Confirm directly before travelling." },
   yo: { kicker:"WÍWÁ ILÉ ÌWÒSÀN NÍ ÀGBÈGBÈ", title:"Àwọn ilé ìwòsàn tó sún mọ́ ọ", intro:"Lo ibi tí fóònù rẹ wà tàbí wá nípa ìlú, LGA tàbí ìpínlẹ̀.", locate:"Lo ibi tí mo wà", locating:"A ń wá ibi rẹ…", search:"Wá ìlú tàbí LGA (àpẹẹrẹ Sapele)", permission:"O kò fún wa ní àṣẹ ibi rẹ. Wá nípa ìlú tàbí LGA.", unavailable:"A kò rí ibi rẹ. Ṣàyẹ̀wò ètò fóònù rẹ tàbí wá pẹ̀lú ọwọ́.", within:"Àwọn ilé ìlera tó wà láàárín 20 km ni a ń fihàn. Àfojúsùn ni ìjìnnà ojú ọ̀nà àti àkókò ìrìn.", fixtures:"Fi àwọn àkọsílẹ̀ ìdánwò Sapele tí kì í ṣe gidi hàn (má ṣe lo fún ìtọ́sọ́nà)", emptyTitle:"A kò rí àkọsílẹ̀ ilé ìlera", emptyGps:"Kò sí àkọsílẹ̀ gidi tó wà láàárín 20 km. Gbìyànjú wíwá nípa ìlú/LGA.", emptySearch:"Wá nípa ìlú tàbí LGA. Àwọn àkọsílẹ̀ ìdánwò kì í ṣe ilé ìwòsàn gidi.", verification:"A kò tíì jẹ́rìí sí ìsọfúnni ilé ìlera — jẹ́rìí kí o tó lọ", maternityYes:"Ibi ìtọ́jú oyún: Bẹ́ẹ̀ni", maternityNo:"Ibi ìtọ́jú oyún: Rárá", maternityUnknown:"Ibi ìtọ́jú oyún: A kò jẹ́rìí sí i — Pe wọn", test:"ÌDÁNWÒ NÌKAN — KÌ Í ṢE GIDI", directions:"Gba ìtọ́sọ́nà", distance:"ìjìnnà tààrà", road:"ní ojú ọ̀nà", drive:"ìṣẹ́jú ìrìn", disclaimer:"Àkọsílẹ̀ ìdánwò pẹ̀lú ibi àfojúsùn. Kì í ṣe ilé ìlera gidi. A ti pa ìtọ́sọ́nà àti ìpè fóònù.", footnote:"A lo ìṣirò Haversine, ìlọ́po 1.35 fún ojú ọ̀nà àti iyára àfojúsùn 30 km/wákàtí. Ìrìn gidi àti iṣẹ́ ilé ìlera lè yàtọ̀. Jẹ́rìí sí i kí o tó lọ." },
@@ -15,14 +15,14 @@ const labels: Record<AppLanguage, Record<string, string>> = {
   pcm: { kicker:"FIND HOSPITAL WEY DEY NEAR YOU", title:"Hospitals wey dey near you", intro:"Use your phone location or search by town, LGA or state.", locate:"Use my location", locating:"We dey find your location…", search:"Search town or LGA (e.g. Sapele)", permission:"You no give location permission. Search by town or LGA instead.", unavailable:"We no fit get your location. Check phone settings or search by yourself.", within:"We dey show facilities within 20 km straight-line distance. Road distance and drive time na estimate, no be live traffic.", fixtures:"Show clearly marked Sapele test records (no use am for directions)", emptyTitle:"No facility record dey here", emptyGps:"No real facility record dey within 20 km. Try search by town/LGA.", emptySearch:"Search by town or LGA. The test records no be real hospitals.", verification:"Facility information never confirm — confirm before you travel", maternityYes:"Maternity Ward: Yes", maternityNo:"Maternity Ward: No", maternityUnknown:"Maternity Ward: Dem never confirm — Call first", test:"TEST ONLY — NO BE REAL", directions:"Get Directions", distance:"straight-line", road:"by road", drive:"min drive", disclaimer:"Na synthetic test data with approximate location. E no be real facility. We don disable directions and calls.", footnote:"We use Haversine formula, 1.35 road-distance multiplier and assume 30 km/h average speed. Real route, traffic and facility service fit different. Confirm before you travel." }
 };
 
-export default function NearbyHospitals({ language }: { language: AppLanguage }) {
+export default function NearbyHospitals({ language, facilities }: { language: AppLanguage; facilities: NearbyHospital[] }) {
   const t = labels[language] ?? labels.en;
   const [position, setPosition] = useState<{lat:number;lng:number}|null>(null);
   const [locationState, setLocationState] = useState<"idle"|"loading"|"denied"|"error">("idle");
   const [query, setQuery] = useState("");
   const [includeFixtures, setIncludeFixtures] = useState(false);
   const canShowFixtures = process.env.NODE_ENV !== "production";
-  const available = useMemo(() => records.filter((item) => !item.is_placeholder || (canShowFixtures && includeFixtures)), [canShowFixtures, includeFixtures]);
+  const available = useMemo(() => [...facilities, ...(canShowFixtures ? fixtureRecords : [])].filter((item) => !item.is_placeholder || (canShowFixtures && includeFixtures)), [facilities, canShowFixtures, includeFixtures]);
   const results = useMemo(() => position
     ? findNearbyHospitals(available, position, 20, includeFixtures)
     : filterHospitalsByTown(available, query, includeFixtures), [available, position, query, includeFixtures]);
@@ -47,14 +47,15 @@ export default function NearbyHospitals({ language }: { language: AppLanguage })
     {results.length === 0 ? <div className="nearby-empty"><MapPin size={23}/><b>{t.emptyTitle}</b><p>{position ? t.emptyGps : t.emptySearch}</p></div> : <div className="nearby-results">{results.map((facility)=>{
       const placeholder=Boolean(facility.is_placeholder);
       const distance="straightDistanceKm" in facility ? facility as NearbyHospitalResult : null;
-      const directions=`https://www.google.com/maps/dir/?api=1&destination=${facility.lat},${facility.lng}`;
+      const hasCoordinates = facility.lat !== null && facility.lng !== null && Number.isFinite(facility.lat) && Number.isFinite(facility.lng);
+      const directions = hasCoordinates ? `https://www.google.com/maps/dir/?api=1&destination=${facility.lat},${facility.lng}` : null;
       return <article className="nearby-hospital-card" key={facility.name}>
         <div className="nearby-card-title"><div><h3>{facility.name}</h3><p><MapPin size={14}/>{facility.lga}, {facility.state}, Nigeria</p></div>{placeholder && <span className="nearby-test-badge">{t.test}</span>}</div>
         {!placeholder && facility.verification_status !== "verified" && <p className="nearby-unverified">{t.verification}</p>}
         <div className="nearby-card-meta"><span>{facility.facility_level}</span><span className={facility.has_maternity===true?"maternity-yes":facility.has_maternity===false?"maternity-no":"maternity-unknown"}>{facility.has_maternity===true?t.maternityYes:facility.has_maternity===false?t.maternityNo:t.maternityUnknown}</span></div>
         {distance && <p className="nearby-distance"><b>{distance.straightDistanceKm.toFixed(1)} km</b> {t.distance} · approx. {distance.estimatedRoadDistanceKm.toFixed(1)} km {t.road} · {distance.estimatedDriveMinutes} {t.drive}</p>}
         {facility.phone && !placeholder && <a className="nearby-phone" href={`tel:${facility.phone}`}><Phone size={15}/>{facility.phone}</a>}
-        {placeholder ? <p className="nearby-disclaimer">{t.disclaimer}</p> : <a className="nearby-directions" href={directions} target="_blank" rel="noreferrer"><Navigation size={15}/>{t.directions}</a>}
+        {placeholder ? <p className="nearby-disclaimer">{t.disclaimer}</p> : directions ? <a className="nearby-directions" href={directions} target="_blank" rel="noreferrer"><Navigation size={15}/>{t.directions}</a> : null}
       </article>;
     })}</div>}
     <p className="nearby-footnote">{t.footnote}</p>

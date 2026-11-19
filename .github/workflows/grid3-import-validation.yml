@@ -1,0 +1,27 @@
+name: GRID3 import validation
+
+on:
+  pull_request:
+    paths:
+      - "scripts/convert-grid3-xlsx.py"
+      - "scripts/test-convert-grid3-xlsx.py"
+      - "requirements-import.txt"
+      - ".github/workflows/grid3-import-validation.yml"
+  push:
+    branches: [master]
+    paths:
+      - "scripts/convert-grid3-xlsx.py"
+      - "scripts/test-convert-grid3-xlsx.py"
+      - "requirements-import.txt"
+      - ".github/workflows/grid3-import-validation.yml"
+
+jobs:
+  converter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-import.txt
+      - run: python scripts/test-convert-grid3-xlsx.py
