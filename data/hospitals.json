@@ -1,0 +1,62 @@
+[
+  {
+    "name": "TEST ONLY — Sapele General Hospital (synthetic record)",
+    "state": "Delta",
+    "lga": "Sapele",
+    "lat": 5.8952,
+    "lng": 5.6767,
+    "facility_level": "General hospital",
+    "has_maternity": null,
+    "phone": null,
+    "is_placeholder": true,
+    "source": "Synthetic test fixture; not a real facility or location"
+  },
+  {
+    "name": "TEST ONLY — Sapele Community Health Centre (synthetic record)",
+    "state": "Delta",
+    "lga": "Sapele",
+    "lat": 5.9018,
+    "lng": 5.6874,
+    "facility_level": "Primary healthcare centre",
+    "has_maternity": null,
+    "phone": null,
+    "is_placeholder": true,
+    "source": "Synthetic test fixture; not a real facility or location"
+  },
+  {
+    "name": "TEST ONLY — Sapele Maternal Care Clinic (synthetic record)",
+    "state": "Delta",
+    "lga": "Sapele",
+    "lat": 5.8876,
+    "lng": 5.6651,
+    "facility_level": "Clinic",
+    "has_maternity": null,
+    "phone": null,
+    "is_placeholder": true,
+    "source": "Synthetic test fixture; not a real facility or location"
+  },
+  {
+    "name": "TEST ONLY — Amukpe Primary Health Centre (synthetic record)",
+    "state": "Delta",
+    "lga": "Sapele",
+    "lat": 5.8739,
+    "lng": 5.6908,
+    "facility_level": "Primary healthcare centre",
+    "has_maternity": null,
+    "phone": null,
+    "is_placeholder": true,
+    "source": "Synthetic test fixture; not a real facility or location"
+  },
+  {
+    "name": "TEST ONLY — Elume Health Centre (synthetic record)",
+    "state": "Delta",
+    "lga": "Sapele",
+    "lat": 5.9164,
+    "lng": 5.6579,
+    "facility_level": "Primary healthcare centre",
+    "has_maternity": null,
+    "phone": null,
+    "is_placeholder": true,
+    "source": "Synthetic test fixture; not a real facility or location"
+  }
+]
