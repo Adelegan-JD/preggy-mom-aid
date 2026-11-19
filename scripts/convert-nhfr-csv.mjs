@@ -39,7 +39,9 @@ const first = (record, names) => {
   return "";
 };
 const number = value => {
-  const parsed = Number(String(value).replace(/,/g, "").trim());
+  const raw = String(value).replace(/,/g, "").trim();
+  if (!raw) return null;
+  const parsed = Number(raw);
   return Number.isFinite(parsed) ? parsed : null;
 };
 const maternity = value => {
