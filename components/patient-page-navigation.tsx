@@ -32,6 +32,7 @@ export default async function PatientPageNavigation({ active }: PatientPageNavig
         <LanguageSwitcher />
       </nav>
     </header>
+    <div className="patient-mobile-language"><LanguageSwitcher /></div>
     <nav className="patient-mobile-nav patient-subpage-mobile-nav" aria-label={t("chooseLanguage")}>
       <Link href="/my-care"><Home size={18}/><span>{t("home")}</span></Link>
       <Link href="/my-care/blood-pressure" aria-current={active === "blood-pressure" ? "page" : undefined}><Activity size={18}/><span>{t("bpLog")}</span></Link>
