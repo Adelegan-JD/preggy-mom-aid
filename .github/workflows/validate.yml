@@ -20,7 +20,7 @@ jobs:
         run: npm install
       - name: Type-check
         run: npm run typecheck
-      - name: Build Next.js application
+      - name: Test hospital CSV converter\n        run: npm run test:hospitals:csv\n      - name: Build Next.js application
         run: npm run build
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
