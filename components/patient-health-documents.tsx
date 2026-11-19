@@ -127,9 +127,9 @@ export default function PatientHealthDocuments({ initialDocuments }: { initialDo
           <option value="discharge_summary">{t("dischargeSummary")}</option>
           <option value="other">{t("other")}</option>
         </select>
-        <label htmlFor="documentNotes">Note <span>(optional)</span></label>
-        <textarea id="documentNotes" rows={3} maxLength={500} value={notes} onChange={event => setNotes(event.target.value)} placeholder="{t("documentNotePlaceholder")}" />
-        <button className="account-submit" disabled={busy || !file}>{busy ? "{t("uploading")}" : "{t("uploadDocument")}"}</button>
+        <label htmlFor="documentNotes">{t("notes")} <span>({t("optional")})</span></label>
+        <textarea id="documentNotes" rows={3} maxLength={500} value={notes} onChange={event => setNotes(event.target.value)} placeholder={t("documentNotePlaceholder")} />
+        <button className="account-submit" disabled={busy || !file}>{busy ? t("uploading") : t("uploadDocument")}</button>
         {error && <p className="account-error" role="alert">{error}</p>}
         {message && <p className="account-success" role="status">{message}</p>}
       </form>
