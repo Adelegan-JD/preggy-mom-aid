@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Baby, CalendarDays, Heart, Leaf, Sparkles } from "lucide-react";
+import { ArrowRight, Baby, Heart, Leaf, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
@@ -29,7 +29,7 @@ const copy: Record<string, {
   },
   yo: {
     title: "Irin-ajo rẹ, ni iyara tirẹ", intro: "Ibi ifọkanbalẹ lati tọju awọn alaye ti o yan lati pin.",
-    week: "Ọsẹ", calendar: ninu("ti 40 · iṣiro kalẹnda, kii ṣe ayẹwo iṣoogun"),
+    week: "Ọsẹ", calendar: "ti 40 · iṣiro kalẹnda, kii ṣe ayẹwo iṣoogun",
     postpartum: "Irin-ajo rẹ lẹ́yìn ìbímọ", days: "ọjọ́ lati ìbí",
     wellbeing: "Irin-ajo ìlera rẹ", profile: "Fi awọn alaye irin-ajo rẹ kun",
     stages: ["Ìbẹ̀rẹ̀", "Àárín", "Ìparí"],
@@ -65,7 +65,6 @@ const copy: Record<string, {
   }
 };
 
-function ninu(value: string) { return value; }
 
 export default function PregnancyJourneyVisual({ pregnancyStatus, estimatedWeeks, daysPostpartum, language = "en" }: Props) {
   const t = copy[language] ?? copy.en;
@@ -79,7 +78,7 @@ export default function PregnancyJourneyVisual({ pregnancyStatus, estimatedWeeks
   return (
     <section className="pma-journey-visual" aria-labelledby="pma-journey-title">
       <div className="pma-journey-photo">
-        <img src="https://images.unsplash.com/photo-1531983412531-1f49a365ffed?auto=format&fit=crop&w=1100&q=85" alt="Expectant mother in a peaceful maternity portrait" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=1100&q=85" alt="Expectant mother in a peaceful maternity portrait" loading="lazy" />
         <span className="pma-photo-chip"><Heart size={14} fill="currentColor"/> Care with compassion</span>
         <div className="pma-photo-caption"><span>YOUR STORY MATTERS</span><strong>Every journey deserves care.</strong></div>
       </div>
