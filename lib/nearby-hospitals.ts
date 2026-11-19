@@ -1,7 +1,7 @@
 export type NearbyHospital = {
   name: string; state: string; lga: string; lat: number; lng: number;
   facility_level: string; has_maternity: boolean | null; phone: string | null;
-  is_placeholder?: boolean; source?: string;
+  is_placeholder?: boolean; source?: string; verification_status?: "verified" | "unverified";
 };
 export type NearbyHospitalResult = NearbyHospital & {
   straightDistanceKm: number; estimatedRoadDistanceKm: number; estimatedDriveMinutes: number;
