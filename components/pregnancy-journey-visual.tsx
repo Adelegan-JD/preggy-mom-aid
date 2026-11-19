@@ -80,7 +80,7 @@ export default function PregnancyJourneyVisual({ pregnancyStatus, estimatedWeeks
       <div className="pma-journey-photo">
         <img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=1100&q=85" alt="Expectant mother in a peaceful maternity portrait" loading="lazy" />
         <span className="pma-photo-chip"><Heart size={14} fill="currentColor"/> Care with compassion</span>
-        <div className="pma-photo-caption"><span>YOUR STORY MATTERS</span><strong>Every journey deserves care.</strong></div>
+        <div className="pma-photo-caption"><span>YOUR STORY MATTERS</span><strong>Every journey deserves care.</strong></div><small className="pma-photo-credit">Photo: Anna Civolani / Unsplash</small>
       </div>
       <div className="pma-journey-panel">
         <div className="pma-journey-heading">
