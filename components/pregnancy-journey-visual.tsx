@@ -98,8 +98,8 @@ export default function PregnancyJourneyVisual({ pregnancyStatus, estimatedWeeks
             <div className="pma-stage-detail" aria-live="polite"><span className="pma-stage-detail-icon"><Leaf size={18}/></span><div><b>{t.selected}: {t.stages[selectedStage]}</b><p>{t.stageNotes[selectedStage]}</p></div></div>
             <p className="pma-journey-disclaimer">{t.note}</p>
           </>
-        ) : isPostpartum ? (
-          <div className="pma-postpartum-count"><Baby size={25}/><strong>{Math.max(0, daysPostpartum ?? 0)} <small>{t.days}</small></strong><p>{t.intro}</p></div>
+        ) : isPostpartum && daysPostpartum !== null ? (
+          <div className="pma-postpartum-count"><Baby size={25}/><strong>{Math.max(0, daysPostpartum)} <small>{t.days}</small></strong><p>{t.intro}</p></div>
         ) : (
           <div className="pma-wellbeing-copy"><p>{t.intro}</p><Link href="/my-care/profile">{t.profile} <ArrowRight size={15}/></Link></div>
         )}
