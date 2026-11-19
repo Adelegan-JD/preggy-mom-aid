@@ -5,7 +5,7 @@ from pathlib import Path
 
 from openpyxl import Workbook
 
-from convert_grid3_xlsx import convert
+import importlib.util\n\nMODULE_PATH = Path(__file__).with_name("convert-grid3-xlsx.py")\nSPEC = importlib.util.spec_from_file_location("grid3_converter", MODULE_PATH)\nMODULE = importlib.util.module_from_spec(SPEC)\nassert SPEC and SPEC.loader\nSPEC.loader.exec_module(MODULE)\nconvert = MODULE.convert
 
 
 class Grid3ConverterTests(unittest.TestCase):
