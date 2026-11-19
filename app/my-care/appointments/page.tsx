@@ -29,7 +29,7 @@ export default async function PatientAppointmentsPage() {
       <section className="patient-dashboard-content">
         <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
         <div className="account-kicker">YOUR PERSONAL SPACE</div>
-        <h1><CalendarHeart size={28}/> My appointments</h1>
+        <h1><CalendarHeart size={28}/> {t("appointments")}</h1>
         <p className="account-intro">{t("chooseSpace")}</p>
         <div className="patient-safety-note"><ShieldCheck size={20}/><p>This is a personal calendar only. It does not contact a hospital, book a visit or send appointment reminders. Please confirm all arrangements directly with your care provider.</p></div>
         <PatientAppointments initialAppointments={appointments ?? []} />
