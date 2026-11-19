@@ -6,6 +6,7 @@ import { normalizeLanguage } from "@/lib/i18n/translations";
 import { healthServicesText as t } from "@/lib/i18n/health-services";
 import { MapPin, Phone, ShieldCheck, AlertTriangle, Search } from "lucide-react";
 import NearbyHospitals from "@/components/nearby-hospitals";
+import type { NearbyHospital } from "@/lib/nearby-hospitals";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hospital directory | Preggy Mom Aid", description: "Public information about maternity and healthcare facilities in Nigeria." };
@@ -26,7 +27,7 @@ export default async function HospitalsPage({ searchParams }: { searchParams: Se
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
     try {
       const supabase = await createClient();
-      let query = supabase.from("health_facilities").select("id,name,facility_type,address,city,state,phone,emergency_phone,maternity_services,has_emergency_department,verification_status").eq("is_published", true).order("name", { ascending: true }).limit(100);
+      let query = supabase.from("health_facilities").select("id,name,facility_type,address,city,state,lga,latitude,longitude,phone,emergency_phone,maternity_services,has_emergency_department,verification_status").eq("is_published", true).order("name", { ascending: true }).limit(100);
       if (city) query = query.ilike("city", "%" + city + "%");
       if (state) query = query.ilike("state", "%" + state + "%");
       if (type) query = query.eq("facility_type", type);
@@ -52,7 +53,22 @@ export default async function HospitalsPage({ searchParams }: { searchParams: Se
       <h1>{t(language, "directory")}</h1>
       <p className="account-intro">{t(language, "directoryIntro")}</p>
       <div className="health-directory-notice"><ShieldCheck size={20}/><p>{t(language, "directoryNotice")}</p></div>
-      <NearbyHospitals language={language} />
+      <NearbyHospitals
+        language={language}
+        facilities={facilities.map((facility): NearbyHospital => ({
+          name: facility.name,
+          state: facility.state,
+          lga: facility.lga ?? facility.city,
+          city: facility.city,
+          lat: facility.latitude,
+          lng: facility.longitude,
+          facility_level: facility.facility_type,
+          // An empty services list means unknown, not confirmed absence.
+          has_maternity: facility.maternity_services?.length ? true : null,
+          phone: facility.phone,
+          verification_status: facility.verification_status,
+        }))}
+      />
       <form method="get" className="health-directory-filters" aria-label={t(language, "search")}>
         <label>{t(language, "city")}<input name="city" defaultValue={city} maxLength={80}/></label>
         <label>{t(language, "state")}<input name="state" defaultValue={state} maxLength={80}/></label>
