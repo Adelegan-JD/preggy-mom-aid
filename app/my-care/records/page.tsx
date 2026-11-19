@@ -29,7 +29,7 @@ export default async function PatientHealthRecordsPage() {
       <section className="patient-dashboard-content">
         <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
         <div className="account-kicker">YOUR PERSONAL SPACE</div>
-        <h1><FileHeart size={28}/> My health records</h1>
+        <h1><FileHeart size={28}/> {t("healthRecords")}</h1>
         <p className="account-intro">{t("privateHealthText")}</p>
         <div className="patient-safety-note"><ShieldCheck size={20}/><p>Files are stored in a private bucket and can only be accessed by your account. They are not shared with healthcare professionals. Keep your original records and follow your provider's instructions for official copies.</p></div>
         <PatientHealthDocuments initialDocuments={documents ?? []} />
