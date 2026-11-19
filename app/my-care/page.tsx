@@ -40,10 +40,10 @@ export default async function MyCarePage() {
   const daysPostpartum = birthDate ? Math.max(0, Math.floor((today.getTime() - birthDate.getTime()) / 86400000)) : null;
 
   return <main className="patient-dashboard patient-dashboard-redesign" id="main-content" tabIndex={-1}>
-    <aside className="patient-sidebar" aria-label="Patient navigation">
+    <aside className="patient-sidebar" aria-label={t("workspace")}>
       <Link href="/my-care" className="patient-sidebar-brand"><span className="account-brand-mark"><HeartPulse size={21}/></span><span><b>Preggy Mom Aid</b><small>{t("personalSpace")}</small></span></Link>
       <div className="patient-sidebar-label">{t("workspace") }</div>
-      <nav className="patient-sidebar-nav" aria-label="Main patient navigation">
+      <nav className="patient-sidebar-nav" aria-label={t("workspace")}>
         <Link href="/my-care" aria-current="page"><Home size={18}/> {t("overview") }</Link>
         <Link href="/my-care/blood-pressure"><Activity size={18}/> {t("bloodPressure") }</Link>
         <Link href="/my-care/symptoms"><ClipboardList size={18}/> {t("symptoms") }</Link>
@@ -83,6 +83,6 @@ export default async function MyCarePage() {
     </section>
     <footer className="patient-dashboard-footer">Preggy Mom Aid <span>•</span> Your care, your information, your choices</footer>
     </div>
-    <nav className="patient-mobile-nav" aria-label="Quick navigation"><Link href="/my-care" aria-current="page"><Home size={18}/><span>Home</span></Link><Link href="/my-care/blood-pressure"><Activity size={18}/><span>BP log</span></Link><Link href="/my-care/appointments"><CalendarHeart size={18}/><span>Visits</span></Link><Link href="/my-care/records"><FileHeart size={18}/><span>Records</span></Link><Link href="/my-care/profile"><UserRound size={18}/><span>Profile</span></Link></nav>
+    <div className="patient-mobile-language"><LanguageSwitcher /></div><nav className="patient-mobile-nav" aria-label={t("chooseLanguage")}><Link href="/my-care" aria-current="page"><Home size={18}/><span>{t("home")}</span></Link><Link href="/my-care/blood-pressure"><Activity size={18}/><span>{t("bpLog")}</span></Link><Link href="/my-care/appointments"><CalendarHeart size={18}/><span>{t("visits")}</span></Link><Link href="/my-care/records"><FileHeart size={18}/><span>{t("records")}</span></Link><Link href="/my-care/profile"><UserRound size={18}/><span>{t("profile")}</span></Link></nav>
   </main>;
 }
