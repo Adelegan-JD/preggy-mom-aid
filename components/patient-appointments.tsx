@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/components/language-provider";
 
 type Appointment = {
   id: string;
@@ -17,11 +18,13 @@ function localDateTimeValue(value?: string) {
   const date = value ? new Date(value) : new Date();
   return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 }
-function formatDate(value: string) {
-  return new Date(value).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+function formatDate(value: string, language: string) {
+  const locale = language === "yo" ? "yo-NG" : language === "ha" ? "ha-NG" : language === "ig" ? "ig-NG" : language === "pcm" ? "en-NG" : "en-NG";
+  return new Date(value).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" });
 }
 
 export default function PatientAppointments({ initialAppointments }: { initialAppointments: Appointment[] }) {
+  const { t, language } = useLanguage();
   const [appointments, setAppointments] = useState(initialAppointments);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
@@ -45,26 +48,26 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
     try {
       const date = new Date(scheduledAt);
-      if (!title.trim() || title.trim().length < 2) throw new Error("Enter an appointment title.");
-      if (Number.isNaN(date.getTime())) throw new Error("Choose a valid appointment date and time.");
+      if (!title.trim() || title.trim().length < 2) throw new Error(t("appointmentTitleError"));
+      if (Number.isNaN(date.getTime())) throw new Error(t("appointmentDateError"));
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Your session has expired. Please sign in again.");
+      if (!user) throw new Error(t("appointmentSessionError"));
       const payload = { title: title.trim(), appointment_type: type, scheduled_at: date.toISOString(), location: location.trim() || null, notes: notes.trim() || null, updated_at: new Date().toISOString() };
       if (editingId) {
         const { data, error: updateError } = await supabase.from("patient_appointments").update(payload).eq("id", editingId).eq("user_id", user.id).select("id,title,appointment_type,scheduled_at,location,notes,status").single();
         if (updateError) throw updateError;
         setAppointments(current => current.map(item => item.id === editingId ? data : item).sort((a, b) => a.scheduled_at.localeCompare(b.scheduled_at)));
-        setMessage("Your appointment has been updated.");
+        setMessage(t("appointmentUpdated"));
       } else {
         const { data, error: insertError } = await supabase.from("patient_appointments").insert({ ...payload, user_id: user.id }).select("id,title,appointment_type,scheduled_at,location,notes,status").single();
         if (insertError) throw insertError;
         setAppointments(current => [...current, data].sort((a, b) => a.scheduled_at.localeCompare(b.scheduled_at)));
-        setMessage("Your appointment has been added to your personal calendar.");
+        setMessage(t("appointmentAdded"));
       }
       resetForm();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "We could not save this appointment. Please try again.");
+      setError(cause instanceof Error ? cause.message : t("appointmentSaveError"));
     } finally { setBusy(false); }
   }
 
@@ -72,19 +75,19 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
     setError(""); setMessage("");
     const supabase = createClient();
     const { error: updateError } = await supabase.from("patient_appointments").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
-    if (updateError) { setError("We could not update this appointment. Please try again."); return; }
+    if (updateError) { setError(t("appointmentUpdateError")); return; }
     setAppointments(current => current.map(item => item.id === id ? { ...item, status } : item));
-    setMessage("Appointment updated.");
+    setMessage(t("appointmentUpdated"));
   }
 
   async function removeAppointment(id: string) {
-    if (!window.confirm("Delete this appointment from your personal calendar?")) return;
+    if (!window.confirm(t("deleteAppointmentConfirm"))) return;
     setError(""); setMessage("");
     const { error: deleteError } = await createClient().from("patient_appointments").delete().eq("id", id);
-    if (deleteError) { setError("We could not delete this appointment. Please try again."); return; }
+    if (deleteError) { setError(t("appointmentDeleteError")); return; }
     setAppointments(current => current.filter(item => item.id !== id));
     if (editingId === id) resetForm();
-    setMessage("Appointment removed.");
+    setMessage(t("appointmentRemoved"));
   }
 
   const upcoming = appointments.filter(item => item.status === "scheduled" && new Date(item.scheduled_at).getTime() >= Date.now());
@@ -92,32 +95,32 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
 
   return <div className="patient-appointments-layout">
     <form className="account-card patient-profile-form" onSubmit={saveAppointment}>
-      <div className="account-kicker">YOUR CARE CALENDAR</div>
-      <h2>{editingId ? "Edit appointment" : "Add an appointment"}</h2>
-      <p className="account-intro">Add appointments you have arranged with your maternity team. This personal calendar does not book hospital visits or send reminders.</p>
-      <label htmlFor="appointmentTitle">Appointment title</label>
-      <input id="appointmentTitle" required minLength={2} maxLength={120} value={title} onChange={event => setTitle(event.target.value)} placeholder="e.g. Antenatal check-up" />
-      <label htmlFor="appointmentType">Appointment type</label>
+      <div className="account-kicker">{t("apptKicker")}</div>
+      <h2>{editingId ? t("editAppointment") : t("addAppointmentTitle")}</h2>
+      <p className="account-intro">{t("calendarIntro")}</p>
+      <label htmlFor="appointmentTitle">{t("appointmentTitle")}</label>
+      <input id="appointmentTitle" required minLength={2} maxLength={120} value={title} onChange={event => setTitle(event.target.value)} placeholder={t("appointmentTitlePlaceholder")} />
+      <label htmlFor="appointmentType">{t("appointmentType")}</label>
       <select id="appointmentType" value={type} onChange={event => setType(event.target.value as Appointment["appointment_type"])}>
-        <option value="antenatal">Antenatal visit</option><option value="postnatal">Postnatal visit</option><option value="scan">Ultrasound / scan</option><option value="laboratory">Laboratory / test</option><option value="other">Other</option>
+        <option value="antenatal">{t("antenatalVisit")}</option><option value="postnatal">{t("postnatalVisit")}</option><option value="scan">{t("ultrasoundScan")}</option><option value="laboratory">{t("labTest")}</option><option value="other">{t("other")}</option>
       </select>
-      <label htmlFor="appointmentWhen">Date and time</label>
+      <label htmlFor="appointmentWhen">{t("dateTime")}</label>
       <input id="appointmentWhen" type="datetime-local" required value={scheduledAt} onChange={event => setScheduledAt(event.target.value)} />
-      <label htmlFor="appointmentLocation">Location <span>(optional)</span></label>
-      <input id="appointmentLocation" maxLength={180} value={location} onChange={event => setLocation(event.target.value)} placeholder="Hospital, clinic or address" />
-      <label htmlFor="appointmentNotes">Notes <span>(optional)</span></label>
-      <textarea id="appointmentNotes" rows={3} maxLength={1500} value={notes} onChange={event => setNotes(event.target.value)} placeholder="Questions to ask or items to bring" />
-      <button className="account-submit" disabled={busy}>{busy ? "Saving…" : editingId ? "Save changes" : "Add to my calendar"}</button>
-      {editingId && <button type="button" className="account-signout" onClick={resetForm}>Cancel editing</button>}
+      <label htmlFor="appointmentLocation">{t("location")} <span>{t("optional")}</span></label>
+      <input id="appointmentLocation" maxLength={180} value={location} onChange={event => setLocation(event.target.value)} placeholder={t("locationPlaceholder")} />
+      <label htmlFor="appointmentNotes">{t("notes")} <span>{t("optional")}</span></label>
+      <textarea id="appointmentNotes" rows={3} maxLength={1500} value={notes} onChange={event => setNotes(event.target.value)} placeholder={t("appointmentNotesPlaceholder")} />
+      <button className="account-submit" disabled={busy}>{busy ? t("saving") : editingId ? t("saveChanges") : t("addToCalendar")}</button>
+      {editingId && <button type="button" className="account-signout" onClick={resetForm}>{t("cancelEditing")}</button>}
       {error && <p className="account-error" role="alert">{error}</p>}
       {message && <p className="account-success" role="status">{message}</p>}
     </form>
     <section className="patient-appointment-list">
-      <div className="patient-recent-panel"><div className="account-kicker">UP NEXT</div><h2>Upcoming appointments</h2>
-        {upcoming.length ? <ul>{upcoming.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at)} · {item.appointment_type.replace("_", " ")}</span>{item.location && <span>{item.location}</span>}{item.notes && <span>{item.notes}</span>}</div><div className="patient-appointment-actions"><button type="button" onClick={() => startEdit(item)}>Edit</button><button type="button" onClick={() => updateStatus(item.id, "completed")}>Mark completed</button><button type="button" onClick={() => updateStatus(item.id, "cancelled")}>Cancel</button><button type="button" onClick={() => removeAppointment(item.id)}>Delete</button></div></li>)}</ul> : <p>No upcoming appointments yet. Add an appointment you have arranged with your care team.</p>}
+      <div className="patient-recent-panel"><div className="account-kicker">{t("upNext")}</div><h2>{t("upcomingAppointments")}</h2>
+        {upcoming.length ? <ul>{upcoming.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at, language)} · {item.appointment_type.replace("_", " ")}</span>{item.location && <span>{item.location}</span>}{item.notes && <span>{item.notes}</span>}</div><div className="patient-appointment-actions"><button type="button" onClick={() => startEdit(item)}>{t("edit")}</button><button type="button" onClick={() => updateStatus(item.id, "completed")}>{t("markCompleted")}</button><button type="button" onClick={() => updateStatus(item.id, "cancelled")}>{t("cancelAppointment")}</button><button type="button" onClick={() => removeAppointment(item.id)}>{t("delete")}</button></div></li>)}</ul> : <p>{t("noUpcomingAppointments")}</p>}
       </div>
-      <div className="patient-recent-panel"><div className="account-kicker">YOUR RECORD</div><h2>Past and cancelled</h2>
-        {past.length ? <ul>{past.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at)}</span><span className={`appointment-status ${item.status}`}>{item.status}</span></div><div className="patient-appointment-actions">{item.status === "cancelled" && <button type="button" onClick={() => updateStatus(item.id, "scheduled")}>Restore</button>}{item.status !== "completed" && <button type="button" onClick={() => startEdit(item)}>Edit</button>}<button type="button" onClick={() => removeAppointment(item.id)}>Delete</button></div></li>)}</ul> : <p>Your completed, cancelled and past appointments will appear here.</p>}
+      <div className="patient-recent-panel"><div className="account-kicker">{t("yourRecord")}</div><h2>{t("pastAppointments")}</h2>
+        {past.length ? <ul>{past.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at, language)}</span><span className={`appointment-status ${item.status}`}>{t(item.status === "cancelled" ? "cancelled" : item.status === "completed" ? "completed" : "scheduled")}</span></div><div className="patient-appointment-actions">{item.status === "cancelled" && <button type="button" onClick={() => updateStatus(item.id, "scheduled")}>{t("restore")}</button>}{item.status !== "completed" && <button type="button" onClick={() => startEdit(item)}>{t("edit")}</button>}<button type="button" onClick={() => removeAppointment(item.id)}>{t("delete")}</button></div></li>)}</ul> : <p>{t("noPastAppointments")}</p>}
       </div>
     </section>
   </div>;

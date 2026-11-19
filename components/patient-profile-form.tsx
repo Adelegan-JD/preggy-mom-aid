@@ -1,7 +1,9 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { useLanguage } from "@/components/language-provider";
 
 type PatientProfile = {
   preferred_name: string | null;
@@ -14,16 +16,23 @@ type PatientProfile = {
 };
 
 export default function PatientProfileForm({ initialProfile }: { initialProfile: PatientProfile | null }) {
+  const { language: appLanguage, setLanguage, t } = useLanguage();
+  const router = useRouter();
   const [preferredName, setPreferredName] = useState(initialProfile?.preferred_name ?? "");
   const [phone, setPhone] = useState(initialProfile?.phone_number ?? "");
   const [state, setState] = useState(initialProfile?.state_or_territory ?? "");
-  const [language, setLanguage] = useState<PatientProfile["preferred_language"]>(initialProfile?.preferred_language ?? "en");
   const [status, setStatus] = useState<PatientProfile["pregnancy_status"]>(initialProfile?.pregnancy_status ?? "pregnant");
   const [dueDate, setDueDate] = useState(initialProfile?.estimated_due_date ?? "");
   const [birthDate, setBirthDate] = useState(initialProfile?.birth_date ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState("");
+
+  useEffect(() => {
+    if (initialProfile?.preferred_language && initialProfile.preferred_language !== "other") {
+      try { if (!window.localStorage.getItem("pma-language-v1")) { setLanguage(initialProfile.preferred_language); router.refresh(); } } catch { /* Keep the active session language. */ }
+    }
+  }, [initialProfile?.preferred_language, setLanguage]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -42,14 +51,14 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
         preferred_name: preferredName.trim() || null,
         phone_number: phone.trim() || null,
         state_or_territory: state.trim() || null,
-        preferred_language: language,
+        preferred_language: appLanguage,
         pregnancy_status: status,
         estimated_due_date: status === "pregnant" ? dueDate || null : null,
         birth_date: status === "postpartum" ? birthDate || null : null,
         updated_at: new Date().toISOString()
       }, { onConflict: "user_id" });
       if (saveError) throw saveError;
-      setSaved("Your patient profile has been saved.");
+      setSaved(t("saved"));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "We could not save your profile. Please try again.");
     } finally {
@@ -59,47 +68,47 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
 
   return (
     <form className="account-card patient-profile-form" onSubmit={submit}>
-      <div className="account-kicker">YOUR DETAILS</div>
-      <h2>Personal information</h2>
+      <div className="account-kicker">{t("personalDetails")}</div>
+      <h2>{t("personalInfo")}</h2>
       <p className="account-intro">Only share details you are comfortable storing. Your profile is private to your account.</p>
-      <label htmlFor="preferredName">What should we call you? <span>(optional)</span></label>
+      <label htmlFor="preferredName">{t("preferredNameQuestion")} <span>(optional)</span></label>
       <input id="preferredName" value={preferredName} maxLength={80} onChange={event => setPreferredName(event.target.value)} autoComplete="given-name" />
-      <label htmlFor="patientPhone">Phone number <span>(optional)</span></label>
+      <label htmlFor="patientPhone">{t("phoneNumber")} <span>(optional)</span></label>
       <input id="patientPhone" type="tel" value={phone} maxLength={30} onChange={event => setPhone(event.target.value)} autoComplete="tel" placeholder="+234…" />
-      <label htmlFor="patientState">State or territory <span>(optional)</span></label>
+      <label htmlFor="patientState">{t("stateTerritory")} <span>(optional)</span></label>
       <input id="patientState" value={state} maxLength={80} onChange={event => setState(event.target.value)} autoComplete="address-level1" placeholder="e.g. Lagos" />
-      <label htmlFor="patientLanguage">Preferred language</label>
-      <select id="patientLanguage" value={language} onChange={event => setLanguage(event.target.value as PatientProfile["preferred_language"])}>
+      <label htmlFor="patientLanguage">{t("preferredLanguage")}</label>
+      <select id="patientLanguage" value={appLanguage} onChange={event => { setLanguage(event.target.value as typeof appLanguage); router.refresh(); }}>
         <option value="en">English</option>
         <option value="yo">Yorùbá</option>
         <option value="ig">Igbo</option>
         <option value="ha">Hausa</option>
         <option value="pcm">Nigerian Pidgin</option>
-        <option value="other">Other</option>
+        
       </select>
       <div className="patient-profile-divider" />
-      <div className="account-kicker">YOUR JOURNEY</div>
-      <h2>Where are you in your journey?</h2>
-      <label htmlFor="pregnancyStatus">Current status</label>
+      <div className="account-kicker">{t("journeyHeading")}</div>
+      <h2>{t("journeyQuestion")}</h2>
+      <label htmlFor="pregnancyStatus">{t("currentStatus")}</label>
       <select id="pregnancyStatus" value={status} onChange={event => setStatus(event.target.value as PatientProfile["pregnancy_status"])}>
-        <option value="pregnant">I am pregnant</option>
-        <option value="postpartum">I have given birth</option>
-        <option value="not_currently_pregnant">I am not currently pregnant</option>
+        <option value="pregnant">{t("statusPregnant")}</option>
+        <option value="postpartum">{t("statusPostpartum")}</option>
+        <option value="not_currently_pregnant">{t("statusNotPregnant")}</option>
       </select>
       {status === "pregnant" && <>
-        <label htmlFor="dueDate">Estimated due date</label>
+        <label htmlFor="dueDate">{t("estimatedDueDate")}</label>
         <input id="dueDate" type="date" required value={dueDate} onChange={event => setDueDate(event.target.value)} />
-        <p className="account-footnote">This date is used to personalise your journey view. It is not a medical assessment or a substitute for dating advice from your maternity team.</p>
+        <p className="account-footnote">{t("dateFootnote")}</p>
       </>}
       {status === "postpartum" && <>
-        <label htmlFor="birthDate">Baby's date of birth</label>
+        <label htmlFor="birthDate">{t("birthDate")}</label>
         <input id="birthDate" type="date" required value={birthDate} onChange={event => setBirthDate(event.target.value)} />
         <p className="account-footnote">Postpartum support continues after birth. Keep following the care plan from your maternity team.</p>
       </>}
-      <button className="account-submit" disabled={busy}>{busy ? "Saving…" : "Save my profile"}</button>
+      <button className="account-submit" disabled={busy}>{busy ? t("saving") : t("saveProfile")}</button>
       {error && <p className="account-error" role="alert">{error}</p>}
       {saved && <p className="account-success" role="status">{saved}</p>}
-      <p className="account-footnote">You can update these details at any time. Your profile does not give healthcare professionals access to your health records.</p>
+      <p className="account-footnote">{t("profilePrivacyFootnote")}</p>
     </form>
   );
 }

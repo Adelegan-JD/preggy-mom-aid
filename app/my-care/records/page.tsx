@@ -1,3 +1,5 @@
+import PatientPageNavigation from "@/components/patient-page-navigation";
+import { getServerTranslator } from "@/lib/i18n/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft, FileHeart, ShieldCheck } from "lucide-react";
@@ -8,8 +10,9 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "My health records | Preggy Mom Aid" };
 
 export default async function PatientHealthRecordsPage() {
+  const { t } = await getServerTranslator();
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link><h1>My health records</h1><p className="account-intro">Health record services are temporarily unavailable because account services are not configured for this deployment.</p></section></main>;
+    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="records"/><section className="patient-dashboard-content"><Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link><h1>{t("healthRecords")}</h1><p className="account-intro">{t("unavailable")}</p></section></main>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -21,13 +24,14 @@ export default async function PatientHealthRecordsPage() {
     .eq("user_id", user.id).order("created_at", { ascending: false }).limit(100);
 
   return (
-    <main className="patient-dashboard" id="main-content" tabIndex={-1}>
+    <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}>
+      <PatientPageNavigation active="records"/>
       <section className="patient-dashboard-content">
-        <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link>
+        <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
         <div className="account-kicker">YOUR PERSONAL SPACE</div>
-        <h1><FileHeart size={28}/> My health records</h1>
-        <p className="account-intro">Keep your own health documents together in a private place.</p>
-        <div className="patient-safety-note"><ShieldCheck size={20}/><p>Files are stored in a private bucket and can only be accessed by your account. They are not shared with healthcare professionals. Keep your original records and follow your provider's instructions for official copies.</p></div>
+        <h1><FileHeart size={28}/> {t("healthRecords")}</h1>
+        <p className="account-intro">{t("privateHealthText")}</p>
+        <div className="patient-safety-note"><ShieldCheck size={20}/><p>{t("recordsSafety")}</p></div>
         <PatientHealthDocuments initialDocuments={documents ?? []} />
       </section>
     </main>

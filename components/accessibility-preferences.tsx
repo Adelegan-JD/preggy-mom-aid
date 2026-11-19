@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { SlidersHorizontal, RotateCcw } from "lucide-react";
+import LanguageSwitcher from "@/components/language-switcher";
 
 type Preferences = {
   theme: "system" | "light" | "dark";
@@ -98,6 +99,8 @@ export default function AccessibilityPreferences() {
           </div>
           <span className="pma-preferences-icon" aria-hidden="true"><SlidersHorizontal size={19} /></span>
         </div>
+
+        <div className="pma-preference-field"><LanguageSwitcher /></div>
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-theme-${ids}`}>Colour theme</label>

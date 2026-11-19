@@ -20,6 +20,10 @@ jobs:
         run: npm install
       - name: Type-check
         run: npm run typecheck
+      - name: Test hospital CSV converter
+        run: npm run test:hospitals:csv
+      - name: Test nearby distance calculations
+        run: npm run test:nearby:distance
       - name: Build Next.js application
         run: npm run build
       - name: Install Playwright Chromium
