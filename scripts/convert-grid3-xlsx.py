@@ -107,7 +107,10 @@ def json_safe_row(row: dict[str, Any]) -> str:
 
 
 def transform(row: dict[str, Any]) -> dict[str, str]:
-    name = clean(row.get("facility_name"))
+    raw_name = row.get("facility_name")
+    # GRID3 may append data-quality notes after a line break in the facility-name cell.
+    # Use the first line as the display name; preserve the complete source value in source_attributes.
+    name = clean(raw_name.splitlines()[0] if isinstance(raw_name, str) else raw_name)
     state = clean(row.get("state_standard"))
     lga = clean(row.get("lga_standard"))
     source_id = clean(row.get("unique_id"))
