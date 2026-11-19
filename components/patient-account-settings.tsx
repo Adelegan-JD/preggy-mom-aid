@@ -108,7 +108,7 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
       <p className="account-intro">{t("notificationIntro")}</p>
       <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.appointment_email_reminders} onChange={event => setPreferences(current => ({ ...current, appointment_email_reminders: event.target.checked }))}/> {t("appointmentReminderEmails")}</label>
       <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.product_email_updates} onChange={event => setPreferences(current => ({ ...current, product_email_updates: event.target.checked }))}/> {t("productUpdates")}</label><p className="account-footnote">{t("notificationFootnote")}</p>
-      <button className="account-submit" disabled={busy}>{busy ? "{t("saving")}" : "{t("savePreferences")}"}</button>
+      <button className="account-submit" disabled={busy}>{busy ? t("saving") : t("savePreferences")}</button>
     </form>
     <section className="patient-settings-panel">
       <div className="account-kicker">{t("accountDetails")}</div><h2>{t("changeSignInEmail")}</h2><p className="account-intro">{t("emailChangeIntro")}</p>
