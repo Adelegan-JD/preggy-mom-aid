@@ -9,6 +9,7 @@ import {ArrowLeft,Activity} from "lucide-react";
 export const dynamic="force-dynamic";
 export const metadata={title:"Blood pressure log | Preggy Mom Aid"};
 export default async function BloodPressurePage(){
+ const { t } = await getServerTranslator();
  if(!process.env.NEXT_PUBLIC_SUPABASE_URL||!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY){return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="blood-pressure"/><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link">Return to sign in</Link><h1>Health log unavailable</h1><p className="account-intro">Secure account services are not configured for this deployment yet.</p></section></main>;}
  const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)redirect("/login?next=/my-care/blood-pressure");
  const {data:account}=await supabase.from("profiles").select("account_type").eq("id",user.id).maybeSingle();if(account?.account_type==="professional")redirect("/professional");
