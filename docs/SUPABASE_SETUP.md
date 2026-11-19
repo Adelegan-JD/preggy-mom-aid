@@ -33,17 +33,22 @@ Add these values in Vercel → Project → Settings → Environment Variables fo
 
 The repository's `.env.example` contains placeholders only. Do not commit live credentials.
 
-## 4. Activate the patient database — one SQL run
+## 4. Patient database activation status
 
-After the patient launch-hardening PR is merged, open **Supabase Dashboard → SQL Editor** for project reference `segggjguspycgdwtgaraq`. Confirm that this is the intended project and that you have checked whether any of these tables or policies already exist.
+The connected Supabase project `segggjguspycgdwtgaraq` has now been activated directly. The consolidated patient schema is applied and recorded in Supabase migration history as `20261119121940_patient_database_activation`. The matching baseline migration is committed in `supabase/migrations/20261119121940_patient_database_activation.sql`.
 
-Open `supabase/ACTIVATE_PATIENT_DATABASE.sql` from the merged `master` branch, copy the complete file, paste it into one new SQL Editor query, and click **Run once**. This single transaction consolidates the current patient schema and RLS policies in timestamp order. Do not also run the individual migration files manually.
+**Do not paste or run `ACTIVATE_PATIENT_DATABASE.sql` again on this project.** The SQL Editor is a query workspace and does not automatically show files stored in GitHub. Its blank state is not a database error.
 
-The script creates/updates patient accounts and health-log foundations, pregnancy profiles, appointments, private health documents and Storage policies, patient-only health-log policies, notification preferences, and account-deletion request records. It also safely handles the legacy feedback-table rename where applicable.
+Verified on the live project:
+- Patient account/profile and health-record tables exist.
+- RLS is enabled on all 11 application tables.
+- The `patient-health-records` Storage bucket exists and is private.
+- The existing Auth user has a corresponding profile.
+- The patient schema migration is recorded.
+- Public execution of the profile trigger and the project's RLS event-trigger function has been revoked.
 
-After the query succeeds, confirm in **Table Editor** that the expected tables exist with RLS enabled. In **Storage**, confirm `patient-health-records` exists and remains private. If SQL Editor reports an error, stop and share the exact error text—do not try to repair the schema by guessing or rerunning fragments.
+For a **new empty Supabase project**, use the single consolidated activation script once, or link the repository with the Supabase CLI and apply the committed baseline migration. Never apply the baseline on top of an already-populated schema without first comparing migration history and schema state.
 
-This SQL does not configure email confirmation templates, allowed redirect URLs, Vercel environment variables, a notification delivery provider, or production deployment. Those are separate launch steps below.
 
 ## 5. Validate before inviting patients
 
@@ -63,4 +68,4 @@ Do not enable clinician access to patient records. That requires verified profes
 
 The GitHub repository is the source of truth. Vercel deployment has previously been blocked by the project's build-usage quota. Development and CI can continue while that is resolved; do not split the production project across accounts simply to bypass the quota. After a successful production deployment, run authenticated smoke tests before opening public registration.
 
-**Important:** Creating the Supabase project alone does not activate the application database. No live database connection or successful production deployment is claimed until it has been tested.
+**Important:** The database schema is now active and verified at the database level. Auth email delivery, full patient-side end-to-end testing, and production deployment still require separate validation.
