@@ -32,6 +32,7 @@ The converter recognises common header aliases for facility name, state, LGA, la
   "has_maternity": null,
   "phone": null,
   "is_placeholder": false,
+  "verification_status": "unverified",
   "source": "NHFR download date / source reference"
 }
 ```
