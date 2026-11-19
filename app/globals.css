@@ -1274,3 +1274,12 @@ html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000
 @media(max-width:900px){.hero-photo-art{right:1%;width:43%}.maternal-story-grid{grid-template-columns:1fr 1fr}.maternal-story-card.story-quote{grid-column:1/-1;min-height:230px}.pma-journey-visual{grid-template-columns:.8fr 1.2fr}.pma-journey-panel{padding:22px}}
 @media(max-width:680px){.hero-photo-art{position:relative;right:auto;top:auto;width:100%;height:300px;margin-top:22px}.hero-photo-frame{inset:0 12px 12px 12px;border-radius:25px 25px 70px 25px}.hero-floating-note{right:0;top:8px}.hero-photo-sparkle{display:none}.maternal-visual-stories{padding:50px 20px}.maternal-stories-heading{display:block}.maternal-stories-heading p{margin-top:13px}.maternal-story-grid{grid-template-columns:1fr}.maternal-story-card,.maternal-story-card.story-quote{min-height:270px;grid-column:auto}.pma-journey-visual{grid-template-columns:1fr}.pma-journey-photo{min-height:260px}.pma-journey-panel{padding:22px 18px}.pma-stage-tabs button{font-size:9px;padding:9px 6px}}
 @media(prefers-reduced-motion:reduce){.hero-photo-frame>img,.maternal-story-card>img,.pma-progress-track span,.pma-stage-tabs button{transition:none}.pma-stage-tabs button:hover{transform:none}}
+
+
+/* Final image-layout corrections */
+.hero-photo-art{position:relative;right:0;top:0;width:100%;height:100%;min-height:420px;transform:none}
+.hero-photo-frame{inset:4px 24px 8px 18px}
+.hero-floating-note{right:-2px}
+.pma-photo-credit{position:absolute;z-index:3;right:12px;bottom:9px;color:rgba(255,255,255,.9);font-size:8px;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+@media(max-width:900px){.hero-photo-art{width:100%;min-height:360px;transform:none}}
+@media(max-width:760px){.hero-photo-art{width:100%;height:300px;min-height:300px;margin-top:4px;transform:none}.hero-photo-frame{inset:0 12px 12px;border-radius:25px 25px 70px 25px}.hero-floating-note{right:0;top:8px}}
