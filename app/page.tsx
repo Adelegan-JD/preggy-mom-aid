@@ -81,7 +81,7 @@ export default function HomePage() {
         <div className="hero-art-public hero-photo-art">
           <div className="hero-photo-frame">
             <img src="https://images.unsplash.com/photo-1752240880737-128cc8cbf65c?auto=format&fit=crop&w=1200&q=85" alt="Pregnant mother holding her baby bump in a warm, peaceful setting" fetchPriority="high" />
-            <span className="hero-photo-label"><HeartHandshake size={17}/><span><b>Compassion first</b><small>Support through every chapter</small></span></span>
+            <span className="hero-photo-label"><HeartHandshake size={17}/><span><b>Compassion first</b><small>Support through every chapter</small><small className="photo-credit">Photo: Arturo Añez / Unsplash</small></span></span>
           </div>
           <div className="hero-floating-note"><span className="hero-note-icon"><HeartHandshake size={18}/></span><span><b>You are not alone</b><small>Care, knowledge and support</small></span></div>
           <span className="hero-photo-sparkle sparkle-a">✦</span><span className="hero-photo-sparkle sparkle-b">✿</span>
@@ -108,8 +108,8 @@ export default function HomePage() {
         <div className="section-kicker">CARE THAT SEES THE WHOLE PERSON</div>
         <div className="maternal-stories-heading"><h2 id="maternal-stories-title">A little more support,<br /><em>at every step.</em></h2><p>From pregnancy questions to post-birth recovery, Preggy Mom Aid is designed to help you stay connected to your own care journey.</p></div>
         <div className="maternal-story-grid">
-          <article className="maternal-story-card story-large"><img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=1100&q=85" alt="Expectant Black mother in a maternity portrait" loading="lazy"/><div><span>YOUR JOURNEY</span><h3>Every mother’s story is different.</h3></div></article>
-          <article className="maternal-story-card"><img src="https://images.unsplash.com/photo-1651083137688-492e79ac9a92?auto=format&fit=crop&w=800&q=80" alt="A joyful maternity portrait" loading="lazy"/><div><span>YOUR VOICE</span><h3>Questions deserve to be heard.</h3></div></article>
+          <article className="maternal-story-card story-large"><img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=1100&q=85" alt="Expectant Black mother in a maternity portrait" loading="lazy"/><div><span>YOUR JOURNEY</span><h3>Every mother’s story is different.</h3><small>Photo: Anna Civolani / Unsplash</small></div></article>
+          <article className="maternal-story-card"><img src="https://images.unsplash.com/photo-1651083137688-492e79ac9a92?auto=format&fit=crop&w=800&q=80" alt="A mother and child sharing a close moment" loading="lazy"/><div><span>YOUR VOICE</span><h3>Questions deserve to be heard.</h3><small>Photo: Olivia Anne Snyder / Unsplash</small></div></article>
           <article className="maternal-story-card story-quote"><span className="story-quote-mark">“</span><h3>Informed, supported, and at the centre of your care.</h3><p>Explore information, keep your records private and work with qualified professionals.</p><a href="/signup">Create your account <ArrowRight size={15}/></a></article>
         </div>
       </section>
