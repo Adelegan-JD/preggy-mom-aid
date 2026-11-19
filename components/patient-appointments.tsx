@@ -30,18 +30,18 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
   const [title, setTitle] = useState("");
   const [type, setType] = useState<Appointment["appointment_type"]>("antenatal");
   const [scheduledAt, setScheduledAt] = useState(localDateTimeValue);
-  const [location, set{t("location")}] = useState("");
-  const [notes, set{t("notes")}] = useState("");
+  const [location, setLocation] = useState("");
+  const [notes, setNotes] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
   function resetForm() {
-    setEditingId(null); setTitle(""); setType("antenatal"); setScheduledAt(localDateTimeValue()); set{t("location")}(""); set{t("notes")}("");
+    setEditingId(null); setTitle(""); setType("antenatal"); setScheduledAt(localDateTimeValue()); setLocation(""); setNotes("");
   }
   function startEdit(item: Appointment) {
     setEditingId(item.id); setTitle(item.title); setType(item.appointment_type); setScheduledAt(localDateTimeValue(item.scheduled_at));
-    set{t("location")}(item.location ?? ""); set{t("notes")}(item.notes ?? ""); setError(""); setMessage("");
+    setLocation(item.location ?? ""); setNotes(item.notes ?? ""); setError(""); setMessage("");
   }
 
   async function saveAppointment(event: FormEvent<HTMLFormElement>) {
@@ -99,18 +99,18 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
       <h2>{editingId ? t("editAppointment") : t("addAppointmentTitle")}</h2>
       <p className="account-intro">{t("calendarIntro")}</p>
       <label htmlFor="appointmentTitle">{t("appointmentTitle")}</label>
-      <input id="appointmentTitle" required minLength={2} maxLength={120} value={title} onChange={event => setTitle(event.target.value)} placeholder="{t("appointmentTitlePlaceholder")}" />
+      <input id="appointmentTitle" required minLength={2} maxLength={120} value={title} onChange={event => setTitle(event.target.value)} placeholder={t("appointmentTitlePlaceholder")} />
       <label htmlFor="appointmentType">{t("appointmentType")}</label>
       <select id="appointmentType" value={type} onChange={event => setType(event.target.value as Appointment["appointment_type"])}>
-        <option value="antenatal">{t("antenatalVisit")}</option><option value="postnatal">{t("postnatalVisit")}</option><option value="scan">{t("ultrasoundScan")}</option><option value="laboratory">{t("labTest")}</option><option value="other">Other</option>
+        <option value="antenatal">{t("antenatalVisit")}</option><option value="postnatal">{t("postnatalVisit")}</option><option value="scan">{t("ultrasoundScan")}</option><option value="laboratory">{t("labTest")}</option><option value="other">{t("other")}</option>
       </select>
       <label htmlFor="appointmentWhen">{t("dateTime")}</label>
       <input id="appointmentWhen" type="datetime-local" required value={scheduledAt} onChange={event => setScheduledAt(event.target.value)} />
-      <label htmlFor="appointment{t("location")}">{t("location")} <span>{t("optional")}</span></label>
-      <input id="appointment{t("location")}" maxLength={180} value={location} onChange={event => set{t("location")}(event.target.value)} placeholder="{t("locationPlaceholder")}" />
-      <label htmlFor="appointment{t("notes")}">{t("notes")} <span>{t("optional")}</span></label>
-      <textarea id="appointment{t("notes")}" rows={3} maxLength={1500} value={notes} onChange={event => set{t("notes")}(event.target.value)} placeholder="{t("appointmentNotesPlaceholder")}" />
-      <button className="account-submit" disabled={busy}>{busy ? "Saving…" : editingId ? "Save changes" : "{t("addToCalendar")}"}</button>
+      <label htmlFor="appointmentLocation">{t("location")} <span>{t("optional")}</span></label>
+      <input id="appointmentLocation" maxLength={180} value={location} onChange={event => setLocation(event.target.value)} placeholder={t("locationPlaceholder")} />
+      <label htmlFor="appointmentNotes">{t("notes")} <span>{t("optional")}</span></label>
+      <textarea id="appointmentNotes" rows={3} maxLength={1500} value={notes} onChange={event => setNotes(event.target.value)} placeholder={t("appointmentNotesPlaceholder")} />
+      <button className="account-submit" disabled={busy}>{busy ? t("saving") : editingId ? t("saveChanges") : t("addToCalendar")}</button>
       {editingId && <button type="button" className="account-signout" onClick={resetForm}>{t("cancelEditing")}</button>}
       {error && <p className="account-error" role="alert">{error}</p>}
       {message && <p className="account-success" role="status">{message}</p>}
@@ -119,7 +119,7 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
       <div className="patient-recent-panel"><div className="account-kicker">{t("upNext")}</div><h2>{t("upcomingAppointments")}</h2>
         {upcoming.length ? <ul>{upcoming.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at, language)} · {item.appointment_type.replace("_", " ")}</span>{item.location && <span>{item.location}</span>}{item.notes && <span>{item.notes}</span>}</div><div className="patient-appointment-actions"><button type="button" onClick={() => startEdit(item)}>{t("edit")}</button><button type="button" onClick={() => updateStatus(item.id, "completed")}>{t("markCompleted")}</button><button type="button" onClick={() => updateStatus(item.id, "cancelled")}>{t("cancelAppointment")}</button><button type="button" onClick={() => removeAppointment(item.id)}>{t("delete")}</button></div></li>)}</ul> : <p>{t("noUpcomingAppointments")}</p>}
       </div>
-      <div className="patient-recent-panel"><div className="account-kicker">{t("yourHealth")}</div><h2>{t("pastAppointments")}</h2>
+      <div className="patient-recent-panel"><div className="account-kicker">{t("yourRecord")}</div><h2>{t("pastAppointments")}</h2>
         {past.length ? <ul>{past.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at, language)}</span><span className={`appointment-status ${item.status}`}>{t(item.status === "cancelled" ? "cancelled" : item.status === "completed" ? "completed" : "scheduled")}</span></div><div className="patient-appointment-actions">{item.status === "cancelled" && <button type="button" onClick={() => updateStatus(item.id, "scheduled")}>{t("restore")}</button>}{item.status !== "completed" && <button type="button" onClick={() => startEdit(item)}>{t("edit")}</button>}<button type="button" onClick={() => removeAppointment(item.id)}>{t("delete")}</button></div></li>)}</ul> : <p>{t("noPastAppointments")}</p>}
       </div>
     </section>
