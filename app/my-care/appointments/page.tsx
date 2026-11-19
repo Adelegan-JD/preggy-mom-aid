@@ -1,3 +1,4 @@
+import PatientPageNavigation from "@/components/patient-page-navigation";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft, CalendarHeart, ShieldCheck } from "lucide-react";
@@ -9,7 +10,7 @@ export const metadata = { title: "My appointments | Preggy Mom Aid" };
 
 export default async function PatientAppointmentsPage() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link><h1>My appointments</h1><p className="account-intro">Appointment services are temporarily unavailable because account services are not configured for this deployment.</p></section></main>;
+    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="appointments"/><section className="patient-dashboard-content"><Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link><h1>My appointments</h1><p className="account-intro">Appointment services are temporarily unavailable because account services are not configured for this deployment.</p></section></main>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -21,7 +22,8 @@ export default async function PatientAppointmentsPage() {
     .eq("user_id", user.id).order("scheduled_at", { ascending: true }).limit(200);
 
   return (
-    <main className="patient-dashboard" id="main-content" tabIndex={-1}>
+    <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}>
+      <PatientPageNavigation active="appointments"/>
       <section className="patient-dashboard-content">
         <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link>
         <div className="account-kicker">YOUR PERSONAL SPACE</div>
