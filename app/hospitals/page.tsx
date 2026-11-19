@@ -5,6 +5,7 @@ import PatientPageNavigation from "@/components/patient-page-navigation";
 import { normalizeLanguage } from "@/lib/i18n/translations";
 import { healthServicesText as t } from "@/lib/i18n/health-services";
 import { MapPin, Phone, ShieldCheck, AlertTriangle, Search } from "lucide-react";
+import NearbyHospitals from "@/components/nearby-hospitals";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hospital directory | Preggy Mom Aid", description: "Public information about maternity and healthcare facilities in Nigeria." };
@@ -51,6 +52,7 @@ export default async function HospitalsPage({ searchParams }: { searchParams: Se
       <h1>{t(language, "directory")}</h1>
       <p className="account-intro">{t(language, "directoryIntro")}</p>
       <div className="health-directory-notice"><ShieldCheck size={20}/><p>{t(language, "directoryNotice")}</p></div>
+      <NearbyHospitals language={language} />
       <form method="get" className="health-directory-filters" aria-label={t(language, "search")}>
         <label>{t(language, "city")}<input name="city" defaultValue={city} maxLength={80}/></label>
         <label>{t(language, "state")}<input name="state" defaultValue={state} maxLength={80}/></label>
