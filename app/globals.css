@@ -1165,3 +1165,5 @@ html[data-theme="dark"] .maternity-no{background:#4a2524;color:#ffd0ca}
 html[data-theme="dark"][data-contrast="high"] .nearby-hospitals,html[data-theme="dark"][data-contrast="high"] .nearby-hospital-card{background:#000;border-color:#fff}
 html[data-theme="dark"][data-contrast="high"] .nearby-hospitals h2,html[data-theme="dark"][data-contrast="high"] .nearby-hospitals h3,html[data-theme="dark"][data-contrast="high"] .nearby-hospitals p,html[data-theme="dark"][data-contrast="high"] .nearby-hospitals label{color:#fff}
 @media(max-width:760px){.nearby-hospitals{padding:15px;margin:20px 0}.nearby-hospitals-heading{display:grid}.nearby-location-button{justify-self:start}.nearby-results{grid-template-columns:1fr}.nearby-card-title{flex-direction:column}.nearby-test-badge{max-width:none}.nearby-card-meta{align-items:flex-start}}
+
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
