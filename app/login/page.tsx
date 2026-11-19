@@ -49,7 +49,7 @@ export default function LoginPage() {
           <form className="account-form" onSubmit={submit}>
             <label htmlFor="loginEmail">Email address</label>
             <input id="loginEmail" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" />
-            <label htmlFor="loginPassword">Password</label>
+            <div className="account-field-heading"><label htmlFor="loginPassword">Password</label><Link href="/forgot-password">Forgot password?</Link></div>
             <input id="loginPassword" type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="Your password" />
             <button className="account-submit" disabled={busy}>{busy ? "Signing in…" : "Sign in securely"} <ArrowRight size={17} /></button>
           </form>

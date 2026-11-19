@@ -769,3 +769,11 @@ html[data-theme="dark"] .patient-emergency-note{background:#3b2524;color:#ffe3df
 .patient-document-actions button:last-child{color:#a33d38}
 @media(max-width:800px){.patient-documents-layout{grid-template-columns:1fr}}
 @media(max-width:520px){.patient-document-item{flex-direction:column}.patient-document-actions{justify-content:flex-start}}
+
+/* Account recovery and personalised patient journey */
+.account-field-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.account-field-heading label{margin:0}
+.account-field-heading a{font-size:12px;font-weight:750;color:var(--pma-green);text-decoration:underline;text-underline-offset:3px}
+.account-field-heading a:focus-visible{outline:3px solid var(--pma-accent);outline-offset:3px;border-radius:3px}
+.patient-recent-panel .patient-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.patient-recent-panel .patient-section-heading h2{margin:0}

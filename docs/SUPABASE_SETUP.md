@@ -1,86 +1,77 @@
 # Supabase setup — Preggy Mom Aid
 
-This guide prepares the Supabase project without opening patient registration or collecting clinical information.
+This guide is for activating the real patient application. Do not enter patient information until the migrations, authentication settings, storage policies and deployment have all been verified.
 
 ## 1. Confirm the project
 
-In the Supabase Dashboard, open the project you created and note:
-- Project name and project reference
-- Selected region
-- Project URL
+Open the intended Supabase project in the Dashboard. Confirm its project reference, region and Project URL. The configured project reference is `segggjguspycgdwtgaraq`; confirm it matches before running SQL.
 
-Record the region for the privacy and cross-border data-transfer assessment. Do not send database passwords, secret API keys, service-role keys, access tokens or recovery codes in chat or commit them to Git.
+Record the region for the privacy and cross-border data-transfer assessment. Do not share database passwords, secret API keys, service-role keys, access tokens or recovery codes in chat or commit them to Git.
 
-## 2. Authentication settings — keep onboarding closed for now
+## 2. Configure email authentication
 
 In **Authentication → Providers → Email**:
-- Email/password can remain available as a provider for later testing.
-- Require email confirmation before any account is considered verified.
-- Keep public sign-ups disabled until the application-side release gates are complete.
+- Enable email/password sign-in.
+- Require email confirmation.
 - Keep anonymous sign-ins disabled.
-- Do not enable phone sign-in until an SMS provider is configured and delivery to Nigerian networks is tested.
+- Do not enable phone sign-in until an SMS provider and Nigerian delivery have been tested.
 
 In **Authentication → URL Configuration**:
 - Set the Site URL to `https://preggy-mom-aid.vercel.app`.
-- Add only callback URLs confirmed by the application code. Do not guess paths or use broad wildcard redirect URLs.
+- Add the exact callback URL used by the current application (the auth callback route is `/auth/callback`) to the allowed redirect URLs.
+- Do not use broad wildcard redirect URLs.
 
-Do not create real patient or clinician accounts during this foundation phase.
+Email confirmation must be tested end-to-end after the production deployment is available. A user must not be treated as signed in until Supabase confirms the account.
 
-## 3. Obtain the browser-safe API values
+## 3. Configure application environment variables
 
-In **Project Settings → API Keys** (and the project's API settings):
-- Copy the Project URL.
-- Copy the publishable key (normally starts with `sb_publishable_`).
+In **Project Settings → API Keys**, obtain:
+- Project URL → `NEXT_PUBLIC_SUPABASE_URL`
+- Publishable key → `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
-These are the only Supabase values intended for the current browser client configuration:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+Add these values in Vercel → Project → Settings → Environment Variables for the intended environments, then redeploy when deployment quota is available. These are browser-safe values; never expose a secret key, service-role key, database password or access token in a `NEXT_PUBLIC_*` variable or GitHub.
 
-Never put a secret key, legacy service-role key, database password or access token in a `NEXT_PUBLIC_*` variable. The publishable key is not a substitute for database security: RLS must enforce access.
+The repository's `.env.example` contains placeholders only. Do not commit live credentials.
 
-The repository's `.env.example` contains placeholders only. Do not replace those placeholders with live credentials in GitHub.
+## 4. Apply database migrations
 
-## 4. Current database migrations
+Use **Supabase Dashboard → SQL Editor**. Open each migration file from the merged `master` branch, paste its complete contents into a new SQL query, and run them in timestamp order. Run each file once, in order; do not skip earlier foundation migrations and do not manually invent tables or policies.
 
-The repository currently contains these migrations in timestamp order:
+The patient feature migrations added in the current implementation sequence are:
 
-1. `supabase/migrations/202611170001_identity_foundation.sql`
-   - Creates a minimal `public.profiles` table linked to `auth.users`.
-   - Enables RLS.
-   - Allows a signed-in user to read only their own profile and update only their own display name.
-   - Creates a profile row when an Auth user is created.
-   - Does not define a user-editable role or professional privileges.
+1. `supabase/migrations/20261119000100_user_accounts_and_private_health_logs.sql`
+   - Patient and professional account roles, profile foundation, private blood-pressure and symptom records, product feedback, and pending professional application records.
+2. `supabase/migrations/20261119000200_patient_profiles.sql`
+   - Patient-owned personal and pregnancy/postpartum profile.
+3. `supabase/migrations/20261119000300_patient_appointments.sql`
+   - Patient-owned personal appointment calendar.
+4. `supabase/migrations/20261119000400_patient_health_documents.sql`
+   - Private health-document metadata and private Storage bucket with per-user folder policies.
+5. `supabase/migrations/20261119000500_patient_health_log_updates.sql`
+   - Grants authenticated patients the database permission needed to edit their own blood-pressure and symptom entries; RLS continues to constrain ownership.
+6. `supabase/migrations/20261119000600_patient_only_health_log_policies.sql`
+   - Restricts blood-pressure and symptom log policies to patient accounts as well as row ownership.
 
-2. `supabase/migrations/202611180001_patient_tester_feedback.sql`
-   - Creates a non-clinical tester-feedback table and a separately granted reviewer list.
-   - Testers can submit and read only their own feedback.
-   - Reviewer access requires an explicit database-owner grant.
-   - It does not create patient records, clinical data or clinician access.
+Also apply any earlier identity and feedback foundation migrations already present in `supabase/migrations` before these files. Check the directory and use the complete timestamp order. If a migration has already been applied, do not rerun it manually without first checking the schema and migration history.
 
-Review the SQL files from the merged `master` branch before applying them. In **SQL Editor → New query**, paste and run each complete migration once, in the order above. Then confirm both tables exist and RLS is enabled in **Table Editor**.
+After applying, confirm in **Table Editor** that the expected tables exist and RLS is enabled. In **Storage**, confirm `patient-health-records` exists and is private. Do not make this bucket public.
 
-Do not manually create extra tables or policies in the Dashboard. Future schema changes should be committed as migrations and reviewed before application.
+## 5. Validate before inviting patients
 
-## 5. Do not connect production credentials yet
+Before real patient onboarding:
+- Confirm the deployed app uses the correct Supabase project and browser-safe environment variables.
+- Test signup, email confirmation, login, logout, password recovery and session expiry using designated internal accounts.
+- Test two separate patient accounts and prove neither can read, edit, delete or download the other's profile, logs, appointments or documents.
+- Test anonymous access is denied for all private records and Storage objects.
+- Verify document upload, signed access, deletion and failure cleanup.
+- Verify patient data export and deletion workflows before promising either capability.
+- Complete the Nigeria Data Protection Act / NDPC review, privacy notices, consent, retention, cross-border transfer assessment, incident response and backup/restore checks.
+- Obtain qualified Nigerian maternal-health clinical review of public health education and emergency guidance.
 
-Do not add the project URL or publishable key to Vercel until the app-side authentication gates and callback flow have been checked. Once approved, add the two values above in Vercel → Project → Settings → Environment Variables for the intended environments, then redeploy.
+Do not enable clinician access to patient records. That requires verified professional identity, explicit patient consent, revocation, scope enforcement and audit logging, all tested independently.
 
-Do not enable:
-- patient self-registration or collection of pregnancy/health details;
-- professional self-registration or self-assigned roles;
-- clinician access to patient data;
-- blood-pressure, symptom, appointment or care-note tables;
-- public storage for identity or professional credential evidence.
+## 6. Deployment status
 
-## 6. Requirements before real-user onboarding
+The GitHub repository is the source of truth. Vercel deployment has previously been blocked by the project's build-usage quota. Development and CI can continue while that is resolved; do not split the production project across accounts simply to bypass the quota. After a successful production deployment, run authenticated smoke tests before opening public registration.
 
-Before patient or professional onboarding is enabled, the project needs:
-- Nigeria Data Protection Act / NDPC review, a Data Protection Impact Assessment, privacy notices and consent workflows;
-- review of Supabase region, processor terms, international transfers, retention, backups and deletion;
-- tested email delivery, secure recovery, abuse controls and MFA for professional/internal accounts;
-- a restricted internal professional-verification workflow using the appropriate Nigerian regulator as the primary source;
-- RLS tests covering anonymous visitors, two separate patients, pending professionals, verified but unassigned professionals, authorised professionals and revoked relationships;
-- private evidence storage, audit logging, backup/restore tests and an incident-response process;
-- clinical approval of maternal-health content and escalation guidance by qualified Nigerian maternal-health clinicians.
-
-**Current state:** creating the Supabase project does not connect it to the application. No live connection has been verified here. Do not enter patient or clinician data during this phase.
+**Important:** Creating the Supabase project alone does not activate the application database. No live database connection or successful production deployment is claimed until it has been tested.

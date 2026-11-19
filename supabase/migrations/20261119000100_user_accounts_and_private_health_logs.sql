@@ -168,7 +168,7 @@ create index if not exists blood_pressure_readings_user_measured_idx
   on public.blood_pressure_readings(user_id, measured_at desc);
 alter table public.blood_pressure_readings enable row level security;
 revoke all on public.blood_pressure_readings from anon, authenticated;
-grant select, insert, delete on public.blood_pressure_readings to authenticated;
+grant select, insert, update, delete on public.blood_pressure_readings to authenticated;
 drop policy if exists "Users manage their own blood pressure readings" on public.blood_pressure_readings;
 create policy "Users manage their own blood pressure readings"
   on public.blood_pressure_readings for all to authenticated
@@ -187,7 +187,7 @@ create index if not exists symptom_reports_user_occurred_idx
   on public.symptom_reports(user_id, occurred_at desc);
 alter table public.symptom_reports enable row level security;
 revoke all on public.symptom_reports from anon, authenticated;
-grant select, insert, delete on public.symptom_reports to authenticated;
+grant select, insert, update, delete on public.symptom_reports to authenticated;
 drop policy if exists "Users manage their own symptom reports" on public.symptom_reports;
 create policy "Users manage their own symptom reports"
   on public.symptom_reports for all to authenticated

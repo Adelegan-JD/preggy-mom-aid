@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 const hasConfiguredSupabase = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 // A configured /my-care route requires an authenticated test user. Keep this suite
 // focused on its safe public fallback unless CI explicitly provides auth fixtures.
-const routes = ["/", "/learn", "/login", ...(hasConfiguredSupabase ? [] : ["/my-care"])] as const;
+const routes = ["/", "/learn", "/login", "/forgot-password", "/reset-password", ...(hasConfiguredSupabase ? [] : ["/my-care"])] as const;
 const themes = ["light", "dark"] as const;
 
 for (const theme of themes) {
