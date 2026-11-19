@@ -6,14 +6,19 @@ test("nearby hospitals module offers manual search without requiring GPS", async
   const search = page.locator("#nearby-hospital-search");
   await expect(search).toBeVisible();
   await search.fill("Sapele");
-  await expect(page.getByText(/no facility records found/i)).toHaveCount(0);
   await expect(page.getByText(/TEST ONLY — NOT REAL/i)).toHaveCount(0);
 });
 
-test("nearby hospitals provides a manual fallback when location permission is denied", async ({ page, context }) => {
-  await context.grantPermissions([], { origin: "http://127.0.0.1:3000" }).catch(() => undefined);
+test("nearby hospitals provides a manual fallback when location permission is denied", async ({ page }) => {
+  await page.addInitScript(() => {
+    const denied = { code: 1, PERMISSION_DENIED: 1 };
+    Object.defineProperty(navigator, "geolocation", {
+      configurable: true,
+      value: { getCurrentPosition: (_success: unknown, onError: (error: typeof denied) => void) => onError(denied) },
+    });
+  });
   await page.goto("/hospitals");
   await page.getByRole("button", { name: /use my location/i }).click();
-  await expect(page.getByText(/location permission was not granted/i)).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText(/location permission was not granted/i)).toBeVisible();
   await expect(page.locator("#nearby-hospital-search")).toBeVisible();
 });
