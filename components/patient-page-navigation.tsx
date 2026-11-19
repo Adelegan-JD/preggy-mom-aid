@@ -1,5 +1,3 @@
-"use server";
-
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { Activity, BookOpen, CalendarHeart, ClipboardList, FileHeart, HeartPulse, Home, UserRound } from "lucide-react";
