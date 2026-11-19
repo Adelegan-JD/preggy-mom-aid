@@ -54,6 +54,22 @@ class Grid3ConverterTests(unittest.TestCase):
             self.assertEqual(rows[1]["facility_type"], "maternity_centre")
             self.assertEqual(rows[1]["functionality_status"], "not_reported")
 
+    def test_uses_first_line_when_source_name_contains_a_note(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "sample.xlsx"
+            output = root / "out.csv"
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet.append(["unique_id", "facility_name", "state_standard", "lga_standard", "latitude", "longitude", "functional"])
+            sheet.append(["GRID3_003", "Z&L Maternity Home\\nNote: duplicate record", "Kaduna", "Kachia", None, None, "Unknown"])
+            workbook.save(source)
+            convert(source, output)
+            with output.open(encoding="utf-8-sig", newline="") as handle:
+                row = next(csv.DictReader(handle))
+            self.assertEqual(row["name"], "Z&L Maternity Home")
+            self.assertIn("Note: duplicate record", row["source_attributes"])
+
 
 if __name__ == "__main__":
     unittest.main()
