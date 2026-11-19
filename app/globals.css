@@ -1171,3 +1171,29 @@ html[data-theme="dark"][data-contrast="high"] .nearby-hospitals h2,html[data-the
 .nearby-unverified{margin:9px 0 0;padding:7px 9px;border-radius:8px;background:#fff0d8;color:#80500c;font-size:10px;line-height:1.5;font-weight:750}
 html[data-theme="dark"] .nearby-unverified{background:#49371e;color:#ffe0a8}
 html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000;color:#fff;border:1px solid #fff}
+
+
+/* Social channels and finishing touches */
+.pma-social-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pma-social-label{font-size:10px;font-weight:700;color:#64736c}
+.pma-social-links a{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:8px 11px;border:1px solid #e6ece8;border-radius:999px;background:#fff;color:#365b55;text-decoration:none;font-size:11px;font-weight:700;transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.pma-social-links a:hover{background:#eff7f3;border-color:#c9ddd3;transform:translateY(-1px)}
+.pma-social-links a:focus-visible{outline:3px solid #f4a7b5;outline-offset:3px}
+.pma-social-links svg{width:16px;height:16px;flex:none}
+.pma-social-links.is-compact{gap:7px}
+.pma-social-links.is-compact a{min-height:34px;padding:7px 9px}
+.pma-social-links.is-compact .pma-social-name{display:inline}
+.pma-nav-social{margin-left:auto;display:flex;align-items:center}
+.patient-subpage-header .patient-nav-social{margin-left:auto;display:flex;align-items:center}
+.public-footer{flex-wrap:wrap;row-gap:12px}
+.public-footer .pma-social-links{margin-left:auto}
+@media(max-width:760px){
+  .public-footer{justify-content:center;text-align:center}
+  .public-footer .pma-social-links{margin:0 auto}
+  .public-footer>span:last-child{margin-left:0}
+  .patient-subpage-header .patient-nav-social{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .pma-social-links a{transition:none}
+  .pma-social-links a:hover{transform:none}
+}
