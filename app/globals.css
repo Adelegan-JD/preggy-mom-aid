@@ -1119,3 +1119,49 @@ html[data-theme="dark"] .health-emergency-hero{background:#251b1a;border-color:#
 html[data-theme="dark"] .health-emergency-hero h1,html[data-theme="dark"] .health-emergency-hero p,html[data-theme="dark"] .health-emergency-hero>small{color:#fff0ec}
 html[data-theme="dark"][data-contrast="high"] .health-services-page{background:#000!important;color:#fff!important}
 html[data-theme="dark"][data-contrast="high"] .health-services-page h1,html[data-theme="dark"][data-contrast="high"] .health-services-page h2,html[data-theme="dark"][data-contrast="high"] .health-services-page p,html[data-theme="dark"][data-contrast="high"] .health-services-page label{color:#fff!important}
+
+
+/* Self-contained nearby hospital finder — no map SDK or routing API */
+.nearby-hospitals{margin:26px 0;padding:22px;border:1px solid var(--pma-border);border-radius:20px;background:var(--pma-surface);box-shadow:0 8px 26px #203b3208}
+.nearby-hospitals-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.nearby-hospitals-heading h2{font-size:clamp(21px,3vw,27px);margin:5px 0}
+.nearby-hospitals-heading p{margin:0;color:var(--pma-muted);font-size:12px;line-height:1.6}
+.nearby-location-button,.nearby-directions{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 14px;border:0;border-radius:11px;background:var(--pma-green);color:#fff;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap}
+.nearby-location-button:disabled{opacity:.65;cursor:wait}
+.nearby-search-row{display:flex;align-items:center;gap:10px;margin:18px 0 12px;padding:0 12px;border:1px solid var(--pma-border);border-radius:12px;background:var(--pma-page)}
+.nearby-search-row label{display:flex;color:var(--pma-muted)}
+.nearby-search-row input{width:100%;min-height:46px;border:0;outline:none;background:transparent;color:var(--pma-ink);font:inherit;font-size:13px}
+.nearby-status{display:flex;align-items:flex-start;gap:8px;color:var(--pma-muted);font-size:11px;line-height:1.6;margin:10px 0}
+.nearby-status svg{flex:0 0 auto}
+.nearby-fixture-toggle{display:flex;align-items:flex-start;gap:8px;margin:12px 0;padding:10px 12px;border:1px dashed #d59a56;border-radius:10px;color:var(--pma-ink);font-size:11px;line-height:1.5}
+.nearby-fixture-toggle input{margin-top:2px}
+.nearby-empty{display:grid;justify-items:center;gap:9px;padding:24px 16px;text-align:center;border:1px dashed var(--pma-border);border-radius:14px;color:var(--pma-muted)}
+.nearby-empty svg{color:var(--pma-green)}
+.nearby-empty b{color:var(--pma-ink);font-size:14px}
+.nearby-empty p{max-width:540px;margin:0;font-size:11px;line-height:1.6}
+.nearby-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.nearby-hospital-card{min-width:0;padding:16px;border:1px solid var(--pma-border);border-radius:14px;background:var(--pma-page)}
+.nearby-card-title{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+.nearby-card-title h3{margin:0 0 7px;color:var(--pma-ink);font-size:15px;line-height:1.4}
+.nearby-card-title p{display:flex;align-items:center;gap:5px;margin:0;color:var(--pma-muted);font-size:11px}
+.nearby-card-title p svg{flex:0 0 auto}
+.nearby-test-badge{flex:0 0 auto;max-width:115px;padding:5px 7px;border-radius:7px;background:#fff0d8;color:#784700;font-size:9px;font-weight:900;text-align:center}
+.nearby-card-meta{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:13px 0}
+.nearby-card-meta>span:first-child{color:var(--pma-muted);font-size:10px}
+.maternity-yes,.maternity-no,.maternity-unknown{padding:5px 8px;border-radius:8px;font-size:10px;font-weight:800}
+.maternity-yes{background:#e3f3e8;color:#17643d}
+.maternity-no{background:#fce8e5;color:#9b322b}
+.maternity-unknown{background:#fff0d8;color:#80500c}
+.nearby-distance{margin:8px 0;color:var(--pma-muted);font-size:10px;line-height:1.6}
+.nearby-distance b{color:var(--pma-ink)}
+.nearby-phone{display:inline-flex;align-items:center;gap:6px;margin:5px 10px 0 0;color:var(--pma-green);font-size:11px;font-weight:750}
+.nearby-directions{min-height:36px;margin-top:8px;font-size:10px}
+.nearby-disclaimer{margin:9px 0 0;color:#80500c;font-size:10px;line-height:1.55}
+.nearby-footnote{margin:14px 0 0;color:var(--pma-muted);font-size:10px;line-height:1.6}
+html[data-theme="dark"] .nearby-hospital-card{background:#17231f}
+html[data-theme="dark"] .nearby-test-badge,html[data-theme="dark"] .maternity-unknown{background:#49371e;color:#ffe0a8}
+html[data-theme="dark"] .maternity-yes{background:#183c2a;color:#b9efca}
+html[data-theme="dark"] .maternity-no{background:#4a2524;color:#ffd0ca}
+html[data-theme="dark"][data-contrast="high"] .nearby-hospitals,html[data-theme="dark"][data-contrast="high"] .nearby-hospital-card{background:#000;border-color:#fff}
+html[data-theme="dark"][data-contrast="high"] .nearby-hospitals h2,html[data-theme="dark"][data-contrast="high"] .nearby-hospitals h3,html[data-theme="dark"][data-contrast="high"] .nearby-hospitals p,html[data-theme="dark"][data-contrast="high"] .nearby-hospitals label{color:#fff}
+@media(max-width:760px){.nearby-hospitals{padding:15px;margin:20px 0}.nearby-hospitals-heading{display:grid}.nearby-location-button{justify-self:start}.nearby-results{grid-template-columns:1fr}.nearby-card-title{flex-direction:column}.nearby-test-badge{max-width:none}.nearby-card-meta{align-items:flex-start}}
