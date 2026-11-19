@@ -30,7 +30,7 @@ function parseCsv(text) {
   }
   if (cell || row.length) { row.push(cell.trim()); rows.push(row); }
   if (!rows.length) return [];
-  const headers = rows.shift().map(value => value.replace(/^\uFEFF/, "").trim().toLowerCase());
+  const headers = rows.shift().map(value => value.replace(/^\uFEFF/, "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, ""));
   return rows.map(values => Object.fromEntries(headers.map((header, index) => [header, values[index] ?? ""])));
 }
 
