@@ -28,8 +28,7 @@ begin
 end $$;
 
 create unique index if not exists health_facilities_source_identity_uidx
-  on public.health_facilities (source_dataset, source_facility_id)
-  where source_dataset is not null and source_facility_id is not null;
+  on public.health_facilities (source_dataset, source_facility_id);
 
 create index if not exists health_facilities_coordinates_idx
   on public.health_facilities (latitude, longitude)
