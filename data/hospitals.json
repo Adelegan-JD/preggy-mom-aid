@@ -9,7 +9,8 @@
     "has_maternity": null,
     "phone": null,
     "is_placeholder": true,
-    "source": "Synthetic test fixture; not a real facility or location"
+    "source": "Synthetic test fixture; not a real facility or location",
+    "verification_status": "unverified"
   },
   {
     "name": "TEST ONLY — Sapele Community Health Centre (synthetic record)",
@@ -21,7 +22,8 @@
     "has_maternity": null,
     "phone": null,
     "is_placeholder": true,
-    "source": "Synthetic test fixture; not a real facility or location"
+    "source": "Synthetic test fixture; not a real facility or location",
+    "verification_status": "unverified"
   },
   {
     "name": "TEST ONLY — Sapele Maternal Care Clinic (synthetic record)",
@@ -33,7 +35,8 @@
     "has_maternity": null,
     "phone": null,
     "is_placeholder": true,
-    "source": "Synthetic test fixture; not a real facility or location"
+    "source": "Synthetic test fixture; not a real facility or location",
+    "verification_status": "unverified"
   },
   {
     "name": "TEST ONLY — Amukpe Primary Health Centre (synthetic record)",
@@ -45,7 +48,8 @@
     "has_maternity": null,
     "phone": null,
     "is_placeholder": true,
-    "source": "Synthetic test fixture; not a real facility or location"
+    "source": "Synthetic test fixture; not a real facility or location",
+    "verification_status": "unverified"
   },
   {
     "name": "TEST ONLY — Elume Health Centre (synthetic record)",
@@ -57,6 +61,7 @@
     "has_maternity": null,
     "phone": null,
     "is_placeholder": true,
-    "source": "Synthetic test fixture; not a real facility or location"
+    "source": "Synthetic test fixture; not a real facility or location",
+    "verification_status": "unverified"
   }
 ]
