@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
+import { languageOptions } from "@/lib/i18n/translations";
 
 export default function SpeakButton({ text, className = "" }: { text: string; className?: string }) {
   const { language, t } = useLanguage();
