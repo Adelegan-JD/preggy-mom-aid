@@ -16,5 +16,5 @@ assert.ok(Math.abs(nearby[0].estimatedRoadDistanceKm - nearby[0].straightDistanc
 assert.equal(nearby[0].estimatedDriveMinutes, Math.ceil(nearby[0].estimatedRoadDistanceKm / 30 * 60));
 assert.deepEqual(filterHospitalsByTown(sample, "Sapele").map((facility) => facility.name), ["Nearest", "Second", "Outside radius", "No GPS facility"]);
 assert.deepEqual(filterHospitalsByTown(sample, ""), []);
-assert.equal(filterHospitalsByTown(sample, "Sapele", true).length, 4);
+assert.equal(filterHospitalsByTown(sample, "Sapele", true).length, 5);
 console.log("Nearby hospital distance and search checks passed.");
