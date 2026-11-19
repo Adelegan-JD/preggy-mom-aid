@@ -62,7 +62,7 @@ class Grid3ConverterTests(unittest.TestCase):
             workbook = Workbook()
             sheet = workbook.active
             sheet.append(["unique_id", "facility_name", "state_standard", "lga_standard", "latitude", "longitude", "functional"])
-            sheet.append(["GRID3_003", "Z&L Maternity Home\\nNote: duplicate record", "Kaduna", "Kachia", None, None, "Unknown"])
+            sheet.append(["GRID3_003", "Z&L Maternity Home\nNote: duplicate record", "Kaduna", "Kachia", None, None, "Unknown"])
             workbook.save(source)
             convert(source, output)
             with output.open(encoding="utf-8-sig", newline="") as handle:
