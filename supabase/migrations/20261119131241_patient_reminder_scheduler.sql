@@ -5,7 +5,7 @@ grant all privileges on all tables in schema cron to postgres;
 create extension if not exists pg_net;
 
 -- Store the non-sensitive project URL in Vault for scheduled invocation.
-select vault.create_secret('https://segggjguspycgdwtgaraq.supabase.co', 'project_url')
+select vault.create_secret('https://seggjguspycgdwtgaraq.supabase.co', 'project_url')
 where not exists (select 1 from vault.secrets where name = 'project_url');
 
 -- Schedule opt-in reminder processing every 15 minutes. The request is sent
