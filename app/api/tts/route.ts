@@ -21,18 +21,38 @@ export async function POST(request: NextRequest) {
 
   const language = normalizeLanguage(payload.language);
   try {
-    const upstream = await fetch("https://api.yarngpt.ai/api/v1/tts", {
+    // YarnGPT's current TTS API is asynchronous for /tts and uses a short-lived
+    // ticket for the low-latency /tts/prepare + /tts/stream flow. The patient's
+    // translated text is already in the selected language, so do not ask the
+    // provider to translate it a second time.
+    const prepared = await fetch("https://api.yarngpt.ai/api/v1/tts/prepare", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ text: payload.text.trim(), target_language: languageCodes[language], output_format: "mp3" }),
+      body: JSON.stringify({ text: payload.text.trim(), output_format: "mp3" }),
       cache: "no-store"
     });
-    if (!upstream.ok) {
-      const detail = await upstream.text();
-      console.error("YarnGPT TTS request failed", upstream.status, detail.slice(0, 500));
-      return NextResponse.json({ error: "Speech generation failed." }, { status: upstream.status === 429 ? 429 : 502 });
+    if (!prepared.ok) {
+      const detail = await prepared.text();
+      console.error("YarnGPT TTS preparation failed", prepared.status, detail.slice(0, 500));
+      return NextResponse.json({ error: "Speech generation failed." }, { status: prepared.status === 429 ? 429 : 502 });
     }
-    const audio = await upstream.arrayBuffer();
+    const ticket = await prepared.json() as { stream_url?: unknown };
+    if (typeof ticket.stream_url !== "string" || !ticket.stream_url.startsWith("/api/v1/tts/stream/")) {
+      console.error("YarnGPT TTS returned an invalid stream ticket.");
+      return NextResponse.json({ error: "Speech service returned an invalid response." }, { status: 502 });
+    }
+    const streamed = await fetch(new URL(ticket.stream_url, "https://api.yarngpt.ai"), {
+      method: "GET",
+      cache: "no-store",
+      redirect: "follow"
+    });
+    if (!streamed.ok) {
+      const detail = await streamed.text();
+      console.error("YarnGPT TTS stream failed", streamed.status, detail.slice(0, 500));
+      return NextResponse.json({ error: "Speech generation failed." }, { status: 502 });
+    }
+    const audio = await streamed.arrayBuffer();
+    if (!audio.byteLength) return NextResponse.json({ error: "Speech service returned empty audio." }, { status: 502 });
     return new NextResponse(audio, { status: 200, headers: { "Content-Type": "audio/mpeg", "Cache-Control": "private, no-store" } });
   } catch (error) {
     console.error("YarnGPT TTS unavailable", error);
