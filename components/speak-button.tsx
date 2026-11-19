@@ -25,16 +25,31 @@ export default function SpeakButton({ text, className = "" }: { text: string; cl
         body: JSON.stringify({ text, language })
       });
       if (!response.ok) {
-        if (response.status === 503) throw new Error(t("speechNotConfigured"));
+        if (response.status === 503) {
+          const option = languageOptions.find(item => item.code === language);
+          const voices = window.speechSynthesis?.getVoices() ?? [];
+          const prefix = language === "pcm" ? "pcm" : language;
+          const voice = voices.find(item => item.lang.toLowerCase().startsWith(prefix));
+          if (option && voice && window.speechSynthesis) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = option.speechCode;
+            utterance.voice = voice;
+            utterance.onend = () => setBusy(false);
+            utterance.onerror = () => { setBusy(false); setMessage(t("speechUnavailable")); };
+            window.speechSynthesis.speak(utterance);
+            return;
+          }
+          throw new Error(t("speechNotConfigured"));
+        }
         throw new Error(t("speechUnavailable"));
       }
       const audio = new Audio(URL.createObjectURL(await response.blob()));
       audio.onended = () => { URL.revokeObjectURL(audio.src); setBusy(false); };
       audio.onerror = () => { URL.revokeObjectURL(audio.src); setBusy(false); setMessage(t("speechUnavailable")); };
       await audio.play();
-    } catch {
+    } catch (error) {
       setBusy(false);
-      setMessage(t("speechNotConfigured"));
+      setMessage(error instanceof Error ? error.message : t("speechNotConfigured"));
     }
   }
 
