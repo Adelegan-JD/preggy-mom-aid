@@ -51,7 +51,7 @@ export function findNearbyHospitals(
     .sort((a, b) => a.straightDistanceKm - b.straightDistanceKm);
 }
 
-export function filterHospitalsByTown(facilities: NearbyHospital[], search: string): NearbyHospital[] {
+export function filterHospitalsByTown(facilities: NearbyHospital[], search: string, includePlaceholders = false): NearbyHospital[] {
   const term = search.trim().toLocaleLowerCase();
   if (!term) return facilities.filter((facility) => !facility.is_placeholder);
   return facilities.filter((facility) => !facility.is_placeholder
