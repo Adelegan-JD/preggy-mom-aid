@@ -10,7 +10,10 @@ import { Activity, CalendarHeart, ClipboardList, FileHeart, HeartPulse, MessageS
 export const dynamic = "force-dynamic";
 export const metadata = { title: "My health dashboard | Preggy Mom Aid" };
 
-export default async function MyCarePage() {\n  const cookieStore = await cookies();\n  const language = normalizeLanguage(cookieStore.get("pma-language")?.value);\n  const t = (key: TranslationKey) => translate(language, key);
+export default async function MyCarePage() {
+  const cookieStore = await cookies();
+  const language = normalizeLanguage(cookieStore.get("pma-language")?.value);
+  const t = (key: TranslationKey) => translate(language, key);
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
     return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><div className="account-kicker">{t("personalSpace") }</div><h1>{t("dashboardTitle") }</h1><p className="account-intro">Your secure health space is temporarily unavailable because account services are not configured for this deployment.</p><div className="patient-safety-note"><ShieldCheck size={20}/><p>Your health information has not been loaded. Do not send medical details through feedback or email.</p></div><Link className="patient-back-link" href="/login">Return to sign in</Link></section></main>;
   }
@@ -57,8 +60,8 @@ export default async function MyCarePage() {\n  const cookieStore = await cookie
     <section className="patient-dashboard-content">
       <div className="patient-welcome patient-welcome-hero"><div className="patient-welcome-copy"><div className="patient-hero-eyebrow"><Sparkles size={14}/> {t("personalSpace") }</div><h1>{t("welcome")}, {firstName} <span aria-hidden="true">♥</span></h1><p>{t("dashboardIntro") }</p><div className="patient-hero-actions"><Link href="/my-care/blood-pressure"><Plus size={16}/> {t("logBloodPressure") }</Link><Link href="/my-care/appointments"><CalendarHeart size={16}/> {t("addAppointment") }</Link></div></div><div className="patient-hero-art" aria-hidden="true"><div className="patient-hero-orbit orbit-one"/><div className="patient-hero-orbit orbit-two"/><span className="patient-hero-heart"><HeartPulse size={52}/></span><span className="patient-hero-sparkle"><Sparkles size={20}/></span></div></div>
       <div className="patient-safety-note"><ShieldCheck size={20}/><p><b>{t("privateHealth") }</b> {t("privateHealthText") }</p><SpeakButton text={t("privateHealthText") }/></div>
-      <section className="patient-recent-panel"><div className="account-kicker">{t("yourJourney") }</div><h2>{patientJourney?.pregnancy_status === "postpartum" ? "{t("postpartumJourney") }" : patientJourney?.pregnancy_status === "not_currently_pregnant" ? "{t("healthSpace") }" : "{t("pregnancyJourney") }"}</h2>
-        {patientJourney?.pregnancy_status === "pregnant" && estimatedWeeks !== null ? <p>Your estimated pregnancy stage is around <strong>{estimatedWeeks} {t("weeks") }</strong>{daysToDue !== null && daysToDue >= 0 ? `, with about ${daysToDue} {t("daysUntilDue") }` : ""}. {t("calendarEstimate") }</p>
+      <section className="patient-recent-panel"><div className="account-kicker">{t("yourJourney") }</div><h2>{patientJourney?.pregnancy_status === "postpartum" ? t("postpartumJourney") : patientJourney?.pregnancy_status === "not_currently_pregnant" ? t("healthSpace") : t("pregnancyJourney")}</h2>
+        {patientJourney?.pregnancy_status === "pregnant" && estimatedWeeks !== null ? <p>Your estimated pregnancy stage is around <strong>{estimatedWeeks} {t("weeks") }</strong>{daysToDue !== null && daysToDue >= 0 ? `, with about ${daysToDue} ${t("daysUntilDue")}` : ""}. {t("calendarEstimate") }</p>
         : patientJourney?.pregnancy_status === "postpartum" && daysPostpartum !== null ? <p>You are around <strong>{daysPostpartum} days</strong> after the birth date you entered. Continue your postnatal care with your maternity team.</p>
         : patientJourney?.pregnancy_status === "not_currently_pregnant" ? <p>{t("healthSpace") }</p>
         : <p>Add your pregnancy status and estimated due date or birth date to see a personal journey summary here.</p>}
