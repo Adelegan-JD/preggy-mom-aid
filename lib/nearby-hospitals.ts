@@ -27,6 +27,7 @@ export function findNearbyHospitals(
 }
 export function filterHospitalsByTown(facilities:NearbyHospital[],search:string,includePlaceholders=false):NearbyHospital[] {
   const term=search.trim().toLocaleLowerCase();
+  if (!term) return [];
   return facilities.filter(f=>(includePlaceholders||!f.is_placeholder)
-    && (!term||`${f.lga} ${f.state} ${f.name}`.toLocaleLowerCase().includes(term)));
+    && `${f.lga} ${f.state} ${f.name}`.toLocaleLowerCase().includes(term));
 }
