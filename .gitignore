@@ -4,3 +4,7 @@ out
 .env*
 !.env.example
 .DS_Store
+
+# Local source registry exports (never commit the full facility dataset)
+data/import/
+grid3-health-facilities.csv
