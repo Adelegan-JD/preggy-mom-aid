@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import PatientPageNavigation from "@/components/patient-page-navigation";
+import SpeakButton from "@/components/speak-button";
 import { normalizeLanguage } from "@/lib/i18n/translations";
 import { healthServicesText as t } from "@/lib/i18n/health-services";
 import { AlertCircle, PhoneCall, MapPin, ShieldAlert, ExternalLink } from "lucide-react";
@@ -21,6 +22,7 @@ export default async function EmergencyPage() {
         <p>{t(language, "emergencyLead")}</p>
         <a className="health-call-button" href="tel:112"><PhoneCall size={22}/>{t(language, "call112")}</a>
         <small>{t(language, "nationalLine")}</small>
+        <div className="health-emergency-speech"><SpeakButton text={[t(language, "emergencyLead"), t(language, "askMedical"), t(language, "giveLocation"), t(language, "doNotWait")].join(" ")} /></div>
       </div>
       <div className="health-emergency-steps">
         <article><span><PhoneCall size={18}/></span><p>{t(language, "askMedical")}</p></article>
