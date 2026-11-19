@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:a11y": "playwright test",
     "convert:hospitals": "node scripts/convert-nhfr-csv.mjs",
-    "test:hospitals:csv": "node scripts/test-nhfr-csv-converter.mjs"
+    "test:hospitals:csv": "node scripts/test-nhfr-csv-converter.mjs",
+    "test:nearby:distance": "node --experimental-strip-types scripts/test-nearby-distance.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
