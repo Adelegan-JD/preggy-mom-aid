@@ -7,7 +7,6 @@ export const languageOptions = [
 ] as const;
 
 export type AppLanguage = typeof languageOptions[number]["code"];
-export type TranslationKey = keyof typeof translations.en;
 
 const en = {
   language: "Language", chooseLanguage: "Choose language", overview: "Overview", bloodPressure: "Blood pressure",
@@ -39,6 +38,8 @@ const en = {
   speechNotConfigured: "Audio is not configured yet. Please try again later.", listenToText: "Listen to this information",
   yourHealth: "Your health", emergencyNotice: "If you feel unwell or have warning symptoms, seek urgent medical assessment. Do not wait for this app to respond.",
 } as const;
+
+export type TranslationKey = keyof typeof en;
 
 const yo: Record<keyof typeof en, string> = {
   language:"Èdè",chooseLanguage:"Yan èdè",overview:"Àkótán",bloodPressure:"Ìfúnpá ẹ̀jẹ̀",symptoms:"Àmì àìsàn àti àkọsílẹ̀",appointments:"Àwọn ìpàdé",healthRecords:"Àkọsílẹ̀ ìlera",learningCentre:"Ibi ẹ̀kọ́",
