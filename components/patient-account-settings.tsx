@@ -48,18 +48,19 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
       const supabase = createClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) throw new Error("Sign in again before exporting your information.");
-      const [profile, journey, bp, symptoms, appointments, documents, prefs] = await Promise.all([
+      const [profile, journey, bp, symptoms, appointments, documents, prefs, deletionRequests] = await Promise.all([
         supabase.from("profiles").select("full_name,account_type,created_at,updated_at").eq("id", user.id).maybeSingle(),
         supabase.from("patient_profiles").select("*").eq("user_id", user.id).maybeSingle(),
         supabase.from("blood_pressure_readings").select("*").eq("user_id", user.id).order("measured_at", { ascending: false }),
         supabase.from("symptom_reports").select("*").eq("user_id", user.id).order("occurred_at", { ascending: false }),
         supabase.from("patient_appointments").select("*").eq("user_id", user.id).order("scheduled_at", { ascending: true }),
         supabase.from("patient_health_documents").select("id,display_name,mime_type,file_size_bytes,document_category,notes,created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
-        supabase.from("patient_notification_preferences").select("appointment_email_reminders,product_email_updates,updated_at").eq("user_id", user.id).maybeSingle()
+        supabase.from("patient_notification_preferences").select("appointment_email_reminders,product_email_updates,updated_at").eq("user_id", user.id).maybeSingle(),
+        supabase.from("account_deletion_requests").select("status,requested_at").eq("user_id", user.id).order("requested_at", { ascending: false })
       ]);
-      const failed = [profile, journey, bp, symptoms, appointments, documents, prefs].find(result => result.error);
+      const failed = [profile, journey, bp, symptoms, appointments, documents, prefs, deletionRequests].find(result => result.error);
       if (failed?.error) throw failed.error;
-      const payload = { exported_at: new Date().toISOString(), account_email: user.email, profile: profile.data, patient_profile: journey.data, blood_pressure_readings: bp.data, symptom_reports: symptoms.data, appointments: appointments.data, health_document_metadata: documents.data, notification_preferences: prefs.data, note: "This export includes document metadata, not the private file contents. Download each document separately from Health records." };
+      const payload = { exported_at: new Date().toISOString(), account_email: user.email, profile: profile.data, patient_profile: journey.data, blood_pressure_readings: bp.data, symptom_reports: symptoms.data, appointments: appointments.data, health_document_metadata: documents.data, notification_preferences: prefs.data, account_deletion_requests: deletionRequests.data, note: "This export includes document metadata, not the private file contents. Download each document separately from Health records." };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a"); anchor.href = url; anchor.download = "preggy-mom-aid-personal-data.json"; anchor.click();
