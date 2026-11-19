@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Download, Mail, ShieldCheck, Trash2 } from "lucide-react";
@@ -8,6 +9,7 @@ import { Download, Mail, ShieldCheck, Trash2 } from "lucide-react";
 type Preferences = { appointment_email_reminders: boolean; product_email_updates: boolean };
 
 export default function PatientAccountSettings({ initialPreferences, initialDeletionRequested = false }: { initialPreferences: Preferences; initialDeletionRequested?: boolean }) {
+  const router = useRouter();
   const [preferences, setPreferences] = useState(initialPreferences);
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
@@ -24,7 +26,7 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
       const { error: saveError } = await supabase.from("patient_notification_preferences")
         .upsert({ user_id: user.id, ...preferences, updated_at: new Date().toISOString() });
       if (saveError) throw saveError;
-      setMessage("Your notification preferences have been saved. Email delivery is not active yet.");
+      setMessage("Your notification preferences have been saved.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not save preferences."); }
     finally { setBusy(false); }
   }
@@ -77,7 +79,15 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
       const { error: insertError } = await supabase.from("account_deletion_requests").insert({ user_id: user.id });
       if (insertError) throw insertError;
       setDeletionRequested(true);
-      setMessage("Your account deletion request has been submitted. Your account remains active until the request is reviewed and completed.");
+      setMessage("Your deletion request has been recorded. To permanently delete this account now, type DELETE in the confirmation prompt.");
+      const confirmation = window.prompt("Permanent account deletion cannot be undone. Type DELETE to remove your account and its stored health records.");
+      if (confirmation !== "DELETE") return;
+      const { error: deletionError } = await supabase.functions.invoke("process-account-deletion", { body: { confirmation: "DELETE" } });
+      if (deletionError) throw deletionError;
+      await supabase.auth.signOut();
+      setMessage("Your account and associated records have been deleted.");
+      router.replace("/?account_deleted=1");
+      router.refresh();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not submit the deletion request."); }
     finally { setBusy(false); }
   }
@@ -85,7 +95,7 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
   return <div className="patient-settings-layout">
     <form className="account-card patient-profile-form" onSubmit={savePreferences}>
       <div className="account-kicker">YOUR COMMUNICATION CHOICES</div><h2>Notification preferences</h2>
-      <p className="account-intro">Choose the emails you may want to receive. These preferences are saved privately to your account. Appointment reminder delivery is not active until the notification service is configured and tested.</p>
+      <p className="account-intro">Choose the emails you may want to receive. Appointment reminders are sent only when enabled. Reminder delivery requires the service to be configured by the site operator.</p>
       <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.appointment_email_reminders} onChange={event => setPreferences(current => ({ ...current, appointment_email_reminders: event.target.checked }))}/> Appointment reminder emails</label>
       <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.product_email_updates} onChange={event => setPreferences(current => ({ ...current, product_email_updates: event.target.checked }))}/> Product and service updates</label>
       <button className="account-submit" disabled={busy}>{busy ? "Saving…" : "Save preferences"}</button>
@@ -98,7 +108,7 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
     <section className="patient-settings-panel">
       <div className="account-kicker">YOUR INFORMATION</div><h2>Download or delete your data</h2><p className="account-intro">You can download a copy of your account information. Document file contents remain in Health records and must be downloaded there separately.</p>
       <button className="account-submit" type="button" onClick={exportData} disabled={busy}><Download size={16}/> Download my data</button>
-      <div className="patient-safety-note"><ShieldCheck size={18}/><p>Deletion requests are reviewed and completed through a secure process. Submitting a request does not immediately delete your account or records.</p></div>
+      <div className="patient-safety-note"><ShieldCheck size={18}/><p>A deletion request is recorded first. You must then type DELETE to confirm permanent removal of your account and associated stored health records.</p></div>
       <button className="patient-delete-request" type="button" onClick={requestDeletion} disabled={busy || deletionRequested}><Trash2 size={16}/> {deletionRequested ? "Deletion request submitted" : "Request account deletion"}</button>
     </section>
     {error && <p className="account-error" role="alert">{error}</p>}
