@@ -15,7 +15,7 @@ export default async function MyCarePage() {
   const language = normalizeLanguage(cookieStore.get("pma-language")?.value);
   const t = (key: TranslationKey) => translate(language, key);
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><div className="account-kicker">{t("personalSpace") }</div><h1>{t("dashboardTitle") }</h1><p className="account-intro">Your secure health space is temporarily unavailable because account services are not configured for this deployment.</p><div className="patient-safety-note"><ShieldCheck size={20}/><p>Your health information has not been loaded. Do not send medical details through feedback or email.</p></div><Link className="patient-back-link" href="/login">Return to sign in</Link></section></main>;
+    return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><div className="patient-mobile-language"><LanguageSwitcher /></div><div className="account-kicker">{t("personalSpace") }</div><h1>{t("dashboardTitle") }</h1><p className="account-intro">{t("unavailable")}</p><div className="patient-safety-note"><ShieldCheck size={20}/><p>Your health information has not been loaded. Do not send medical details through feedback or email.</p></div><Link className="patient-back-link" href="/login">Return to sign in</Link></section></main>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
