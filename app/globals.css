@@ -1167,3 +1167,7 @@ html[data-theme="dark"][data-contrast="high"] .nearby-hospitals h2,html[data-the
 @media(max-width:760px){.nearby-hospitals{padding:15px;margin:20px 0}.nearby-hospitals-heading{display:grid}.nearby-location-button{justify-self:start}.nearby-results{grid-template-columns:1fr}.nearby-card-title{flex-direction:column}.nearby-test-badge{max-width:none}.nearby-card-meta{align-items:flex-start}}
 
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+.nearby-unverified{margin:9px 0 0;padding:7px 9px;border-radius:8px;background:#fff0d8;color:#80500c;font-size:10px;line-height:1.5;font-weight:750}
+html[data-theme="dark"] .nearby-unverified{background:#49371e;color:#ffe0a8}
+html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000;color:#fff;border:1px solid #fff}
