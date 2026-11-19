@@ -31,6 +31,8 @@ create table if not exists public.account_deletion_requests (
 );
 create index if not exists account_deletion_requests_user_requested_idx
   on public.account_deletion_requests(user_id, requested_at desc);
+create unique index if not exists account_deletion_requests_one_open_per_user_idx
+  on public.account_deletion_requests(user_id) where status in ('requested','processing');
 alter table public.account_deletion_requests enable row level security;
 revoke all on public.account_deletion_requests from anon, authenticated;
 grant select, insert on public.account_deletion_requests to authenticated;
