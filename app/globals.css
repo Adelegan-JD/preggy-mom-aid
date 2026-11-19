@@ -814,3 +814,43 @@ html[data-contrast="high"] .patient-dashboard-header nav a{color:CanvasText!impo
 .patient-delete-request{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 14px;border:1px solid #a33d38;border-radius:9px;background:transparent;color:#8c302d;font-weight:750}
 html[data-theme="dark"] .patient-delete-request{color:#ffc4bd;border-color:#ffc4bd}
 @media(max-width:760px){.patient-settings-layout{grid-template-columns:1fr}.patient-dashboard-header nav{flex-wrap:wrap}}
+
+
+/* Final contrast fixes from full-route Playwright/axe validation */
+.account-brand small{color:#70504b}
+.feedback-count{color:#526056}
+
+/* High-contrast mode uses system foreground/background tokens consistently,
+   including emphasized headings, badges and interactive emergency actions. */
+html[data-contrast="high"] :where(.public-site,.learn-page){
+  color:CanvasText!important;
+  background:Canvas!important;
+}
+html[data-contrast="high"] :where(.public-site,.learn-page) :where(
+  header,main,section,article,footer,.public-hero,.trust-strip,.launch-status,
+  .learn-hero,.learn-section,.warning-panel,.learn-resource-card,.interactive-warning,
+  .interactive-stage,.directory-empty,.professional-card
+){
+  color:CanvasText!important;
+  background:Canvas!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+html[data-contrast="high"] :where(.public-site,.learn-page) :where(
+  h1,h2,h3,h4,h5,h6,p,small,a,span,label,li,em,strong,b,figcaption
+){
+  color:CanvasText!important;
+}
+html[data-contrast="high"] :where(.public-site,.learn-page) :where(
+  button,.header-cta,.primary-public-btn,.interactive-emergency
+){
+  color:CanvasText!important;
+  background:Canvas!important;
+  background-image:none!important;
+  border:2px solid CanvasText!important;
+  box-shadow:none!important;
+}
+html[data-contrast="high"] :where(.public-site,.learn-page) a{
+  text-decoration:underline!important;
+  text-underline-offset:3px;
+}
