@@ -7,7 +7,7 @@ import { normalizeLanguage, translate, TranslationKey } from "@/lib/i18n/transla
 import { healthServicesText as hs } from "@/lib/i18n/health-services";
 
 type PatientPageNavigationProps = {
-  active: "blood-pressure" | "symptoms" | "appointments" | "records" | "profile" | "settings" | "hospitals" | "emergency";
+  active: "blood-pressure" | "symptoms" | "appointments" | "records" | "profile" | "settings" | "hospitals" | "emergency" | "postpartum";
 };
 
 export default async function PatientPageNavigation({ active }: PatientPageNavigationProps) {
@@ -19,6 +19,7 @@ export default async function PatientPageNavigation({ active }: PatientPageNavig
     { href: "/my-care/blood-pressure", label: t("bloodPressure"), icon: Activity, key: "blood-pressure" },
     { href: "/my-care/symptoms", label: t("symptoms"), icon: ClipboardList, key: "symptoms" },
     { href: "/my-care/appointments", label: t("appointments"), icon: CalendarHeart, key: "appointments" },
+    { href: "/my-care/postpartum", label: t("postpartumJourney"), icon: HeartPulse, key: "postpartum" },
     { href: "/my-care/records", label: t("healthRecords"), icon: FileHeart, key: "records" },
     { href: "/learn", label: t("learningCentre"), icon: BookOpen, key: "learn" },
     { href: "/hospitals", label: hs(language, "directory"), icon: BookOpen, key: "hospitals" },
@@ -43,6 +44,7 @@ export default async function PatientPageNavigation({ active }: PatientPageNavig
       <Link href="/my-care/blood-pressure" aria-current={active === "blood-pressure" ? "page" : undefined}><Activity size={18}/><span>{t("bpLog")}</span></Link>
       <Link href="/my-care/appointments" aria-current={active === "appointments" ? "page" : undefined}><CalendarHeart size={18}/><span>{t("visits")}</span></Link>
       <Link href="/my-care/records" aria-current={active === "records" ? "page" : undefined}><FileHeart size={18}/><span>{t("records")}</span></Link>
+      <Link href="/my-care/postpartum" aria-current={active === "postpartum" ? "page" : undefined}><HeartPulse size={18}/><span>{t("postpartumJourney")}</span></Link>
       <Link href="/my-care/profile" aria-current={active === "profile" ? "page" : undefined}><UserRound size={18}/><span>{t("profile")}</span></Link>
     </nav>
   </>;
