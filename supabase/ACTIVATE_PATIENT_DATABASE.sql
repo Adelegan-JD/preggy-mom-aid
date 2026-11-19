@@ -82,7 +82,10 @@ begin
 
   return new;
 end;
-$$;
+$;
+
+-- Trigger functions must not be callable through the Data API.
+revoke all on function public.handle_new_user() from public, anon, authenticated;
 
 insert into public.profiles (id, full_name, account_type, professional_type, verification_status)
 select
