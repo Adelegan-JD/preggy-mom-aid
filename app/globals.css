@@ -1053,3 +1053,6 @@ html[data-theme="dark"][data-contrast="high"] .patient-dashboard .patient-back-l
 html[data-theme="dark"][data-contrast="high"] .patient-dashboard h1,
 html[data-theme="dark"][data-contrast="high"] .patient-dashboard .account-intro{color:#f4f7f4!important}
 html[data-theme="dark"][data-contrast="high"] .patient-dashboard .patient-back-link{text-decoration:underline}
+
+.patient-mobile-language{display:none}
+@media(max-width:760px){.patient-mobile-language{display:block;position:fixed;z-index:49;right:12px;bottom:70px;padding:5px 9px;border:1px solid var(--pma-border,#dce5df);border-radius:12px;background:var(--pma-surface,#fff);box-shadow:0 5px 18px #203b3220}.patient-mobile-language .pma-language-switcher{gap:4px}.patient-mobile-language .pma-language-switcher span{font-size:10px}.patient-mobile-language .pma-language-switcher select{max-width:120px;min-height:30px;font-size:11px}}
