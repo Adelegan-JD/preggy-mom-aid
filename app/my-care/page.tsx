@@ -41,7 +41,7 @@ export default async function MyCarePage() {
 
   return <main className="patient-dashboard patient-dashboard-redesign" id="main-content" tabIndex={-1}>
     <aside className="patient-sidebar" aria-label="Patient navigation">
-      <Link href="/my-care" className="patient-sidebar-brand"><span className="account-brand-mark"><HeartPulse size={21}/></span><span><b>Preggy Mom Aid</b><small>MY HEALTH SPACE</small></span></Link>
+      <Link href="/my-care" className="patient-sidebar-brand"><span className="account-brand-mark"><HeartPulse size={21}/></span><span><b>Preggy Mom Aid</b><small>{t("personalSpace")}</small></span></Link>
       <div className="patient-sidebar-label">{t("workspace") }</div>
       <nav className="patient-sidebar-nav" aria-label="Main patient navigation">
         <Link href="/my-care" aria-current="page"><Home size={18}/> {t("overview") }</Link>
