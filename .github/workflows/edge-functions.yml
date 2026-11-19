@@ -1,0 +1,27 @@
+name: Validate Supabase Edge Functions
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/**"
+      - ".github/workflows/edge-functions.yml"
+  push:
+    branches: [master]
+    paths:
+      - "supabase/functions/**"
+      - ".github/workflows/edge-functions.yml"
+
+jobs:
+  deno-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check account deletion function
+        run: deno check supabase/functions/process-account-deletion/index.ts
+      - name: Type-check patient reminders function
+        run: deno check supabase/functions/process-patient-reminders/index.ts
