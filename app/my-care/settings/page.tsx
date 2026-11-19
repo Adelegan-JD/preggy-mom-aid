@@ -1,3 +1,4 @@
+import PatientPageNavigation from "@/components/patient-page-navigation";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft, Settings, ShieldCheck } from "lucide-react";
@@ -9,7 +10,7 @@ export const metadata = { title: "Privacy and account settings | Preggy Mom Aid"
 
 export default async function PatientSettingsPage() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link"><ArrowLeft size={16}/> Return to sign in</Link><h1>Privacy and account settings</h1><p className="account-intro">Secure account services are not configured for this deployment.</p></section></main>;
+    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="settings"/><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link"><ArrowLeft size={16}/> Return to sign in</Link><h1>Privacy and account settings</h1><p className="account-intro">Secure account services are not configured for this deployment.</p></section></main>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -21,7 +22,8 @@ export default async function PatientSettingsPage() {
     supabase.from("account_deletion_requests").select("id").eq("user_id", user.id).in("status", ["requested", "processing"]).limit(1).maybeSingle()
   ]);
 
-  return <main className="patient-dashboard" id="main-content" tabIndex={-1}>
+  return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}>
+    <PatientPageNavigation active="settings"/>
     <section className="patient-dashboard-content">
       <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> Back to dashboard</Link>
       <div className="account-kicker">YOUR PERSONAL SPACE</div><h1><Settings size={28}/> Privacy and account settings</h1>
