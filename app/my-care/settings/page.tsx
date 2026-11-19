@@ -12,7 +12,7 @@ export const metadata = { title: "Privacy and account settings | Preggy Mom Aid"
 export default async function PatientSettingsPage() {
   const { t } = await getServerTranslator();
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="settings"/><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link"><ArrowLeft size={16}/> Return to sign in</Link><h1>{t("settingsTitle")}</h1><p className="account-intro">Secure account services are not configured for this deployment.</p></section></main>;
+    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="settings"/><section className="patient-dashboard-content"><Link href="/login" className="patient-back-link"><ArrowLeft size={16}/> Return to sign in</Link><h1>{t("settingsTitle")}</h1><p className="account-intro">{t("unavailable")}</p></section></main>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
