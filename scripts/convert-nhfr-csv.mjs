@@ -64,6 +64,7 @@ const records = parseCsv(fs.readFileSync(input, "utf8")).map((row, index) => {
     has_maternity: maternity(first(row, ["has_maternity", "maternity", "maternity_services", "delivery_services"])),
     phone: first(row, ["phone", "telephone", "phone_number", "contact_phone"]) || null,
     is_placeholder: false,
+    verification_status: "unverified",
     source: first(row, ["source", "dataset", "source_name"]) || "Imported CSV — verify against original registry",
   };
 }).filter(Boolean);
