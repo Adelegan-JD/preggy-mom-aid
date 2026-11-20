@@ -1371,3 +1371,28 @@ html[data-theme="dark"][data-contrast="high"] .nearby-unverified{background:#000
 .postpartum-source-links a:hover{text-decoration:underline}
 @media(max-width:760px){.postpartum-hero{grid-template-columns:1fr}.postpartum-hero-copy{padding:27px 23px 12px}.postpartum-hero-art{min-height:220px}.postpartum-tool-grid{grid-template-columns:1fr 1fr}.postpartum-question-list,.postpartum-topic-grid{grid-template-columns:1fr}.postpartum-source-links{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.postpartum-tool-grid>a,.postpartum-topic-grid summary svg{transition:none}.postpartum-tool-grid>a:hover{transform:none}}
+
+
+/* Contrast regression fixes validated against the current Playwright findings. */
+.hero-floating-note small{color:#52635b}
+
+/* Apply the same accessible system palette to patient workspace routes.
+   Earlier high-contrast rules covered the public and learning pages only. */
+html[data-contrast="high"] .patient-dashboard,
+html[data-contrast="high"] .patient-dashboard :where(*),
+html[data-contrast="high"] .patient-dashboard :where(*::before,*::after){
+  color:CanvasText!important;
+  background-color:Canvas!important;
+  background-image:none!important;
+  border-color:CanvasText!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+html[data-contrast="high"] .patient-dashboard a{
+  text-decoration:underline!important;
+  text-underline-offset:3px;
+  text-decoration-thickness:2px;
+}
+html[data-contrast="high"] .patient-dashboard :where(button,input,select,textarea){
+  border:2px solid CanvasText!important;
+}
