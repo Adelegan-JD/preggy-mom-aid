@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-import PatientPageNavigation from "@/components/patient-page-navigation";
+import PatientShell from "@/components/patient-shell";
 import { normalizeLanguage } from "@/lib/i18n/translations";
 import { healthServicesText as t } from "@/lib/i18n/health-services";
-import { MapPin, Phone, ShieldCheck, AlertTriangle, Search } from "lucide-react";
+import { AlertTriangle, ArrowRight, MapPin, Phone, Search, ShieldCheck } from "lucide-react";
+import { Callout, PageHeader } from "@/components/ds";
 import NearbyHospitals from "@/components/nearby-hospitals";
 import type { NearbyHospital } from "@/lib/nearby-hospitals";
+import { ComboBox } from "@/components/combo-box";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Hospital directory | Preggy Mom Aid", description: "Public information about maternity and healthcare facilities in Nigeria." };
@@ -46,13 +48,11 @@ export default async function HospitalsPage({ searchParams }: { searchParams: Se
     return t(language, key as "hospital" | "clinic" | "maternityCentre" | "medicalCentre");
   };
 
-  return <main className="patient-dashboard patient-subpage health-services-page" id="main-content" tabIndex={-1}>
-    <PatientPageNavigation active="hospitals" />
-    <section className="patient-dashboard-content">
-      <div className="account-kicker">{t(language, "publicDirectory")}</div>
-      <h1>{t(language, "directory")}</h1>
-      <p className="account-intro">{t(language, "directoryIntro")}</p>
-      <div className="health-directory-notice"><ShieldCheck size={20}/><p>{t(language, "directoryNotice")}</p></div>
+  return <PatientShell active="hospitals" publicFallback>
+    <div className="ds-page">
+      <PageHeader title={t(language, "directory")} lede={t(language, "directoryIntro")} />
+      <Callout tone="neutral" className="ds-callout-spaced">{t(language, "directoryNotice")}</Callout>
+
       <NearbyHospitals
         language={language}
         facilities={facilities.map((facility): NearbyHospital => ({
@@ -69,29 +69,35 @@ export default async function HospitalsPage({ searchParams }: { searchParams: Se
           verification_status: facility.verification_status,
         }))}
       />
-      <form method="get" className="health-directory-filters" aria-label={t(language, "search")}>
-        <label>{t(language, "city")}<input name="city" defaultValue={city} maxLength={80}/></label>
-        <label>{t(language, "state")}<input name="state" defaultValue={state} maxLength={80}/></label>
-        <label>{t(language, "facilityType")}<select name="type" defaultValue={type}><option value="">{t(language, "allTypes")}</option>{facilityTypes.map(item => <option key={item} value={item}>{facilityTypeLabel(item)}</option>)}</select></label>
-        <button type="submit"><Search size={16}/>{t(language, "search")}</button>
-        <Link href="/hospitals">{t(language, "clear")}</Link>
-      </form>
-      {directoryUnavailable ? <div className="health-directory-empty"><AlertTriangle size={26}/><h2>{t(language, "noFacilities")}</h2><p>{t(language, "noDirectoryData")}</p></div>
-      : facilities.length === 0 ? <div className="health-directory-empty"><MapPin size={26}/><h2>{city || state || type ? t(language, "noMatches") : t(language, "noFacilities")}</h2><p>{t(language, "noFacilitiesText")}</p></div>
-      : <div className="health-facility-grid">{facilities.map(facility => {
-        const verified = facility.verification_status === "verified";
-        return <article className="health-facility-card" key={facility.id}>
-          <div className="health-facility-card-top"><span className={verified ? "health-verification verified" : "health-verification unverified"}>{verified ? <ShieldCheck size={14}/> : <AlertTriangle size={14}/>} {t(language, verified ? "verified" : facility.verification_status === "under_review" ? "underReview" : "unverified")}</span><small>{facilityTypeLabel(facility.facility_type)}</small></div>
-          <h2>{facility.name}</h2>
-          <p><MapPin size={15}/>{facility.address}, {facility.city}, {facility.state}, Nigeria</p>
-          {facility.phone ? <p><Phone size={15}/><a href={"tel:" + facility.phone}>{facility.phone}</a></p> : null}
-          {facility.emergency_phone ? <p><Phone size={15}/>{t(language, "emergencyPhone")}: <a href={"tel:" + facility.emergency_phone}>{facility.emergency_phone}</a></p> : null}
-          {facility.maternity_services?.length ? <div><b>{t(language, "services")}</b><ul>{facility.maternity_services.map((service: string) => <li key={service}>{service}</li>)}</ul></div> : null}
-          {facility.has_emergency_department ? <p className="health-facility-emergency">{t(language, "emergencyDepartment")}</p> : null}
-          <small>{t(language, "listingNote")}</small>
-        </article>;
-      })}</div>}
-      <p className="health-directory-footer"><Link href="/emergency">{t(language, "emergencyPage")}</Link></p>
-    </section>
-  </main>;
+
+      <section className="ds-section" aria-labelledby="directory-browse-title">
+        <h2 className="ds-h2" id="directory-browse-title">{t(language, "search")}</h2>
+        <form method="get" className="ds-panel ds-directory-filters" aria-label={t(language, "search")}>
+          <div className="ds-field"><label className="ds-label" htmlFor="dirCity">{t(language, "city")}</label><input className="ds-input" id="dirCity" name="city" defaultValue={city} maxLength={80}/></div>
+          <div className="ds-field"><label className="ds-label" htmlFor="dirState">{t(language, "state")}</label><input className="ds-input" id="dirState" name="state" defaultValue={state} maxLength={80}/></div>
+          <div className="ds-field"><label className="ds-label" htmlFor="dirType">{t(language, "facilityType")}</label><ComboBox id="dirType" name="type" defaultValue={type ?? ""} allowEmpty placeholder={t(language, "allTypes")} options={facilityTypes.map(item => ({ value: item, label: facilityTypeLabel(item) }))} /></div>
+          <div className="ds-form-actions"><button type="submit" className="ds-btn ds-btn-primary"><Search size={16} aria-hidden="true"/>{t(language, "search")}</button><Link className="ds-btn ds-btn-ghost" href="/hospitals">{t(language, "clear")}</Link></div>
+        </form>
+
+        <div style={{ marginTop: "var(--ds-6)" }}>
+        {directoryUnavailable ? <div className="ds-empty"><b>{t(language, "noFacilities")}</b><p>{t(language, "noDirectoryData")}</p></div>
+        : facilities.length === 0 ? <div className="ds-empty"><b>{city || state || type ? t(language, "noMatches") : t(language, "noFacilities")}</b><p>{t(language, "noFacilitiesText")}</p></div>
+        : <div className="ds-grid-2">{facilities.map(facility => {
+          const verified = facility.verification_status === "verified";
+          return <article className="ds-panel ds-stack" key={facility.id} style={{ gap: "var(--ds-2)" }}>
+            <div className="ds-form-actions"><span className={verified ? "ds-badge ds-badge-success" : "ds-badge ds-badge-warning"}>{verified ? <ShieldCheck size={13} aria-hidden="true"/> : <AlertTriangle size={13} aria-hidden="true"/>} {t(language, verified ? "verified" : facility.verification_status === "under_review" ? "underReview" : "unverified")}</span><span className="ds-badge">{facilityTypeLabel(facility.facility_type)}</span></div>
+            <h3 className="ds-h3">{facility.name}</h3>
+            <p className="ds-muted ds-small ds-note"><MapPin size={15} aria-hidden="true"/>{[facility.address, facility.city, facility.state, "Nigeria"].filter(Boolean).join(", ")}</p>
+            {facility.phone ? <a className="ds-link ds-link-quiet" href={"tel:" + facility.phone}><Phone size={15} aria-hidden="true"/>{facility.phone}</a> : null}
+            {facility.emergency_phone ? <a className="ds-link ds-link-quiet" href={"tel:" + facility.emergency_phone}><Phone size={15} aria-hidden="true"/>{t(language, "emergencyPhone")}: {facility.emergency_phone}</a> : null}
+            {facility.maternity_services?.length ? <div className="ds-small"><b>{t(language, "services")}</b><ul className="ds-steps">{facility.maternity_services.map((service: string) => <li key={service}>{service}</li>)}</ul></div> : null}
+            {facility.has_emergency_department ? <span className="ds-badge ds-badge-accent">{t(language, "emergencyDepartment")}</span> : null}
+            <p className="ds-hint">{t(language, "listingNote")}</p>
+          </article>;
+        })}</div>}
+        </div>
+      </section>
+      <p className="ds-section"><Link className="ds-link" href="/emergency">{t(language, "emergencyPage")} <ArrowRight size={15} aria-hidden="true"/></Link></p>
+    </div>
+  </PatientShell>;
 }

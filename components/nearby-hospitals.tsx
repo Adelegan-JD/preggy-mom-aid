@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AlertTriangle, LocateFixed, MapPin, Navigation, Phone, Search } from "lucide-react";
+import { LocateFixed, Navigation, Phone, Search } from "lucide-react";
 import hospitalData from "@/data/hospitals.json";
 import { filterHospitalsByTown, findNearbyHospitals, type NearbyHospital, type NearbyHospitalResult } from "@/lib/nearby-hospitals";
 import type { AppLanguage } from "@/lib/i18n/translations";
@@ -37,27 +37,42 @@ export default function NearbyHospitals({ language, facilities }: { language: Ap
     );
   }
 
-  return <section className="nearby-hospitals" aria-labelledby="nearby-hospitals-title">
-    <div className="nearby-hospitals-heading"><div><span className="account-kicker">{t.kicker}</span><h2 id="nearby-hospitals-title">{t.title}</h2><p>{t.intro}</p></div><button type="button" className="nearby-location-button" onClick={locate} disabled={locationState === "loading"}><LocateFixed size={17}/>{locationState === "loading" ? t.locating : t.locate}</button></div>
-    <div className="nearby-search-row"><label htmlFor="nearby-hospital-search"><Search size={17}/><span className="sr-only">{t.search}</span></label><input id="nearby-hospital-search" value={query} onChange={(event)=>{setQuery(event.target.value);setPosition(null);setLocationState("idle");}} placeholder={t.search} maxLength={80}/></div>
-    {locationState === "denied" && <p className="nearby-status"><AlertTriangle size={15}/>{t.permission}</p>}
-    {locationState === "error" && <p className="nearby-status"><AlertTriangle size={15}/>{t.unavailable}</p>}
-    {position && <p className="nearby-status">{t.within}</p>}
-    {canShowFixtures && <label className="nearby-fixture-toggle"><input type="checkbox" checked={includeFixtures} onChange={(event)=>setIncludeFixtures(event.target.checked)}/>{t.fixtures}</label>}
-    {results.length === 0 ? <div className="nearby-empty"><MapPin size={23}/><b>{t.emptyTitle}</b><p>{position ? t.emptyGps : t.emptySearch}</p></div> : <div className="nearby-results">{results.map((facility)=>{
+  return <section className="ds-panel ds-form" aria-labelledby="nearby-hospitals-title">
+    <div className="ds-panel-header" style={{ marginBottom: 0 }}>
+      <div><h2 className="ds-h2" id="nearby-hospitals-title">{t.title}</h2><p>{t.intro}</p></div>
+      <button type="button" className="ds-btn ds-btn-primary" onClick={locate} disabled={locationState === "loading"}><LocateFixed size={17} aria-hidden="true"/>{locationState === "loading" ? t.locating : t.locate}</button>
+    </div>
+    <div className="ds-field">
+      <label className="ds-visually-hidden" htmlFor="nearby-hospital-search">{t.search}</label>
+      <div className="ds-search"><Search size={17} aria-hidden="true"/><input className="ds-input" id="nearby-hospital-search" value={query} onChange={(event)=>{setQuery(event.target.value);setPosition(null);setLocationState("idle");}} placeholder={t.search} maxLength={80}/></div>
+    </div>
+    {locationState === "denied" && <p className="ds-message ds-message-error" role="status">{t.permission}</p>}
+    {locationState === "error" && <p className="ds-message ds-message-error" role="status">{t.unavailable}</p>}
+    {position && <p className="ds-hint" role="status">{t.within}</p>}
+    {canShowFixtures && <label className="ds-choice"><input type="checkbox" checked={includeFixtures} onChange={(event)=>setIncludeFixtures(event.target.checked)}/>{t.fixtures}</label>}
+    {results.length === 0 ? <div className="ds-empty"><b>{t.emptyTitle}</b><p>{position ? t.emptyGps : t.emptySearch}</p></div> : <ul className="ds-list">{results.map((facility)=>{
       const placeholder=Boolean(facility.is_placeholder);
       const distance="straightDistanceKm" in facility ? facility as NearbyHospitalResult : null;
       const hasCoordinates = facility.lat !== null && facility.lng !== null && Number.isFinite(facility.lat) && Number.isFinite(facility.lng);
       const directions = hasCoordinates ? `https://www.google.com/maps/dir/?api=1&destination=${facility.lat},${facility.lng}` : null;
-      return <article className="nearby-hospital-card" key={facility.name}>
-        <div className="nearby-card-title"><div><h3>{facility.name}</h3><p><MapPin size={14}/>{facility.lga}, {facility.state}, Nigeria</p></div>{placeholder && <span className="nearby-test-badge">{t.test}</span>}</div>
-        {!placeholder && facility.verification_status !== "verified" && <p className="nearby-unverified">{t.verification}</p>}
-        <div className="nearby-card-meta"><span>{facility.facility_level}</span><span className={facility.has_maternity===true?"maternity-yes":facility.has_maternity===false?"maternity-no":"maternity-unknown"}>{facility.has_maternity===true?t.maternityYes:facility.has_maternity===false?t.maternityNo:t.maternityUnknown}</span></div>
-        {distance && <p className="nearby-distance"><b>{distance.straightDistanceKm.toFixed(1)} km</b> {t.distance} · approx. {distance.estimatedRoadDistanceKm.toFixed(1)} km {t.road} · {distance.estimatedDriveMinutes} {t.drive}</p>}
-        {facility.phone && !placeholder && <a className="nearby-phone" href={`tel:${facility.phone}`}><Phone size={15}/>{facility.phone}</a>}
-        {placeholder ? <p className="nearby-disclaimer">{t.disclaimer}</p> : directions ? <a className="nearby-directions" href={directions} target="_blank" rel="noreferrer"><Navigation size={15}/>{t.directions}</a> : null}
-      </article>;
-    })}</div>}
-    <p className="nearby-footnote">{t.footnote}</p>
+      return <li className="ds-list-item" key={facility.name}>
+        <div className="ds-list-main">
+          <span className="ds-list-title">{facility.name}</span>
+          <span className="ds-list-meta">{facility.lga}, {facility.state}, Nigeria · {facility.facility_level}</span>
+          <div className="ds-form-actions" style={{ marginTop: "var(--ds-1)" }}>
+            {placeholder && <span className="ds-badge ds-badge-danger">{t.test}</span>}
+            <span className={facility.has_maternity===true?"ds-badge ds-badge-success":facility.has_maternity===false?"ds-badge":"ds-badge ds-badge-warning"}>{facility.has_maternity===true?t.maternityYes:facility.has_maternity===false?t.maternityNo:t.maternityUnknown}</span>
+            {!placeholder && facility.verification_status !== "verified" && <span className="ds-badge ds-badge-warning">{t.verification}</span>}
+          </div>
+          {distance && <span className="ds-list-meta ds-tabular"><b>{distance.straightDistanceKm.toFixed(1)} km</b> {t.distance} · approx. {distance.estimatedRoadDistanceKm.toFixed(1)} km {t.road} · {distance.estimatedDriveMinutes} {t.drive}</span>}
+          {placeholder && <span className="ds-hint">{t.disclaimer}</span>}
+        </div>
+        {!placeholder && <div className="ds-list-actions">
+          {facility.phone && <a className="ds-btn ds-btn-sm" href={`tel:${facility.phone}`}><Phone size={15} aria-hidden="true"/>{facility.phone}</a>}
+          {directions && <a className="ds-btn ds-btn-sm" href={directions} target="_blank" rel="noreferrer"><Navigation size={15} aria-hidden="true"/>{t.directions}</a>}
+        </div>}
+      </li>;
+    })}</ul>}
+    <p className="ds-hint">{t.footnote}</p>
   </section>;
 }

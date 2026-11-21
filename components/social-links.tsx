@@ -22,7 +22,7 @@ export default function SocialLinks({ compact = false, className = "" }: SocialL
       <a href="https://www.tiktok.com/@preggymum_aid" target="_blank" rel="noopener noreferrer" aria-label="Preggy Mom Aid on TikTok">
         <TikTokMark /><span className="pma-social-name">TikTok</span>
       </a>
-      <a href="https://www.instagram.com/preggymum_aid/" target="_blank" rel="noopener noreferrer" aria-label="Preggy Mom Aid on Instagram">
+      <a href="https://www.instagram.com/preggymom_aid/" target="_blank" rel="noopener noreferrer" aria-label="Preggy Mom Aid on Instagram">
         <Instagram aria-hidden="true" /><span className="pma-social-name">Instagram</span>
       </a>
     </div>

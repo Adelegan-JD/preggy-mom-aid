@@ -3,6 +3,8 @@
 import { FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/language-provider";
+import { useConfirmations } from "@/contexts/confirmations-provider";
+import { ComboBox } from "@/components/combo-box";
 
 type Appointment = {
   id: string;
@@ -25,6 +27,7 @@ function formatDate(value: string, language: string) {
 
 export default function PatientAppointments({ initialAppointments }: { initialAppointments: Appointment[] }) {
   const { t, language } = useLanguage();
+ const { openConfirmModal } = useConfirmations();
   const [appointments, setAppointments] = useState(initialAppointments);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
@@ -80,8 +83,11 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
     setMessage(t("appointmentUpdated"));
   }
 
-  async function removeAppointment(id: string) {
-    if (!window.confirm(t("deleteAppointmentConfirm"))) return;
+  function removeAppointment(id: string) {
+    openConfirmModal(t("deleteAppointmentConfirm"), () => performRemoveAppointment(id), { title: t("delete"), confirmText: t("delete"), isDelete: true });
+  }
+
+  async function performRemoveAppointment(id: string) {
     setError(""); setMessage("");
     const { error: deleteError } = await createClient().from("patient_appointments").delete().eq("id", id);
     if (deleteError) { setError(t("appointmentDeleteError")); return; }
@@ -93,35 +99,75 @@ export default function PatientAppointments({ initialAppointments }: { initialAp
   const upcoming = appointments.filter(item => item.status === "scheduled" && new Date(item.scheduled_at).getTime() >= Date.now());
   const past = appointments.filter(item => !upcoming.some(next => next.id === item.id));
 
-  return <div className="patient-appointments-layout">
-    <form className="account-card patient-profile-form" onSubmit={saveAppointment}>
-      <div className="account-kicker">{t("apptKicker")}</div>
-      <h2>{editingId ? t("editAppointment") : t("addAppointmentTitle")}</h2>
-      <p className="account-intro">{t("calendarIntro")}</p>
-      <label htmlFor="appointmentTitle">{t("appointmentTitle")}</label>
-      <input id="appointmentTitle" required minLength={2} maxLength={120} value={title} onChange={event => setTitle(event.target.value)} placeholder={t("appointmentTitlePlaceholder")} />
-      <label htmlFor="appointmentType">{t("appointmentType")}</label>
-      <select id="appointmentType" value={type} onChange={event => setType(event.target.value as Appointment["appointment_type"])}>
-        <option value="antenatal">{t("antenatalVisit")}</option><option value="postnatal">{t("postnatalVisit")}</option><option value="scan">{t("ultrasoundScan")}</option><option value="laboratory">{t("labTest")}</option><option value="other">{t("other")}</option>
-      </select>
-      <label htmlFor="appointmentWhen">{t("dateTime")}</label>
-      <input id="appointmentWhen" type="datetime-local" required value={scheduledAt} onChange={event => setScheduledAt(event.target.value)} />
-      <label htmlFor="appointmentLocation">{t("location")} <span>{t("optional")}</span></label>
-      <input id="appointmentLocation" maxLength={180} value={location} onChange={event => setLocation(event.target.value)} placeholder={t("locationPlaceholder")} />
-      <label htmlFor="appointmentNotes">{t("notes")} <span>{t("optional")}</span></label>
-      <textarea id="appointmentNotes" rows={3} maxLength={1500} value={notes} onChange={event => setNotes(event.target.value)} placeholder={t("appointmentNotesPlaceholder")} />
-      <button className="account-submit" disabled={busy}>{busy ? t("saving") : editingId ? t("saveChanges") : t("addToCalendar")}</button>
-      {editingId && <button type="button" className="account-signout" onClick={resetForm}>{t("cancelEditing")}</button>}
-      {error && <p className="account-error" role="alert">{error}</p>}
-      {message && <p className="account-success" role="status">{message}</p>}
+  const typeLabel = (value: Appointment["appointment_type"]) => t(value === "antenatal" ? "antenatalVisit" : value === "postnatal" ? "postnatalVisit" : value === "scan" ? "ultrasoundScan" : value === "laboratory" ? "labTest" : "other");
+
+  return <div className="ds-split">
+    <form className="ds-panel ds-form ds-sticky" onSubmit={saveAppointment} aria-labelledby="appointment-form-title">
+      <h2 className="ds-h2" id="appointment-form-title">{editingId ? t("editAppointment") : t("addAppointmentTitle")}</h2>
+      <div className="ds-field">
+        <label className="ds-label" htmlFor="appointmentTitle">{t("appointmentTitle")}</label>
+        <input className="ds-input" id="appointmentTitle" required minLength={2} maxLength={120} value={title} onChange={event => setTitle(event.target.value)} placeholder={t("appointmentTitlePlaceholder")} />
+      </div>
+      <div className="ds-field-row">
+        <div className="ds-field">
+          <label className="ds-label" htmlFor="appointmentType">{t("appointmentType")}</label>
+          <ComboBox id="appointmentType" value={type} onValueChange={value => setType(value as Appointment["appointment_type"])} options={[{ value: "antenatal", label: t("antenatalVisit") }, { value: "postnatal", label: t("postnatalVisit") }, { value: "scan", label: t("ultrasoundScan") }, { value: "laboratory", label: t("labTest") }, { value: "other", label: t("other") }]} />
+        </div>
+        <div className="ds-field">
+          <label className="ds-label" htmlFor="appointmentWhen">{t("dateTime")}</label>
+          <input className="ds-input" id="appointmentWhen" type="datetime-local" required value={scheduledAt} onChange={event => setScheduledAt(event.target.value)} />
+        </div>
+      </div>
+      <div className="ds-field">
+        <label className="ds-label" htmlFor="appointmentLocation">{t("location")} <span className="ds-optional">{t("optional")}</span></label>
+        <input className="ds-input" id="appointmentLocation" maxLength={180} value={location} onChange={event => setLocation(event.target.value)} placeholder={t("locationPlaceholder")} />
+      </div>
+      <div className="ds-field">
+        <label className="ds-label" htmlFor="appointmentNotes">{t("notes")} <span className="ds-optional">{t("optional")}</span></label>
+        <textarea className="ds-input" id="appointmentNotes" rows={3} maxLength={1500} value={notes} onChange={event => setNotes(event.target.value)} placeholder={t("appointmentNotesPlaceholder")} />
+      </div>
+      <div className="ds-form-actions">
+        <button className="ds-btn ds-btn-primary" disabled={busy}>{busy ? t("saving") : editingId ? t("saveChanges") : t("addToCalendar")}</button>
+        {editingId && <button type="button" className="ds-btn ds-btn-ghost" onClick={resetForm}>{t("cancelEditing")}</button>}
+      </div>
+      {error && <p className="ds-message ds-message-error" role="alert">{error}</p>}
+      {message && <p className="ds-message ds-message-success" role="status">{message}</p>}
     </form>
-    <section className="patient-appointment-list">
-      <div className="patient-recent-panel"><div className="account-kicker">{t("upNext")}</div><h2>{t("upcomingAppointments")}</h2>
-        {upcoming.length ? <ul>{upcoming.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at, language)} · {item.appointment_type.replace("_", " ")}</span>{item.location && <span>{item.location}</span>}{item.notes && <span>{item.notes}</span>}</div><div className="patient-appointment-actions"><button type="button" onClick={() => startEdit(item)}>{t("edit")}</button><button type="button" onClick={() => updateStatus(item.id, "completed")}>{t("markCompleted")}</button><button type="button" onClick={() => updateStatus(item.id, "cancelled")}>{t("cancelAppointment")}</button><button type="button" onClick={() => removeAppointment(item.id)}>{t("delete")}</button></div></li>)}</ul> : <p>{t("noUpcomingAppointments")}</p>}
-      </div>
-      <div className="patient-recent-panel"><div className="account-kicker">{t("yourRecord")}</div><h2>{t("pastAppointments")}</h2>
-        {past.length ? <ul>{past.map(item => <li key={item.id} className="patient-appointment-item"><div><strong>{item.title}</strong><span>{formatDate(item.scheduled_at, language)}</span><span className={`appointment-status ${item.status}`}>{t(item.status === "cancelled" ? "cancelled" : item.status === "completed" ? "completed" : "scheduled")}</span></div><div className="patient-appointment-actions">{item.status === "cancelled" && <button type="button" onClick={() => updateStatus(item.id, "scheduled")}>{t("restore")}</button>}{item.status !== "completed" && <button type="button" onClick={() => startEdit(item)}>{t("edit")}</button>}<button type="button" onClick={() => removeAppointment(item.id)}>{t("delete")}</button></div></li>)}</ul> : <p>{t("noPastAppointments")}</p>}
-      </div>
-    </section>
+
+    <div className="ds-stack-lg">
+      <section className="ds-panel" aria-labelledby="upcoming-title">
+        <div className="ds-panel-header"><h2 className="ds-h2" id="upcoming-title">{t("upcomingAppointments")}</h2>{upcoming.length > 0 && <span className="ds-badge">{upcoming.length}</span>}</div>
+        {upcoming.length ? <ul className="ds-list">{upcoming.map(item => <li key={item.id} className="ds-list-item">
+          <div className="ds-list-main">
+            <span className="ds-list-title">{item.title}</span>
+            <span className="ds-list-meta">{formatDate(item.scheduled_at, language)} · {typeLabel(item.appointment_type)}</span>
+            {item.location && <span className="ds-list-meta">{item.location}</span>}
+            {item.notes && <span className="ds-list-meta">{item.notes}</span>}
+          </div>
+          <div className="ds-list-actions">
+            <button type="button" className="ds-btn ds-btn-sm" onClick={() => updateStatus(item.id, "completed")}>{t("markCompleted")}</button>
+            <button type="button" className="ds-btn ds-btn-sm ds-btn-ghost" onClick={() => startEdit(item)}>{t("edit")}</button>
+            <button type="button" className="ds-btn ds-btn-sm ds-btn-ghost" onClick={() => updateStatus(item.id, "cancelled")}>{t("cancelAppointment")}</button>
+            <button type="button" className="ds-btn ds-btn-sm ds-btn-danger" onClick={() => removeAppointment(item.id)}>{t("delete")}</button>
+          </div>
+        </li>)}</ul> : <div className="ds-empty"><b>{t("noUpcomingAppointments")}</b></div>}
+      </section>
+
+      <section className="ds-panel" aria-labelledby="past-title">
+        <div className="ds-panel-header"><h2 className="ds-h2" id="past-title">{t("pastAppointments")}</h2></div>
+        {past.length ? <ul className="ds-list">{past.map(item => <li key={item.id} className="ds-list-item">
+          <div className="ds-list-main">
+            <span className="ds-list-title">{item.title}</span>
+            <span className="ds-list-meta">{formatDate(item.scheduled_at, language)} · {typeLabel(item.appointment_type)}</span>
+            <span className={`ds-badge ${item.status === "completed" ? "ds-badge-success" : item.status === "cancelled" ? "ds-badge-danger" : "ds-badge-warning"}`}>{t(item.status === "cancelled" ? "cancelled" : item.status === "completed" ? "completed" : "scheduled")}</span>
+          </div>
+          <div className="ds-list-actions">
+            {item.status === "cancelled" && <button type="button" className="ds-btn ds-btn-sm" onClick={() => updateStatus(item.id, "scheduled")}>{t("restore")}</button>}
+            {item.status !== "completed" && <button type="button" className="ds-btn ds-btn-sm ds-btn-ghost" onClick={() => startEdit(item)}>{t("edit")}</button>}
+            <button type="button" className="ds-btn ds-btn-sm ds-btn-danger" onClick={() => removeAppointment(item.id)}>{t("delete")}</button>
+          </div>
+        </li>)}</ul> : <div className="ds-empty"><b>{t("noPastAppointments")}</b></div>}
+      </section>
+    </div>
   </div>;
 }

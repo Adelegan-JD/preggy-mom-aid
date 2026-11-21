@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { chooseOption } from "./helpers";
 
 const hasConfiguredSupabase = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 // A configured /my-care route requires an authenticated test user. Keep this suite
@@ -10,10 +11,11 @@ const themes = ["light", "dark"] as const;
 for (const theme of themes) {
   for (const route of routes) {
     test(`${route} remains WCAG-readable in ${theme} high-contrast mode`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(route);
-      await page.getByText("Display settings", { exact: true }).click();
-      await page.getByLabel("Colour theme").selectOption(theme);
-      await page.getByLabel("Contrast").selectOption("high");
+      await page.getByText("Language & display", { exact: true }).click();
+      await chooseOption(page, "Colour theme", theme === "dark" ? "Dark" : "Light");
+      await chooseOption(page, "Contrast", "High contrast");
 
       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
       await expect(page.locator("html")).toHaveAttribute("data-contrast", "high");

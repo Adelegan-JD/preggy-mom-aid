@@ -47,3 +47,18 @@ A successful build or deployment does not by itself establish clinical, privacy,
 Before processing real patient information, complete the applicable Nigeria Data Protection Act / NDPC review, a Data Protection Impact Assessment, privacy notices and consent workflows, region and cross-border transfer review, retention and deletion rules, access-control testing, incident response and backup/restore checks.
 
 The application is being developed toward WCAG 2.2 Level AA. Automated scans must be supplemented by manual keyboard, screen-reader, zoom and assistive-technology testing.
+
+
+## Demo mode (no Supabase needed)
+
+Run the full app locally with a fake backend:
+
+```bash
+npm run dev:mock      # http://localhost:3001
+npm run mock:reset    # restore the sample data
+```
+
+- Any email and password signs in as the demo patient; an email starting with `pro` (for example `pro@example.test`) signs in as a demo professional awaiting verification.
+- Sign up, password reset and email confirmation are simulated; no emails are sent.
+- Data is stored in a JSON file in your system temp folder, never in Supabase or the repository. Sample records are labelled TEST ONLY.
+- Demo mode is disabled in production builds, and `/api/dev-mock` returns 404 outside it.
