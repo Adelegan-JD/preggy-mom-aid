@@ -2,12 +2,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import LanguageSwitcher from "@/components/language-switcher";
-import SpeakButton from "@/components/speak-button";
-import HealthServicesCards from "@/components/health-services-cards";
+import PatientShell from "@/components/patient-shell";
+import { Callout, PageHeader, UnavailablePage } from "@/components/ds";
 import PregnancyJourneyVisual from "@/components/pregnancy-journey-visual";
 import { normalizeLanguage, translate, TranslationKey } from "@/lib/i18n/translations";
-import { Activity, CalendarHeart, ClipboardList, FileHeart, HeartPulse, MessageSquareText, ShieldCheck, BookOpen, ArrowRight, Home, UserRound, Settings, Plus, Clock3, Sparkles, Stethoscope, ChevronRight } from "lucide-react";
+import { healthServicesText as hs } from "@/lib/i18n/health-services";
+import { postpartumCopy } from "@/lib/i18n/postpartum";
+import { Activity, CalendarHeart, ClipboardList, FileHeart, HeartPulse, ShieldCheck, BookOpen, ArrowRight, Plus, ChevronRight, Hospital, PhoneCall } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "My health dashboard | Preggy Mom Aid" };
@@ -17,7 +18,7 @@ export default async function MyCarePage() {
   const language = normalizeLanguage(cookieStore.get("pma-language")?.value);
   const t = (key: TranslationKey) => translate(language, key);
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard" id="main-content" tabIndex={-1}><section className="patient-dashboard-content"><div className="pma-language-fallback"><LanguageSwitcher /></div><div className="account-kicker">{t("personalSpace") }</div><h1>{t("dashboardTitle") }</h1><p className="account-intro">{t("unavailable")}</p><div className="patient-safety-note"><ShieldCheck size={20}/><p>{t("healthNotLoaded")}</p></div><Link className="patient-back-link" href="/login">{t("returnSignIn")}</Link></section></main>;
+    return <PatientShell active="overview"><UnavailablePage title={t("dashboardTitle")} message={t("unavailable")} /></PatientShell>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -25,12 +26,17 @@ export default async function MyCarePage() {
   const { data: profile } = await supabase.from("profiles").select("full_name,account_type").eq("id", user.id).maybeSingle();
   if (profile?.account_type === "professional") redirect("/professional");
 
-  const [{ count: bpCount }, { count: symptomCount }, { data: recentReadings }, { data: patientJourney }] = await Promise.all([
-    supabase.from("blood_pressure_readings").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+  const nowIso = new Date().toISOString();
+  const [{ count: symptomCount }, { data: recentReadings }, { data: patientJourney }, { data: nextAppointment }, { data: latestSymptom }] = await Promise.all([
     supabase.from("symptom_reports").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-    supabase.from("blood_pressure_readings").select("systolic,diastolic,measured_at").eq("user_id", user.id).order("measured_at", { ascending: false }).limit(3),
-    supabase.from("patient_profiles").select("preferred_name,pregnancy_status,estimated_due_date,birth_date").eq("user_id", user.id).maybeSingle()
+    supabase.from("blood_pressure_readings").select("systolic,diastolic,pulse,measured_at").eq("user_id", user.id).order("measured_at", { ascending: false }).limit(3),
+    supabase.from("patient_profiles").select("preferred_name,pregnancy_status,estimated_due_date,birth_date").eq("user_id", user.id).maybeSingle(),
+    supabase.from("patient_appointments").select("title,scheduled_at,location").eq("user_id", user.id).eq("status", "scheduled").gte("scheduled_at", nowIso).order("scheduled_at", { ascending: true }).limit(1).maybeSingle(),
+    supabase.from("symptom_reports").select("symptom_tags,occurred_at").eq("user_id", user.id).order("occurred_at", { ascending: false }).limit(1).maybeSingle()
   ]);
+  const locale = language === "yo" ? "yo-NG" : language === "ha" ? "ha-NG" : language === "ig" ? "ig-NG" : "en-NG";
+  const formatWhen = (value: string) => new Date(value).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" });
+  const latestReading = recentReadings?.[0] ?? null;
 
   const firstName = patientJourney?.preferred_name?.trim() || profile?.full_name?.trim().split(/\s+/)[0] || "there";
   const today = new Date();
@@ -40,47 +46,73 @@ export default async function MyCarePage() {
   const daysToDue = dueDate ? Math.round((dueDate.getTime() - today.getTime()) / 86400000) : null;
   const estimatedWeeks = daysToDue === null ? null : Math.max(0, Math.min(42, Math.floor((280 - daysToDue) / 7)));
   const daysPostpartum = birthDate ? Math.max(0, Math.floor((today.getTime() - birthDate.getTime()) / 86400000)) : null;
+  const pp = postpartumCopy[language] ?? postpartumCopy.en;
+  // Only nudge for the profile while key journey details are missing.
+  const profileIncomplete = !patientJourney
+    || (patientJourney.pregnancy_status === "pregnant" && !patientJourney.estimated_due_date)
+    || (patientJourney.pregnancy_status === "postpartum" && !patientJourney.birth_date);
 
-  return <main className="patient-dashboard patient-dashboard-redesign" id="main-content" tabIndex={-1}>
-    <aside className="patient-sidebar" aria-label={t("workspace")}>
-      <Link href="/my-care" className="patient-sidebar-brand"><span className="account-brand-mark"><HeartPulse size={21}/></span><span><b>Preggy Mom Aid</b><small>{t("personalSpace")}</small></span></Link>
-      <div className="patient-sidebar-label">{t("workspace") }</div>
-      <nav className="patient-sidebar-nav" aria-label={t("workspace")}>
-        <Link href="/my-care" aria-current="page"><Home size={18}/> {t("overview") }</Link>
-        <Link href="/my-care/blood-pressure"><Activity size={18}/> {t("bloodPressure") }</Link>
-        <Link href="/my-care/symptoms"><ClipboardList size={18}/> {t("symptoms") }</Link>
-        <Link href="/my-care/appointments"><CalendarHeart size={18}/> {t("appointments") }</Link>
-        <Link href="/my-care/records"><FileHeart size={18}/> {t("healthRecords") }</Link>
-        <Link href="/learn"><BookOpen size={18}/> {t("learningCentre") }</Link>
-      </nav>
-      <div className="patient-sidebar-spacer"/>
-      <div className="patient-sidebar-help"><span><ShieldCheck size={17}/></span><b>{t("privacyMatters") }</b><p>{t("privacyText") }</p><Link href="/my-care/settings">{t("privacySettings") } <ChevronRight size={14}/></Link></div>
-      <Link href="/my-care/profile" className="patient-sidebar-account"><span className="patient-avatar"><UserRound size={17}/></span><span><b>{t("profile")}</b><small>{t("personalDetails") }</small></span><ChevronRight size={15}/></Link>
-    </aside>
-    <div className="patient-main-column">
-    <header className="patient-dashboard-header"><Link href="/" className="account-brand"><span className="account-brand-mark"><HeartPulse size={20}/></span><span><b>Preggy Mom Aid</b><small>{t("myHealthSpace")}</small></span></Link><nav aria-label={t("yourAccount") }><Link href="/learn">{t("learningCentre") }</Link><Link href="/my-care/settings">{t("privacySettings") }</Link><Link href="/feedback">{t("feedback")}</Link><LanguageSwitcher /><form action={async () => {"use server"; const client = await createClient(); await client.auth.signOut(); redirect("/login");}}><button className="account-signout">{t("signOut") }</button></form></nav></header>
-    <section className="patient-dashboard-content">
-      <div className="patient-welcome patient-welcome-hero"><div className="patient-welcome-copy"><div className="patient-hero-eyebrow"><Sparkles size={14}/> {t("personalSpace") }</div><h1>{t("welcome")}, {firstName} <span aria-hidden="true">♥</span></h1><p>{t("dashboardIntro") }</p><div className="patient-hero-actions"><Link href="/my-care/blood-pressure"><Plus size={16}/> {t("logBloodPressure") }</Link><Link href="/my-care/appointments"><CalendarHeart size={16}/> {t("addAppointment") }</Link></div></div><div className="patient-hero-art" aria-hidden="true"><div className="patient-hero-orbit orbit-one"/><div className="patient-hero-orbit orbit-two"/><span className="patient-hero-heart"><HeartPulse size={52}/></span><span className="patient-hero-sparkle"><Sparkles size={20}/></span></div></div>
-      <div className="patient-safety-note"><ShieldCheck size={20}/><p><b>{t("privateHealth") }</b> {t("privateHealthText") }</p><SpeakButton text={t("privateHealthText") }/></div>
-      <PregnancyJourneyVisual pregnancyStatus={patientJourney?.pregnancy_status ?? null} estimatedWeeks={estimatedWeeks} daysPostpartum={daysPostpartum} language={language} />
-      <div className="patient-stat-grid patient-stat-grid-modern"><article><span className="patient-stat-icon"><Activity size={17}/></span><div><span>{t("bloodPressureLogs")}</span><strong>{bpCount ?? 0}</strong><small>{t("savedReadings") }</small></div></article><article><span className="patient-stat-icon rose"><ClipboardList size={17}/></span><div><span>{t("symptomNotes") }</span><strong>{symptomCount ?? 0}</strong><small>{t("savedNotes") }</small></div></article><article><span className="patient-stat-icon sage"><ShieldCheck size={17}/></span><div><span>{t("privacyStatus") }</span><strong className="patient-private-value">{t("protected") }</strong><small>{t("controlRecords") }</small></div></article></div>
-      <div className="patient-section-heading patient-section-heading-modern"><div><div className="account-kicker">{t("healthTools") }</div><h2>{t("everythingInOnePlace") }</h2><p>{t("chooseSpace")}</p></div><span className="patient-section-note"><ShieldCheck size={15}/> {t("privateToYou") }</span></div>
-      <div className="patient-profile-prompt"><div><div className="account-kicker">{t("personalise") }</div><strong>{t("completeProfile") }</strong><p>{t("profilePrompt")}</p></div><Link href="/my-care/profile">{t("updateProfile") } <ArrowRight size={15}/></Link></div>
-      <div className="patient-feature-grid patient-feature-grid-modern">
-        <Link href="/my-care/blood-pressure" className="patient-feature-card"><span className="patient-feature-icon"><Activity/></span><h3>{t("bloodPressure") }</h3><p>{t("bloodPressureCardText")}</p><span>{t("openBloodPressure")} <ArrowRight size={16}/></span></Link>
-        <Link href="/my-care/symptoms" className="patient-feature-card"><span className="patient-feature-icon rose"><ClipboardList/></span><h3>{t("symptoms")}</h3><p>{t("symptomCardText")}</p><span>{t("recordSymptomAction")} <ArrowRight size={16}/></span></Link>
-        <Link href="/my-care/appointments" className="patient-feature-card"><span className="patient-feature-icon"><CalendarHeart/></span><h3>{t("appointments") }</h3><p>{t("appointments")}</p><span>{t("viewAppointments")} <ArrowRight size={16}/></span></Link>
-        <Link href="/my-care/postpartum" className="patient-feature-card"><span className="patient-feature-icon sage"><HeartPulse/></span><h3>{t("postpartumJourney")}</h3><p>Organise your after-birth questions, appointments and personal notes.</p><span>Explore postpartum support <ArrowRight size={16}/></span></Link>
-        <Link href="/my-care/records" className="patient-feature-card"><span className="patient-feature-icon rose"><FileHeart/></span><h3>{t("healthRecords") }</h3><p>{t("recordsCardText")}</p><span>{t("manageRecords")} <ArrowRight size={16}/></span></Link>
-        <Link href="/learn" className="patient-feature-card"><span className="patient-feature-icon"><BookOpen/></span><h3>{t("learningCentre") }</h3><p>{t("learningCardText")}</p><span>{t("exploreLearning")} <ArrowRight size={16}/></span></Link>
+  return <PatientShell active="overview">
+    <div className="ds-page">
+      <PageHeader
+        title={<>{t("welcome")}, {firstName}</>}
+        lede={t("dashboardIntro")}
+        actions={<>
+          <Link href="/my-care/blood-pressure" className="ds-btn ds-btn-primary"><Plus size={16} aria-hidden="true"/> {t("logBloodPressure")}</Link>
+          <Link href="/my-care/symptoms" className="ds-btn"><ClipboardList size={16} aria-hidden="true"/> {t("recordSymptomAction")}</Link>
+        </>}
+      />
+
+      {profileIncomplete && <Callout tone="info" title={t("completeProfile")} action={<Link href="/my-care/profile" className="ds-btn ds-btn-sm">{t("updateProfile")}</Link>} className="ds-callout-spaced">{t("profilePrompt")}</Callout>}
+
+      <div className="ds-grid-3" data-reveal data-reveal-stagger>
+        <section className="ds-panel ds-summary" aria-labelledby="summary-bp">
+          <h2 id="summary-bp"><Activity size={16} aria-hidden="true"/> {t("bloodPressure")}</h2>
+          {latestReading ? <>
+            <p className="ds-summary-value"><span className="ds-tabular">{latestReading.systolic}/{latestReading.diastolic}</span> <small>mmHg</small></p>
+            <p className="ds-muted ds-small">{formatWhen(latestReading.measured_at)}{latestReading.pulse ? ` · ${latestReading.pulse} bpm` : ""}</p>
+            {recentReadings && recentReadings.length > 1 && <ul className="ds-summary-history">{recentReadings.slice(1).map(reading => <li key={reading.measured_at}><span className="ds-tabular">{reading.systolic}/{reading.diastolic}</span><span>{formatWhen(reading.measured_at)}</span></li>)}</ul>}
+          </> : <p className="ds-muted ds-small">{t("noDashboardReadings")}</p>}
+          <Link href="/my-care/blood-pressure" className="ds-link ds-link-quiet">{latestReading ? t("viewHistory") : t("logBloodPressure")} <ArrowRight size={15} aria-hidden="true"/></Link>
+        </section>
+
+        <section className="ds-panel ds-summary" aria-labelledby="summary-appointment">
+          <h2 id="summary-appointment"><CalendarHeart size={16} aria-hidden="true"/> {t("upcomingAppointments")}</h2>
+          {nextAppointment ? <>
+            <p className="ds-summary-title">{nextAppointment.title}</p>
+            <p className="ds-muted ds-small">{formatWhen(nextAppointment.scheduled_at)}{nextAppointment.location ? ` · ${nextAppointment.location}` : ""}</p>
+          </> : <p className="ds-muted ds-small">{t("noUpcomingAppointments")}</p>}
+          <Link href="/my-care/appointments" className="ds-link ds-link-quiet">{nextAppointment ? t("viewAppointments") : t("addAppointment")} <ArrowRight size={15} aria-hidden="true"/></Link>
+        </section>
+
+        <section className="ds-panel ds-summary" aria-labelledby="summary-symptoms">
+          <h2 id="summary-symptoms"><ClipboardList size={16} aria-hidden="true"/> {t("symptomNotes")}</h2>
+          {latestSymptom ? <>
+            <p className="ds-summary-value"><span className="ds-tabular">{symptomCount ?? 0}</span> <small>{t("savedNotes")}</small></p>
+            <p className="ds-muted ds-small">{formatWhen(latestSymptom.occurred_at)}</p>
+          </> : <p className="ds-muted ds-small">{t("noNotes")}</p>}
+          <Link href="/my-care/symptoms" className="ds-link ds-link-quiet">{t("recordSymptomAction")} <ArrowRight size={15} aria-hidden="true"/></Link>
+        </section>
       </div>
-      <HealthServicesCards language={language} />
-      <section className="patient-recent-panel"><div><div className="account-kicker">{t("recentReadings")}</div><h2>{t("latestReadings")}</h2></div>{recentReadings?.length ? <ul>{recentReadings.map((reading, index) => <li key={index}><strong>{reading.systolic}/{reading.diastolic} mmHg</strong><span>{new Date(reading.measured_at).toLocaleString(language === "yo" ? "yo-NG" : language === "ha" ? "ha-NG" : language === "ig" ? "ig-NG" : "en-NG")}</span></li>)}</ul> : <p>{t("noDashboardReadings")}</p>}<Link href="/my-care/blood-pressure">{t("viewHistory")} <ArrowRight size={15}/></Link></section>
-      <section className="patient-urgent-panel" aria-labelledby="patient-urgent-title"><span className="patient-urgent-icon"><HeartPulse size={20}/></span><div><div className="account-kicker">{t("urgentHealthInfo")}</div><h2 id="patient-urgent-title">{t("urgentHelpTitle")}</h2><p>{t("urgentHelpBody")}</p></div><Link href="/learn">{t("readWarningSigns")} <ArrowRight size={15}/></Link></section>
-      <p className="patient-feedback-link"><MessageSquareText size={16}/> <Link href="/feedback">{t("shareExperience")}</Link></p>
-    </section>
-    <footer className="patient-dashboard-footer">Preggy Mom Aid <span>•</span> {t("footerTagline")}</footer>
+
+      <div className="ds-section" data-reveal>
+        <PregnancyJourneyVisual pregnancyStatus={patientJourney?.pregnancy_status ?? null} estimatedWeeks={estimatedWeeks} daysPostpartum={daysPostpartum} language={language} />
+      </div>
+
+      <Callout tone="danger" title={t("urgentHelpTitle")} className="ds-section" action={<Link href="/emergency" className="ds-btn ds-btn-urgent ds-btn-sm"><PhoneCall size={15} aria-hidden="true"/> {hs(language, "emergencyPage")}</Link>}>{t("urgentHelpBody")} <Link href="/learn">{t("readWarningSigns")}</Link></Callout>
+
+      <nav className="ds-section ds-mobile-only" aria-labelledby="overview-more" style={{ gap: "var(--ds-4)" }}>
+        <h2 className="ds-h2" id="overview-more">{t("everythingInOnePlace")}</h2>
+        <div className="ds-linklist">
+          <Link href="/my-care/symptoms"><ClipboardList size={18} aria-hidden="true"/><span><b>{t("symptoms")}</b><small>{t("symptomCardText")}</small></span><ChevronRight size={16} aria-hidden="true"/></Link>
+          <Link href="/my-care/postpartum"><HeartPulse size={18} aria-hidden="true"/><span><b>{t("postpartumJourney")}</b><small>{pp.organise}</small></span><ChevronRight size={16} aria-hidden="true"/></Link>
+          <Link href="/learn"><BookOpen size={18} aria-hidden="true"/><span><b>{t("learningCentre")}</b><small>{t("learningCardText")}</small></span><ChevronRight size={16} aria-hidden="true"/></Link>
+          <Link href="/hospitals"><Hospital size={18} aria-hidden="true"/><span><b>{hs(language, "directory")}</b></span><ChevronRight size={16} aria-hidden="true"/></Link>
+          <Link href="/my-care/settings"><ShieldCheck size={18} aria-hidden="true"/><span><b>{t("privacySettings")}</b></span><ChevronRight size={16} aria-hidden="true"/></Link>
+        </div>
+      </nav>
+
+      <div className="ds-section ds-note"><ShieldCheck size={16} aria-hidden="true"/><span><b>{t("privateHealth")}</b> {t("privateHealthText")} <Link href="/feedback">{t("shareExperience")}</Link></span></div>
     </div>
-    <div className="patient-mobile-language"><LanguageSwitcher /></div><nav className="patient-mobile-nav" aria-label={t("chooseLanguage")}><Link href="/my-care" aria-current="page"><Home size={18}/><span>{t("home")}</span></Link><Link href="/my-care/blood-pressure"><Activity size={18}/><span>{t("bpLog")}</span></Link><Link href="/my-care/appointments"><CalendarHeart size={18}/><span>{t("visits")}</span></Link><Link href="/my-care/records"><FileHeart size={18}/><span>{t("records")}</span></Link><Link href="/my-care/profile"><UserRound size={18}/><span>{t("profile")}</span></Link></nav>
-  </main>;
+  </PatientShell>;
 }

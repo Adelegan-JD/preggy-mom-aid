@@ -1,16 +1,22 @@
 "use client";
 
-import { useLanguage } from "@/components/language-provider";
+import { useId } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/components/language-provider";
+import { ComboBox } from "@/components/combo-box";
 import { languageOptions } from "@/lib/i18n/translations";
 
 export default function LanguageSwitcher() {
   const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
-  return <label className="pma-language-switcher">
-    <span>{t("language")}</span>
-    <select aria-label={t("chooseLanguage")} value={language} onChange={event => { setLanguage(event.target.value as typeof language); router.refresh(); }}>
-      {languageOptions.map(option => <option key={option.code} value={option.code}>{option.nativeLabel}</option>)}
-    </select>
-  </label>;
+  const id = useId();
+  return <div className="pma-language-switcher">
+    <label htmlFor={`language-${id}`}>{t("language")}</label>
+    <ComboBox
+      id={`language-${id}`}
+      value={language}
+      onValueChange={value => { setLanguage(value as typeof language); router.refresh(); }}
+      options={languageOptions.map(option => ({ value: option.code, label: option.nativeLabel }))}
+    />
+  </div>;
 }

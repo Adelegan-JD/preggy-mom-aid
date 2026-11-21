@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Baby, Heart, Leaf, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
@@ -76,34 +76,29 @@ export default function PregnancyJourneyVisual({ pregnancyStatus, estimatedWeeks
   const progress = Math.max(0, Math.min(100, Math.round((week / 40) * 100)));
 
   return (
-    <section className="pma-journey-visual" aria-labelledby="pma-journey-title">
-      <div className="pma-journey-photo">
-        <img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=1100&q=85" alt="Expectant mother in a peaceful maternity portrait" loading="lazy" />
-        <span className="pma-photo-chip"><Heart size={14} fill="currentColor"/> Care with compassion</span>
-        <div className="pma-photo-caption"><span>YOUR STORY MATTERS</span><strong>Every journey deserves care.</strong></div><small className="pma-photo-credit">Photo: Anna Civolani / Unsplash</small>
-      </div>
-      <div className="pma-journey-panel">
-        <div className="pma-journey-heading">
-          <span className="pma-journey-icon"><Sparkles size={17}/></span>
-          <div><span className="pma-journey-kicker">PREGGY MOM AID · YOUR SPACE</span><h2 id="pma-journey-title">{isPregnant ? t.title : isPostpartum ? t.postpartum : t.wellbeing}</h2></div>
-        </div>
+    <section className="ds-panel ds-journey" aria-labelledby="pma-journey-title">
+      <div className="ds-journey-body">
+        <h2 className="ds-h2" id="pma-journey-title">{isPregnant ? t.title : isPostpartum ? t.postpartum : t.wellbeing}</h2>
         {isPregnant ? (
           <>
-            <div className="pma-week-count"><strong>{t.week} {week}</strong><span>{t.calendar}</span></div>
-            <div className="pma-progress-track" role="progressbar" aria-label="Calendar-based pregnancy progress estimate" aria-valuemin={0} aria-valuemax={40} aria-valuenow={week}><span style={{ width: progress + "%" }}/></div>
-            <div className="pma-progress-labels"><span>Week 1</span><span>Week 40</span></div>
-            <div className="pma-stage-tabs" role="group" aria-label="Explore journey chapters">
-              {t.stages.map((stage, index) => <button type="button" key={stage} className={selectedStage === index ? "is-active" : ""} aria-pressed={selectedStage === index} onClick={() => setSelectedStage(index)}><span>0{index + 1}</span>{stage}</button>)}
+            <p className="ds-summary-value ds-tabular">{t.week} {week} <small>{t.calendar}</small></p>
+            <div className="ds-progress" role="progressbar" aria-label="Calendar-based pregnancy progress estimate" aria-valuemin={0} aria-valuemax={40} aria-valuenow={week}><span style={{ width: progress + "%" }}/></div>
+            <div className="ds-segmented" role="group" aria-label="Explore journey chapters">
+              {t.stages.map((stage, index) => <button type="button" key={stage} aria-pressed={selectedStage === index} onClick={() => setSelectedStage(index)}>{stage}</button>)}
             </div>
-            <div className="pma-stage-detail" aria-live="polite"><span className="pma-stage-detail-icon"><Leaf size={18}/></span><div><b>{t.selected}: {t.stages[selectedStage]}</b><p>{t.stageNotes[selectedStage]}</p></div></div>
-            <p className="pma-journey-disclaimer">{t.note}</p>
+            <p className="ds-body" aria-live="polite">{t.stageNotes[selectedStage]}</p>
+            <p className="ds-hint">{t.note}</p>
           </>
         ) : isPostpartum && daysPostpartum !== null ? (
-          <div className="pma-postpartum-count"><Baby size={25}/><strong>{Math.max(0, daysPostpartum)} <small>{t.days}</small></strong><p>{t.intro}</p></div>
+          <><p className="ds-summary-value ds-tabular">{Math.max(0, daysPostpartum)} <small>{t.days}</small></p><p className="ds-muted">{t.intro}</p></>
         ) : (
-          <div className="pma-wellbeing-copy"><p>{t.intro}</p><Link href="/my-care/profile">{t.profile} <ArrowRight size={15}/></Link></div>
+          <p className="ds-muted">{t.intro}</p>
         )}
-        <Link className="pma-journey-link" href="/my-care/profile">{t.update} <ArrowRight size={15}/></Link>
+        <Link className="ds-link ds-link-quiet" href="/my-care/profile">{isPregnant || isPostpartum ? t.update : t.profile} <ArrowRight size={15} aria-hidden="true"/></Link>
+      </div>
+      <div className="ds-journey-photo">
+        <img src="https://images.unsplash.com/photo-1558636411-95b6f3dbfa6a?auto=format&fit=crop&w=700&q=80" alt="" loading="lazy" />
+        <small>Photo: Anna Civolani / Unsplash</small>
       </div>
     </section>
   );
