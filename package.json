@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "check:design": "node scripts/check-design-system.mjs",
     "test:a11y": "playwright test",
     "convert:hospitals": "node scripts/convert-nhfr-csv.mjs",
     "test:hospitals:csv": "node scripts/test-nhfr-csv-converter.mjs",

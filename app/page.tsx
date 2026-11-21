@@ -91,10 +91,10 @@ export default function HomePage() {
           <div className="ds-container ds-split-band" data-reveal data-reveal-stagger>
             <div className="ds-stack">
               <h2 id="professionals-heading" className="ds-h1-lg">For doctors, nurses and midwives</h2>
-              <p className="ds-lede" style={{ color: "#c9d8d0" }}>We welcome professionals who share our commitment to respectful, evidence-informed maternal care.</p>
+              <p className="ds-lede">We welcome professionals who share our commitment to respectful, evidence-informed maternal care.</p>
             </div>
             <div className="ds-stack">
-              <p className="ds-note" style={{ color: "#dce7e1" }}><LockKeyhole size={16} aria-hidden="true" style={{ color: "#9ad8bf" }} /><span>Professional accounts stay restricted until an authorised reviewer verifies your registration. Access to a patient&apos;s records needs that patient&apos;s separate authorisation.</span></p>
+              <p className="ds-note"><LockKeyhole size={16} aria-hidden="true" /><span>Professional accounts stay restricted until an authorised reviewer verifies your registration. Access to a patient&apos;s records needs that patient&apos;s separate authorisation.</span></p>
               <div><Link className="ds-btn ds-btn-lg" href="/signup?type=professional">Create a professional account <ArrowRight size={18} aria-hidden="true" /></Link></div>
             </div>
           </div>

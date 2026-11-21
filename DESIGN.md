@@ -85,6 +85,8 @@ Use genuine, appropriately licensed maternal photography with credits; decorativ
 
 ## Checks before shipping UI
 
-1. `npx tsc --noEmit` and `npm run build`.
+`npm run check:design` (also run in CI) fails on: native `<select>`, `window.confirm`/`prompt`/`alert`, hard-coded colours in TS/TSX, growth of `app/globals.css`, pages without a shared frame, and logo images outside `Brand`. Mark a justified one-line exception with a `design-system-ignore: <reason>` comment.
+
+1. `npm run typecheck`, `npm run check:design` and `npm run build`.
 2. `npm run test:a11y` (Playwright + axe, light/dark/high-contrast).
 3. Look at the page at 390px and 1440px in light and dark mode.

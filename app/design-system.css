@@ -676,3 +676,8 @@ html[data-theme="dark"] .ds-icon-tile{color:var(--ds-info)}
 .pma-preference-field .pma-language-switcher{gap:6px}
 .pma-preference-field .pma-language-switcher .ds-combo-value,.pma-preference-field .ds-combo-value{font-weight:400!important;font-size:var(--ds-text-sm)!important;color:var(--ds-ink)!important}
 .pma-preferences-panel .ds-combo-trigger{min-height:40px;padding:var(--ds-2) var(--ds-3)}
+
+/* Dark band text and icons (kept here so pages never hard-code colours) */
+.ds-band-dark .ds-lede{color:#c9d8d0}
+.ds-band-dark .ds-note{color:#dce7e1}
+.ds-band-dark .ds-note svg{color:#9ad8bf}

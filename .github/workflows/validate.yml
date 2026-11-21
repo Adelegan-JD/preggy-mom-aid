@@ -20,6 +20,8 @@ jobs:
         run: npm install
       - name: Type-check
         run: npm run typecheck
+      - name: Design-system check
+        run: npm run check:design
       - name: Test hospital CSV converter
         run: npm run test:hospitals:csv
       - name: Test nearby distance calculations
