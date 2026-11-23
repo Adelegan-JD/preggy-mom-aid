@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { chooseOption } from "./helpers";
 
 const publicAndAccountRoutes = [
   "/",
@@ -26,6 +27,8 @@ for (const route of publicAndAccountRoutes) {
   });
 
   test(`${route} passes automated WCAG 2.2 AA axe checks`, async ({ page }) => {
+    // Scan settled content: scroll-reveal fades are mid-transition otherwise.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(route);
 
     const results = await new AxeBuilder({ page })
@@ -47,7 +50,7 @@ test("mobile navigation opens, closes with Escape, and returns focus", async ({ 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
-  const menuButton = page.locator(".public-menu-toggle");
+  const menuButton = page.locator('button[aria-controls="primary-navigation"]');
   await menuButton.click();
   await expect(menuButton).toHaveAttribute("aria-expanded", "true");
   await expect(page.getByRole("navigation", { name: "Main navigation" })).toBeVisible();
@@ -59,14 +62,14 @@ test("mobile navigation opens, closes with Escape, and returns focus", async ({ 
 
 test("display preferences can be changed and persist on this device", async ({ page }) => {
   await page.goto("/");
-  await page.getByText("Display settings", { exact: true }).click();
+  await page.getByText("Language & display", { exact: true }).click();
 
-  await page.getByLabel("Colour theme").selectOption("dark");
-  await page.getByLabel("Accent colour").selectOption("blue");
-  await page.getByLabel("Text size").selectOption("largest");
-  await page.getByLabel("Contrast").selectOption("high");
-  await page.getByLabel("Motion").selectOption("reduce");
-  await page.getByLabel("Content width").selectOption("wide");
+  await chooseOption(page, "Colour theme", "Dark");
+  await chooseOption(page, "Accent colour", "Blue");
+  await chooseOption(page, "Text size", "Extra large");
+  await chooseOption(page, "Contrast", "High contrast");
+  await chooseOption(page, "Motion", "Reduce motion");
+  await chooseOption(page, "Content width", "Wider layout");
 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("data-accent", "blue");
@@ -79,9 +82,10 @@ test("display preferences can be changed and persist on this device", async ({ p
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("data-accent", "blue");
 
-  await page.getByText("Display settings", { exact: true }).click();
+  await page.getByText("Language & display", { exact: true }).click();
   await page.getByRole("button", { name: "Restore defaults" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "system");
+  // "Use my device setting" resolves to the device's concrete light/dark scheme.
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
 test("landing page reflows at 320 CSS pixels without horizontal page overflow", async ({ page }) => {

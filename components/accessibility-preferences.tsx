@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { SlidersHorizontal, RotateCcw } from "lucide-react";
+import { Languages, SlidersHorizontal, RotateCcw } from "lucide-react";
 import LanguageSwitcher from "@/components/language-switcher";
+import { ComboBox } from "@/components/combo-box";
 
 type Preferences = {
   theme: "system" | "light" | "dark";
@@ -62,7 +63,12 @@ export default function AccessibilityPreferences() {
   useEffect(() => {
     if (!ready) return;
     const root = document.documentElement;
-    root.dataset.theme = preferences.theme;
+    const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const applyTheme = () => {
+      root.dataset.theme = preferences.theme === "system" ? (media?.matches ? "dark" : "light") : preferences.theme;
+    };
+    applyTheme();
+    if (preferences.theme === "system") media?.addEventListener?.("change", applyTheme);
     root.dataset.accent = preferences.accent;
     root.dataset.textSize = preferences.textSize;
     root.dataset.contrast = preferences.contrast;
@@ -73,6 +79,7 @@ export default function AccessibilityPreferences() {
     } catch {
       setAnnouncement("Your browser does not allow preferences to be saved on this device.");
     }
+    return () => media?.removeEventListener?.("change", applyTheme);
   }, [preferences, ready]);
 
   function update<K extends keyof Preferences>(key: K, value: Preferences[K], label: string) {
@@ -88,14 +95,14 @@ export default function AccessibilityPreferences() {
   return (
     <details className="pma-preferences">
       <summary aria-controls={`pma-preferences-${ids}`}>
-        <SlidersHorizontal size={18} aria-hidden="true" />
-        <span>Display settings</span>
+        <Languages size={18} aria-hidden="true" />
+        <span className="pma-preferences-label">Language &amp; display</span>
       </summary>
       <section className="pma-preferences-panel" id={`pma-preferences-${ids}`} aria-label="Display and accessibility preferences">
         <div className="pma-preferences-heading">
           <div>
             <span className="pma-preferences-kicker">MAKE IT COMFORTABLE</span>
-            <h2>Display preferences</h2>
+            <h2>Language and display</h2>
           </div>
           <span className="pma-preferences-icon" aria-hidden="true"><SlidersHorizontal size={19} /></span>
         </div>
@@ -104,55 +111,32 @@ export default function AccessibilityPreferences() {
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-theme-${ids}`}>Colour theme</label>
-          <select id={`pma-theme-${ids}`} value={preferences.theme} onChange={(event) => update("theme", event.currentTarget.value as Preferences["theme"], "Colour theme")}>
-            <option value="system">Use my device setting</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
+          <ComboBox id={`pma-theme-${ids}`} value={preferences.theme} onValueChange={(value) => update("theme", value as Preferences["theme"], "Colour theme")} options={[{ value: "system", label: "Use my device setting" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} />
         </div>
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-accent-${ids}`}>Accent colour</label>
-          <select id={`pma-accent-${ids}`} value={preferences.accent} onChange={(event) => update("accent", event.currentTarget.value as Preferences["accent"], "Accent colour")}>
-            <option value="rose">Rose</option>
-            <option value="teal">Teal</option>
-            <option value="blue">Blue</option>
-            <option value="plum">Plum</option>
-          </select>
+          <ComboBox id={`pma-accent-${ids}`} value={preferences.accent} onValueChange={(value) => update("accent", value as Preferences["accent"], "Accent colour")} options={[{ value: "rose", label: "Rose" }, { value: "teal", label: "Teal" }, { value: "blue", label: "Blue" }, { value: "plum", label: "Plum" }]} />
         </div>
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-text-${ids}`}>Text size</label>
-          <select id={`pma-text-${ids}`} value={preferences.textSize} onChange={(event) => update("textSize", event.currentTarget.value as Preferences["textSize"], "Text size")}>
-            <option value="default">Default</option>
-            <option value="large">Large</option>
-            <option value="largest">Extra large</option>
-          </select>
+          <ComboBox id={`pma-text-${ids}`} value={preferences.textSize} onValueChange={(value) => update("textSize", value as Preferences["textSize"], "Text size")} options={[{ value: "default", label: "Default" }, { value: "large", label: "Large" }, { value: "largest", label: "Extra large" }]} />
         </div>
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-contrast-${ids}`}>Contrast</label>
-          <select id={`pma-contrast-${ids}`} value={preferences.contrast} onChange={(event) => update("contrast", event.currentTarget.value as Preferences["contrast"], "Contrast")}>
-            <option value="standard">Standard</option>
-            <option value="high">High contrast</option>
-          </select>
+          <ComboBox id={`pma-contrast-${ids}`} value={preferences.contrast} onValueChange={(value) => update("contrast", value as Preferences["contrast"], "Contrast")} options={[{ value: "standard", label: "Standard" }, { value: "high", label: "High contrast" }]} />
         </div>
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-motion-${ids}`}>Motion</label>
-          <select id={`pma-motion-${ids}`} value={preferences.motion} onChange={(event) => update("motion", event.currentTarget.value as Preferences["motion"], "Motion")}>
-            <option value="system">Use my device setting</option>
-            <option value="reduce">Reduce motion</option>
-            <option value="allow">Allow motion</option>
-          </select>
+          <ComboBox id={`pma-motion-${ids}`} value={preferences.motion} onValueChange={(value) => update("motion", value as Preferences["motion"], "Motion")} options={[{ value: "system", label: "Use my device setting" }, { value: "reduce", label: "Reduce motion" }, { value: "allow", label: "Allow motion" }]} />
         </div>
 
         <div className="pma-preference-field">
           <label htmlFor={`pma-layout-${ids}`}>Content width</label>
-          <select id={`pma-layout-${ids}`} value={preferences.layout} onChange={(event) => update("layout", event.currentTarget.value as Preferences["layout"], "Content width")}>
-            <option value="standard">Comfortable reading width</option>
-            <option value="wide">Wider layout</option>
-          </select>
+          <ComboBox id={`pma-layout-${ids}`} value={preferences.layout} onValueChange={(value) => update("layout", value as Preferences["layout"], "Content width")} options={[{ value: "standard", label: "Comfortable reading width" }, { value: "wide", label: "Wider layout" }]} />
         </div>
 
         <button className="pma-preferences-reset" type="button" onClick={reset}>

@@ -4,6 +4,8 @@ import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/components/language-provider";
+import { languageOptions } from "@/lib/i18n/translations";
+import { ComboBox } from "@/components/combo-box";
 
 type PatientProfile = {
   preferred_name: string | null;
@@ -67,48 +69,60 @@ export default function PatientProfileForm({ initialProfile }: { initialProfile:
   }
 
   return (
-    <form className="account-card patient-profile-form" onSubmit={submit}>
-      <div className="account-kicker">{t("personalDetails")}</div>
-      <h2>{t("personalInfo")}</h2>
-      <p className="account-intro">Only share details you are comfortable storing. Your profile is private to your account.</p>
-      <label htmlFor="preferredName">{t("preferredNameQuestion")} <span>(optional)</span></label>
-      <input id="preferredName" value={preferredName} maxLength={80} onChange={event => setPreferredName(event.target.value)} autoComplete="given-name" />
-      <label htmlFor="patientPhone">{t("phoneNumber")} <span>(optional)</span></label>
-      <input id="patientPhone" type="tel" value={phone} maxLength={30} onChange={event => setPhone(event.target.value)} autoComplete="tel" placeholder="+234…" />
-      <label htmlFor="patientState">{t("stateTerritory")} <span>(optional)</span></label>
-      <input id="patientState" value={state} maxLength={80} onChange={event => setState(event.target.value)} autoComplete="address-level1" placeholder="e.g. Lagos" />
-      <label htmlFor="patientLanguage">{t("preferredLanguage")}</label>
-      <select id="patientLanguage" value={appLanguage} onChange={event => { setLanguage(event.target.value as typeof appLanguage); router.refresh(); }}>
-        <option value="en">English</option>
-        <option value="yo">Yorùbá</option>
-        <option value="ig">Igbo</option>
-        <option value="ha">Hausa</option>
-        <option value="pcm">Nigerian Pidgin</option>
-        
-      </select>
-      <div className="patient-profile-divider" />
-      <div className="account-kicker">{t("journeyHeading")}</div>
-      <h2>{t("journeyQuestion")}</h2>
-      <label htmlFor="pregnancyStatus">{t("currentStatus")}</label>
-      <select id="pregnancyStatus" value={status} onChange={event => setStatus(event.target.value as PatientProfile["pregnancy_status"])}>
-        <option value="pregnant">{t("statusPregnant")}</option>
-        <option value="postpartum">{t("statusPostpartum")}</option>
-        <option value="not_currently_pregnant">{t("statusNotPregnant")}</option>
-      </select>
-      {status === "pregnant" && <>
-        <label htmlFor="dueDate">{t("estimatedDueDate")}</label>
-        <input id="dueDate" type="date" required value={dueDate} onChange={event => setDueDate(event.target.value)} />
-        <p className="account-footnote">{t("dateFootnote")}</p>
-      </>}
-      {status === "postpartum" && <>
-        <label htmlFor="birthDate">{t("birthDate")}</label>
-        <input id="birthDate" type="date" required value={birthDate} onChange={event => setBirthDate(event.target.value)} />
-        <p className="account-footnote">Postpartum support continues after birth. Keep following the care plan from your maternity team.</p>
-      </>}
-      <button className="account-submit" disabled={busy}>{busy ? t("saving") : t("saveProfile")}</button>
-      {error && <p className="account-error" role="alert">{error}</p>}
-      {saved && <p className="account-success" role="status">{saved}</p>}
-      <p className="account-footnote">{t("profilePrivacyFootnote")}</p>
+    <form className="ds-stack-lg" onSubmit={submit}>
+      <section className="ds-panel ds-form" aria-labelledby="profile-personal-title">
+        <div>
+          <h2 className="ds-h2" id="profile-personal-title">{t("personalInfo")}</h2>
+          <p className="ds-muted ds-small">Only share details you are comfortable storing. Your profile is private to your account.</p>
+        </div>
+        <div className="ds-field-row">
+          <div className="ds-field">
+            <label className="ds-label" htmlFor="preferredName">{t("preferredNameQuestion")} <span className="ds-optional">{t("optional")}</span></label>
+            <input className="ds-input" id="preferredName" value={preferredName} maxLength={80} onChange={event => setPreferredName(event.target.value)} autoComplete="given-name" />
+          </div>
+          <div className="ds-field">
+            <label className="ds-label" htmlFor="patientPhone">{t("phoneNumber")} <span className="ds-optional">{t("optional")}</span></label>
+            <input className="ds-input" id="patientPhone" type="tel" value={phone} maxLength={30} onChange={event => setPhone(event.target.value)} autoComplete="tel" placeholder="+234…" />
+          </div>
+        </div>
+        <div className="ds-field-row">
+          <div className="ds-field">
+            <label className="ds-label" htmlFor="patientState">{t("stateTerritory")} <span className="ds-optional">{t("optional")}</span></label>
+            <input className="ds-input" id="patientState" value={state} maxLength={80} onChange={event => setState(event.target.value)} autoComplete="address-level1" placeholder="e.g. Lagos" />
+          </div>
+          <div className="ds-field">
+            <label className="ds-label" htmlFor="patientLanguage">{t("preferredLanguage")}</label>
+            <ComboBox id="patientLanguage" value={appLanguage} onValueChange={value => { setLanguage(value as typeof appLanguage); router.refresh(); }} options={languageOptions.map(option => ({ value: option.code, label: option.nativeLabel }))} />
+          </div>
+        </div>
+      </section>
+
+      <section className="ds-panel ds-form" aria-labelledby="profile-journey-title">
+        <h2 className="ds-h2" id="profile-journey-title">{t("journeyQuestion")}</h2>
+        <fieldset className="ds-fieldset">
+          <legend>{t("currentStatus")}</legend>
+          <div className="ds-choice-grid">
+            {(["pregnant", "postpartum", "not_currently_pregnant"] as const).map(value => <label key={value} className="ds-choice"><input type="radio" name="pregnancyStatus" value={value} checked={status === value} onChange={() => setStatus(value)} />{t(value === "pregnant" ? "statusPregnant" : value === "postpartum" ? "statusPostpartum" : "statusNotPregnant")}</label>)}
+          </div>
+        </fieldset>
+        {status === "pregnant" && <div className="ds-field">
+          <label className="ds-label" htmlFor="dueDate">{t("estimatedDueDate")}</label>
+          <input className="ds-input" id="dueDate" type="date" required value={dueDate} onChange={event => setDueDate(event.target.value)} aria-describedby="dueDateHint" style={{ maxWidth: 280 }} />
+          <p className="ds-hint" id="dueDateHint">{t("dateFootnote")}</p>
+        </div>}
+        {status === "postpartum" && <div className="ds-field">
+          <label className="ds-label" htmlFor="birthDate">{t("birthDate")}</label>
+          <input className="ds-input" id="birthDate" type="date" required value={birthDate} onChange={event => setBirthDate(event.target.value)} aria-describedby="birthDateHint" style={{ maxWidth: 280 }} />
+          <p className="ds-hint" id="birthDateHint">Postpartum support continues after birth. Keep following the care plan from your maternity team.</p>
+        </div>}
+      </section>
+
+      <div className="ds-form-actions">
+        <button className="ds-btn ds-btn-primary ds-btn-lg" disabled={busy}>{busy ? t("saving") : t("saveProfile")}</button>
+        <p className="ds-hint">{t("profilePrivacyFootnote")}</p>
+      </div>
+      {error && <p className="ds-message ds-message-error" role="alert">{error}</p>}
+      {saved && <p className="ds-message ds-message-success" role="status">{saved}</p>}
     </form>
   );
 }

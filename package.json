@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:mock": "NEXT_PUBLIC_PMA_MOCK=1 NEXT_PUBLIC_SUPABASE_URL=http://demo.supabase.invalid NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=demo-key next dev -p 3001",
+    "mock:reset": "node -e \"require('fs').rmSync(require('path').join(require('os').tmpdir(),'preggy-mom-aid-mock-db.json'),{force:true});console.log('Demo data reset.')\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "check:design": "node scripts/check-design-system.mjs",
     "test:a11y": "playwright test",
     "convert:hospitals": "node scripts/convert-nhfr-csv.mjs",
     "test:hospitals:csv": "node scripts/test-nhfr-csv-converter.mjs",

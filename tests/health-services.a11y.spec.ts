@@ -4,7 +4,7 @@ test("emergency support exposes the national emergency call action and safety bo
   await page.goto("/emergency");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator('a[href="tel:112"]')).toBeVisible();
-  await expect(page.getByText(/not an emergency service|no be emergency service/i)).toBeVisible();
+  await expect(page.getByRole("main").getByText(/not an emergency service|no be emergency service/i)).toBeVisible();
 });
 
 test("public hospital directory does not invent facility records when empty", async ({ page }) => {

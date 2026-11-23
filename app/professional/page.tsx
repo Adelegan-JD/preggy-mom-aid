@@ -1,13 +1,25 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { ShieldCheck,Stethoscope,BookOpen,MessageSquareText } from "lucide-react";
+import { BookOpen, MessageSquareText, Stethoscope } from "lucide-react";
+import SignOutButton from "@/components/sign-out-button";
+import AuthLayout from "@/components/auth/auth-layout";
+import { Callout } from "@/components/ds";
 import ProfessionalApplicationForm from "@/components/professional-application-form";
 
 export const dynamic="force-dynamic";
 export const metadata={title:"Professional space | Preggy Mom Aid"};
 
+async function signOut(){
+ "use server";
+ const client=await createClient();
+ try{await client.auth.signOut();}finally{redirect("/login?signed_out=1");}
+}
+
 export default async function ProfessionalPage(){
+ if(!process.env.NEXT_PUBLIC_SUPABASE_URL||!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY){
+  return <AuthLayout title="Professional space" lede="Secure account services are temporarily unavailable. Please try again later."><Link className="ds-btn" href="/">Return to Preggy Mom Aid</Link></AuthLayout>;
+ }
  const supabase=await createClient();
  const {data:{user}}=await supabase.auth.getUser();
  if(!user)redirect("/login?next=/professional");
@@ -15,11 +27,17 @@ export default async function ProfessionalPage(){
  if(!profile||profile.account_type!=="professional")redirect("/my-care");
  const {data:application}=await supabase.from("professional_applications").select("status").eq("user_id",user.id).maybeSingle();
  const profession=profile.professional_type as "doctor"|"nurse"|"midwife"|null;
- return <main className="professional-dashboard" id="main-content" tabIndex={-1}>
-  <header className="professional-dashboard-header"><Link href="/" className="account-brand"><span className="account-brand-mark"><Stethoscope size={20}/></span><span><b>Preggy Mom Aid</b><small>PROFESSIONAL SPACE</small></span></Link><form action={async()=>{"use server";const client=await createClient();await client.auth.signOut();redirect("/login");}}><button className="account-signout">Sign out</button></form></header>
-  <section className="professional-dashboard-content">
-   <div className="account-kicker">HEALTHCARE PROFESSIONAL PORTAL</div><h1>Welcome{profile.full_name?" "+profile.full_name.split(/\\s+/)[0]:""}</h1><p className="account-intro">A dedicated space for verified doctors, nurses and midwives supporting maternal health.</p>
-   {profile.verification_status!=="verified"?<section className="professional-verification-panel"><span className="professional-verification-icon"><ShieldCheck size={26}/></span><h2>Professional verification required</h2><p>Your account is registered as a {profession??"healthcare"} professional. Practitioner tools and patient information remain restricted until your registration is checked by an authorised reviewer.</p><p className="verification-status">Current status: <strong>{application?.status??profile.verification_status??"pending"}</strong></p>{!application&&profession&&<><h3>Submit your professional details</h3><ProfessionalApplicationForm profession={profession}/></>}</section>:<section className="professional-verification-panel"><span className="professional-verification-icon"><ShieldCheck size={26}/></span><h2>Your professional account is verified</h2><p>Patient access is controlled separately. You will only see a patient’s information after that patient has explicitly authorised the relationship.</p><div className="professional-dashboard-links"><Link href="/learn"><BookOpen/> Learning Centre</Link><Link href="/feedback"><MessageSquareText/> Product feedback</Link></div></section>}
-  </section>
- </main>;
+ const firstName=profile.full_name?profile.full_name.trim().split(/\s+/)[0]:"";
+ const status=application?.status??profile.verification_status??"pending";
+ const signOutForm=<SignOutButton action={signOut} label="Sign out" className="ds-btn ds-btn-ghost" />;
+ if(profile.verification_status==="verified"){
+  return <AuthLayout title={`Welcome${firstName?`, ${firstName}`:""}`} lede="Your professional account is verified." footer={signOutForm}>
+   <Callout tone="success" title="Patient access is controlled separately">You will only see a patient&apos;s information after that patient has explicitly authorised it.</Callout>
+   <div className="ds-form-actions"><Link className="ds-btn" href="/learn"><BookOpen size={16} aria-hidden="true"/> Learning Centre</Link><Link className="ds-btn" href="/feedback"><MessageSquareText size={16} aria-hidden="true"/> Product feedback</Link></div>
+  </AuthLayout>;
+ }
+ return <AuthLayout title={`Welcome${firstName?`, ${firstName}`:""}`} lede={`Your account is registered as a ${profession??"healthcare"} professional. Practitioner tools and patient information stay restricted until an authorised reviewer checks your registration.`} footer={signOutForm}>
+  <div className="ds-panel ds-panel-quiet ds-form-actions" style={{ justifyContent: "space-between" }}><span className="ds-label">Verification status</span><span className="ds-badge ds-badge-warning" style={{ textTransform: "capitalize" }}><Stethoscope size={13} aria-hidden="true"/> {String(status).replaceAll("_"," ")}</span></div>
+  {!application&&profession&&<section className="ds-stack"><h2 className="ds-h2">Submit your professional details</h2><ProfessionalApplicationForm profession={profession}/></section>}
+ </AuthLayout>;
 }

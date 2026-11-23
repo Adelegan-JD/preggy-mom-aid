@@ -1,9 +1,8 @@
-import PatientPageNavigation from "@/components/patient-page-navigation";
+import PatientShell from "@/components/patient-shell";
 import { getServerTranslator } from "@/lib/i18n/server";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, FileHeart, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { Callout, PageHeader, UnavailablePage } from "@/components/ds";
 import PatientHealthDocuments from "@/components/patient-health-documents";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +11,7 @@ export const metadata = { title: "My health records | Preggy Mom Aid" };
 export default async function PatientHealthRecordsPage() {
   const { t } = await getServerTranslator();
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}><PatientPageNavigation active="records"/><section className="patient-dashboard-content"><Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link><h1>{t("healthRecords")}</h1><p className="account-intro">{t("unavailable")}</p></section></main>;
+    return <PatientShell active="records"><UnavailablePage title={t("healthRecords")} message={t("unavailable")} /></PatientShell>;
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -24,16 +23,12 @@ export default async function PatientHealthRecordsPage() {
     .eq("user_id", user.id).order("created_at", { ascending: false }).limit(100);
 
   return (
-    <main className="patient-dashboard patient-subpage" id="main-content" tabIndex={-1}>
-      <PatientPageNavigation active="records"/>
-      <section className="patient-dashboard-content">
-        <Link href="/my-care" className="patient-back-link"><ArrowLeft size={16}/> {t("backDashboard")}</Link>
-        <div className="account-kicker">YOUR PERSONAL SPACE</div>
-        <h1><FileHeart size={28}/> {t("healthRecords")}</h1>
-        <p className="account-intro">{t("privateHealthText")}</p>
-        <div className="patient-safety-note"><ShieldCheck size={20}/><p>{t("recordsSafety")}</p></div>
+    <PatientShell active="records">
+      <div className="ds-page">
+        <PageHeader title={t("healthRecords")} lede={t("privateHealthText")} />
+        <Callout tone="info" className="ds-callout-spaced">{t("recordsSafety")}</Callout>
         <PatientHealthDocuments initialDocuments={documents ?? []} />
-      </section>
-    </main>
+      </div>
+    </PatientShell>
   );
 }

@@ -6,12 +6,14 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Download, Mail, ShieldCheck, Trash2 } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
+import { useConfirmations } from "@/contexts/confirmations-provider";
 
 type Preferences = { appointment_email_reminders: boolean; product_email_updates: boolean };
 
 export default function PatientAccountSettings({ initialPreferences, initialDeletionRequested = false }: { initialPreferences: Preferences; initialDeletionRequested?: boolean }) {
   const router = useRouter();
   const { t } = useLanguage();
+ const { openConfirmModal } = useConfirmations();
   const [preferences, setPreferences] = useState(initialPreferences);
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
@@ -72,8 +74,11 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
     finally { setBusy(false); }
   }
 
-  async function requestDeletion() {
-    if (!window.confirm(t("deleteAccountConfirm"))) return;
+  function requestDeletion() {
+    openConfirmModal(t("deleteAccountConfirm"), performRequestDeletion, { title: t("requestAccountDeletion"), confirmText: t("requestAccountDeletion"), isDelete: true });
+  }
+
+  async function performRequestDeletion() {
     setBusy(true); setError(""); setMessage("");
     try {
       const supabase = createClient();
@@ -87,9 +92,11 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
     finally { setBusy(false); }
   }
 
-  async function confirmDeletion() {
-    const confirmation = window.prompt(t("deleteAccountPrompt"));
-    if (confirmation !== "DELETE") return;
+  function confirmDeletion() {
+    openConfirmModal(t("deleteAccountPrompt"), performConfirmDeletion, { title: t("confirmPermanentDeletion"), confirmText: t("confirmPermanentDeletion"), isDelete: true, requireText: "DELETE" });
+  }
+
+  async function performConfirmDeletion() {
     setBusy(true); setError(""); setMessage("");
     try {
       const supabase = createClient();
@@ -102,26 +109,43 @@ export default function PatientAccountSettings({ initialPreferences, initialDele
     finally { setBusy(false); }
   }
 
-  return <div className="patient-settings-layout">
-    <form className="account-card patient-profile-form" onSubmit={savePreferences}>
-      <div className="account-kicker">{t("communicationChoices")}</div><h2>{t("notificationPreferences")}</h2>
-      <p className="account-intro">{t("notificationIntro")}</p>
-      <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.appointment_email_reminders} onChange={event => setPreferences(current => ({ ...current, appointment_email_reminders: event.target.checked }))}/> {t("appointmentReminderEmails")}</label>
-      <label className="patient-setting-toggle"><input type="checkbox" checked={preferences.product_email_updates} onChange={event => setPreferences(current => ({ ...current, product_email_updates: event.target.checked }))}/> {t("productUpdates")}</label><p className="account-footnote">{t("notificationFootnote")}</p>
-      <button className="account-submit" disabled={busy}>{busy ? t("saving") : t("savePreferences")}</button>
+  return <div className="ds-stack-lg">
+    <form className="ds-panel ds-form" onSubmit={savePreferences} aria-labelledby="settings-notify-title">
+      <div>
+        <h2 className="ds-h2" id="settings-notify-title">{t("notificationPreferences")}</h2>
+        <p className="ds-muted ds-small">{t("notificationIntro")}</p>
+      </div>
+      <div className="ds-stack" style={{ gap: "var(--ds-2)" }}>
+        <label className="ds-choice"><input type="checkbox" checked={preferences.appointment_email_reminders} onChange={event => setPreferences(current => ({ ...current, appointment_email_reminders: event.target.checked }))}/> {t("appointmentReminderEmails")}</label>
+        <label className="ds-choice"><input type="checkbox" checked={preferences.product_email_updates} onChange={event => setPreferences(current => ({ ...current, product_email_updates: event.target.checked }))}/> {t("productUpdates")}</label>
+      </div>
+      <p className="ds-hint">{t("notificationFootnote")}</p>
+      <div className="ds-form-actions"><button className="ds-btn ds-btn-primary" disabled={busy}>{busy ? t("saving") : t("savePreferences")}</button></div>
     </form>
-    <section className="patient-settings-panel">
-      <div className="account-kicker">{t("accountDetails")}</div><h2>{t("changeSignInEmail")}</h2><p className="account-intro">{t("emailChangeIntro")}</p>
-      <form className="account-form" onSubmit={changeEmail}><label htmlFor="newAccountEmail">{t("newEmail")}</label><input id="newAccountEmail" type="email" autoComplete="email" required value={email} onChange={event => setEmail(event.target.value)}/><button className="account-submit" disabled={busy}><Mail size={16}/> {t("sendConfirmation")}</button></form>
-      <p className="account-switch"><Link href="/forgot-password">{t("resetPassword")}</Link></p>
+
+    <section className="ds-panel ds-form" aria-labelledby="settings-email-title">
+      <div>
+        <h2 className="ds-h2" id="settings-email-title">{t("changeSignInEmail")}</h2>
+        <p className="ds-muted ds-small">{t("emailChangeIntro")}</p>
+      </div>
+      <form className="ds-form" onSubmit={changeEmail}>
+        <div className="ds-field"><label className="ds-label" htmlFor="newAccountEmail">{t("newEmail")}</label><input className="ds-input" id="newAccountEmail" type="email" autoComplete="email" required value={email} onChange={event => setEmail(event.target.value)} style={{ maxWidth: 420 }}/></div>
+        <div className="ds-form-actions"><button className="ds-btn" disabled={busy}><Mail size={16} aria-hidden="true"/> {t("sendConfirmation")}</button><Link className="ds-link" href="/forgot-password">{t("resetPassword")}</Link></div>
+      </form>
     </section>
-    <section className="patient-settings-panel">
-      <div className="account-kicker">{t("yourInformation")}</div><h2>{t("downloadDeleteData")}</h2><p className="account-intro">{t("dataIntro")}</p>
-      <button className="account-submit" type="button" onClick={exportData} disabled={busy}><Download size={16}/> {t("downloadMyData")}</button>
-      <div className="patient-safety-note"><ShieldCheck size={18}/><p>{t("deletionSteps")}</p></div>
-      {deletionRequested ? <button className="patient-delete-request" type="button" onClick={confirmDeletion} disabled={busy}><Trash2 size={16}/> {t("confirmPermanentDeletion")}</button> : <button className="patient-delete-request" type="button" onClick={requestDeletion} disabled={busy}><Trash2 size={16}/> {t("requestAccountDeletion")}</button>}
+
+    <section className="ds-panel ds-form" aria-labelledby="settings-data-title">
+      <div>
+        <h2 className="ds-h2" id="settings-data-title">{t("downloadDeleteData")}</h2>
+        <p className="ds-muted ds-small">{t("dataIntro")}</p>
+      </div>
+      <div className="ds-form-actions"><button className="ds-btn" type="button" onClick={exportData} disabled={busy}><Download size={16} aria-hidden="true"/> {t("downloadMyData")}</button></div>
+      <div className="ds-callout ds-callout-neutral"><ShieldCheck size={18} aria-hidden="true"/><div><p>{t("deletionSteps")}</p></div></div>
+      <div className="ds-form-actions">{deletionRequested
+        ? <button className="ds-btn ds-btn-danger" type="button" onClick={confirmDeletion} disabled={busy}><Trash2 size={16} aria-hidden="true"/> {t("confirmPermanentDeletion")}</button>
+        : <button className="ds-btn ds-btn-danger" type="button" onClick={requestDeletion} disabled={busy}><Trash2 size={16} aria-hidden="true"/> {t("requestAccountDeletion")}</button>}</div>
     </section>
-    {error && <p className="account-error" role="alert">{error}</p>}
-    {message && <p className="account-success" role="status">{message}</p>}
+    {error && <p className="ds-message ds-message-error" role="alert">{error}</p>}
+    {message && <p className="ds-message ds-message-success" role="status">{message}</p>}
   </div>;
 }
